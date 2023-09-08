@@ -133,7 +133,6 @@ export default function Stake() {
 
   const toggleReferrals = () => {
     setShowReferrals(!showReferrals);
-    console.log(showReferrals);
   };
 
   useEffect(() => {
