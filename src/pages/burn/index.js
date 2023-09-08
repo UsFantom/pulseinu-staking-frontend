@@ -85,6 +85,9 @@ const BurnConfirmDiv = styled.div`
 
 const BurnConfirmTitleDiv = styled.div`
   width: 48%;
+  @media (max-width: 1044px) {
+    width: 96%;
+  }
 `;
 
 const BurnConfirmButtonDiv = styled.div`
