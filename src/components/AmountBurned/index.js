@@ -23,7 +23,7 @@ const AmountBurnedTitle = styled.h2`
   line-height: 26px;
   letter-spacing: 0.02em;
   text-align: left;
-  color: rgba(105, 105, 105, 1);
+  color: #d7e0ff;
   margin-top: 0px;
   margin-left: 20px;
 `;

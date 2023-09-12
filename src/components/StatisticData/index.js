@@ -19,7 +19,8 @@ const StatisticTitle = styled.h2`
   line-height: 18px;
   letter-spacing: 0.05em;
   text-align: left;
-  color: #696969;
+  color: #d7e0ff;
+  text-transform: uppercase;
   @media (max-width: 650px) {
     text-align: center;
   }
