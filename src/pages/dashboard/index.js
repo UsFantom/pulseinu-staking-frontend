@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Header from '../../components/Header';
 import AmountBurned from '../../components/AmountBurned';
 import PulseInuBgImage from '../../components/PulseInuBgImage';
 import StatisticData from '../../components/StatisticData';
@@ -27,23 +28,66 @@ const ContentDiv = styled.div`
   margin-top: 40px;
   padding-top: 10px;
   padding-bottom: 30px;
-  background: #d7e0ff0d;
-  border-radius: 30px;
+  // background: #d7e0ff0d;
+  // border-radius: 30px;
   @media (max-width: 1044px) {
     width: 90%;
   }
 `;
 
-const DashboardTitle = styled.p`
+const DashboardTitleDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  @media (max-width: 1044px) {
+    flex-direction: column;
+  }
+`;
+
+const DashboardTitle = styled.div`
+  width: 60%;
+  margin-bottom: 40px;
+  @media (max-width: 1044px) {
+    width: 100%;
+  }
+`;
+
+const DashboardTitleH = styled.h1`
   font-family: Poppins;
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 33px;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 78px;
   letter-spacing: 0em;
   text-align: left;
+  color: #d7e0ff;
+  margin-left: 20px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  @media (max-width: 1044px) {
+    text-align: center;
+  }
+`;
+
+const DashboardTitleContentDiv = styled.div`
+  margin-bottom: 40px;
+  width: 40%;
+  @media (max-width: 1044px) {
+    width: 100%;
+  }
+`;
+
+const DashboardTitleContent = styled.p`
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 33px;
+  text-align: center;
+  letter-spacing: 0em;
   color: #696969;
-  margin-left: 40px;
-  margin-top: 20px;
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 5px;
 `;
 
 const DashboardStakeDiv = styled.div`
@@ -215,11 +259,23 @@ export default function Dashboard() {
   return (
     <PageLayout>
       <ContentDiv>
-        <DashboardTitle>
-          Pulse Inu is a community built meme coin on Pulsechain.
-          <br />
-          Better pumpamentals than Doge or the original Shiba Inu.
-        </DashboardTitle>
+        <Header />
+        <DashboardTitleDiv>
+          <DashboardTitle>
+            <DashboardTitleH>Shiba Inu</DashboardTitleH>
+            <DashboardTitleH>Ecosystem Reborn</DashboardTitleH>
+            <DashboardTitleH>on Pulse Chain</DashboardTitleH>
+          </DashboardTitle>
+          <DashboardTitleContentDiv>
+            <DashboardTitleContent>
+              Pulse Inu is a community meme coin on Pulsechain.
+            </DashboardTitleContent>
+            <DashboardTitleContent>
+              Better pumpamentals than the original Shiba Inu.
+            </DashboardTitleContent>
+            <DashboardTitleContent>Buy, stake or burn Pulse Inu for NFTs.</DashboardTitleContent>
+          </DashboardTitleContentDiv>
+        </DashboardTitleDiv>
         <AmountBurned />
         <DashboardStakeDiv>
           <DashboardStakeTitle>Earn PLS Dividends Today!</DashboardStakeTitle>
