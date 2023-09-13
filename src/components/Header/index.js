@@ -93,8 +93,18 @@ const HeaderConnectBtn = styled.button`
   letter-spacing: 0.02em;
   text-align: center;
   color: #d7e0ff;
-  background: #4f30ff;
   text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 0px 52px 0px #cc13ec75;
+  background: radial-gradient(
+      farthest-corner at -17% 291%,
+      #00e8fc 0%,
+      #4f30ff 60%,
+      #f00f8e 95%,
+      #ff0000 100%
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
 `;
 
 export default function AmountBurned() {

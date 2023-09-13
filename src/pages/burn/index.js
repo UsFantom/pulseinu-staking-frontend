@@ -114,7 +114,16 @@ const BurnConfirmBtn = styled.button`
   color: #d9d9d9;
   margin-right: 20px;
   cursor: pointer;
-  background: #4f30ff;
+  border: none;
+  box-shadow: 0px 0px 52px 0px #cc13ec75;
+  background: radial-gradient(
+      farthest-corner at -17% 291%,
+      #00e8fc 0%,
+      #4f30ff 60%,
+      #f00f8e 95%,
+      #ff0000 100%
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
 `;
 
 const BurnCancelBtn = styled.button`

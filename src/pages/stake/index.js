@@ -77,10 +77,18 @@ const StakeTitleBurnButton = styled.button`
   padding: 14px 20px 14px 20px;
   border-radius: 25px;
   text-align: center;
-  background: #4f30ff;
-  box-shadow: 0px 0px 52px 0px #cc13ec75;
   cursor: pointer;
   z-index: 1;
+  border: none;
+  box-shadow: 0px 0px 52px 0px #cc13ec75;
+  background: radial-gradient(
+      farthest-corner at -17% 291%,
+      #00e8fc 0%,
+      #4f30ff 60%,
+      #f00f8e 95%,
+      #ff0000 100%
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
   @media (max-width: 600px) {
     width: 80%;
     overflow: hidden;

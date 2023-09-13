@@ -120,8 +120,6 @@ const DashboardStakeButton = styled.button`
   width: 350px;
   height: 50px;
   border-radius: 100px;
-  background: #4f30ff;
-  box-shadow: 0px 0px 52px 0px rgba(204, 19, 236, 0.46);
   font-family: Poppins;
   font-size: 22px;
   font-weight: 700;
@@ -132,6 +130,16 @@ const DashboardStakeButton = styled.button`
   text-transform: uppercase;
   margin-right: 20px;
   cursor: pointer;
+  border: none;
+  box-shadow: 0px 0px 52px 0px #cc13ec75;
+  background: radial-gradient(
+      farthest-corner at -17% 291%,
+      #00e8fc 0%,
+      #4f30ff 60%,
+      #f00f8e 95%,
+      #ff0000 100%
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
   @media (max-width: 1044px) {
     margin-right: 0px;
   }
