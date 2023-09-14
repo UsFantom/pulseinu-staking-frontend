@@ -258,6 +258,12 @@ const DashboardPulseInuDistPieChartDiv = styled.div`
 `;
 
 export default function Dashboard() {
+  const data = [
+    { label: 'Liquidity', percent: 0.53, fill: 'url(#paint0_linear_91_230)' },
+    { label: 'Stakes', percent: 0.19, fill: 'url(#paint0_radial_91_231)' },
+    { label: 'Burns', percent: 0.28, fill: 'url(#paint0_radial_91_232)' }
+  ];
+
   const navigate = useNavigate();
 
   const navigateTo = (to) => {
@@ -340,7 +346,7 @@ export default function Dashboard() {
             </DashboardPulseInuDistDiv>
           </DashboardDistributionStatsDiv>
           <DashboardPulseInuDistPieChartDiv>
-            <PulseInuPieChart />
+            <PulseInuPieChart data={data} />
           </DashboardPulseInuDistPieChartDiv>
         </DashboardDistribution>
       </ContentDiv>
