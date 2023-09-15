@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import PULSEINULOGO from '../../assets/images/pulseinu.svg';
+
 const PieChartDiv = styled.div`
   position: relative;
   width: 220px;
@@ -8,6 +10,23 @@ const PieChartDiv = styled.div`
   margin: auto;
   margin-top: 30px;
   margin-bottom: 30px;
+`;
+
+const PulseInuImgDiv = styled.div`
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  left: 50%;
+  overflow: hidden;
+  border-radius: 0 110px 110px 0;
+`;
+
+const PulseInuImg = styled.img`
+  height: 55%;
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  transform: translate(-120px, 0);
 `;
 
 export function PulseInuPieChart(props) {
@@ -29,8 +48,6 @@ export function PulseInuPieChart(props) {
       };
 
       const getCoordinatesForLabel = (slice) => {
-        console.log('slice: ', slice);
-        console.log('angle: ', startAngle + (2 * Math.PI * slice) / 2);
         const x = 110 + 55 * Math.cos(startAngle + (2 * Math.PI * slice) / 2);
         const y = 110 + 55 * Math.sin(startAngle + (2 * Math.PI * slice) / 2);
         startAngle += 2 * Math.PI * slice;
@@ -58,6 +75,13 @@ export function PulseInuPieChart(props) {
           gEl.appendChild(pathEl);
           svgEl.appendChild(gEl);
         } else {
+          if (slice.label === 'Liquidity') {
+            const pathImgEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathImgEl.setAttribute('d', pathData);
+            pathImgEl.setAttribute('fill', 'url(#pulse_inu_bg)');
+            // svgEl.appendChild(pathImgEl);
+            pathEl.setAttribute('opacity', '0.85');
+          }
           svgEl.appendChild(pathEl);
         }
 
@@ -70,7 +94,7 @@ export function PulseInuPieChart(props) {
         label.style.textAlign = 'center';
         label.style.fontFamily = 'Poppins';
         label.style.fontWeight = '400';
-        label.style.fontSize = '12px';
+        label.style.fontSize = slice.label === 'Liquidity' ? '16px' : '12px';
         label.style.transform = 'translate(-50%, -100%)';
 
         label.innerHTML =
@@ -87,6 +111,9 @@ export function PulseInuPieChart(props) {
 
   return (
     <PieChartDiv ref={pieChartRef}>
+      <PulseInuImgDiv>
+        <PulseInuImg src={PULSEINULOGO} />
+      </PulseInuImgDiv>
       <svg
         ref={svgRef}
         viewBox="-1 -1 2 2"
@@ -157,6 +184,21 @@ export function PulseInuPieChart(props) {
             <stop offset="0.720277" stopColor="#F00F8E" />
             <stop offset="0.972607" stopColor="#FF0000" />
           </radialGradient>
+          <pattern
+            id="pulse_inu_bg"
+            patternUnits="userSpaceOnUse"
+            width="100%"
+            height="100%"
+            patternTransform="rotate(90)">
+            <image
+              href="./pulseinu.svg"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMinYMin slice"
+            />
+          </pattern>
         </defs>
       </svg>
     </PieChartDiv>
