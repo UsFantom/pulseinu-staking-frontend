@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import MaxPinuImage from '../../assets/images/maxpinu.svg';
 import CalendarImage from '../../assets/images/calendar.svg';
+import { useStakingTokenUserBalance } from '../../queries/useStaking';
 
 const StakeAmountLengthDiv = styled.div`
   width: 860px;
@@ -47,10 +48,15 @@ const StakeLengthImg = styled.img`
 `;
 
 export default function StakeAmountLength() {
+  const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
   return (
     <>
       <StakeAmountLengthDiv>
-        <StakeAmountLengthTitle>Stake Amount in PINU (0.000 PINU available)</StakeAmountLengthTitle>
+        <StakeAmountLengthTitle>
+          {`Stake Amount in PINU (${
+            stakingTokenuserBalanceQuery.data ? stakingTokenuserBalanceQuery.data : '-'
+          } PINU available)`}
+        </StakeAmountLengthTitle>
         <StakeAmountImg src={MaxPinuImage} />
       </StakeAmountLengthDiv>
       <StakeAmountLengthDiv>

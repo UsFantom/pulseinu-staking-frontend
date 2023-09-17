@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import ReferralsTable from '../ReferralsTable';
 import ToggleUpImage from '../../assets/images/toggleup.svg';
 import ToggleDownImage from '../../assets/images/toggledown.svg';
+import { useWeb3React } from '@web3-react/core';
+import { isValidValue } from '../../utils';
 
 const ReferralsDiv = styled.div``;
 
@@ -146,12 +148,14 @@ const ReferralLink = styled.p`
 
 export default function Referrals(props) {
   const [copied, setCopied] = useState(false);
+  const { account } = useWeb3React();
 
   const copyToClipboard = () => {
+    if (!isValidValue(account)) {
+      return;
+    }
     setCopied(true);
-    navigator.clipboard.writeText(
-      'pulseinu.org/referrals/0xa12E2661ec6603CBbB891072b2Ad5b3d5edb48bd'
-    );
+    navigator.clipboard.writeText(`pulseinu.org/referrals/${account}`);
     setTimeout(() => {
       setCopied(false);
     }, 2000);
@@ -176,9 +180,7 @@ export default function Referrals(props) {
             ) : (
               <ReferralLinkCopyBtn onClick={() => copyToClipboard()}>Copy</ReferralLinkCopyBtn>
             )}
-            <ReferralLink>
-              pulseinu.org/referrals/0xa12E2661ec6603CBbB891072b2Ad5b3d5edb48bd
-            </ReferralLink>
+            <ReferralLink>{`pulseinu.org/referrals/${account ?? ''}`}</ReferralLink>
           </ReferralLinkDiv>
           <ReferralDetailTitle>Your referrals</ReferralDetailTitle>
           <ReferralsTable />

@@ -1,5 +1,7 @@
+import { useWeb3React } from '@web3-react/core';
 import React from 'react';
 import styled from 'styled-components';
+import { useStakingReferrals } from '../../queries/useStaking';
 
 const ReferralsTableDiv = styled.div`
   width: 860px;
@@ -17,7 +19,7 @@ const ReferralsTableRowDiv = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  border-bottom: ${(props) => (props.borderDisabled !== undefined ? 'none' : '0.5px solid')};
+  border-bottom: ${(props) => (props.borderdisabled !== undefined ? 'none' : '0.5px solid')};
   border-color: #696969;
   border-image: ${(props) => (props.border !== undefined ? props.border : 'none')};
 `;
@@ -78,6 +80,10 @@ const ReferralsTableTotalComissionCell = styled.p`
 `;
 
 export default function ReferralsTable() {
+  const { account } = useWeb3React();
+  const stakingReferralsQuery = useStakingReferrals();
+  console.log(stakingReferralsQuery);
+
   return (
     <ReferralsTableDiv>
       <ReferralsTableRowDiv>
@@ -90,9 +96,7 @@ export default function ReferralsTable() {
       </ReferralsTableRowDiv>
       <ReferralsTableRowDiv>
         <ReferralsTableAddressDiv>
-          <ReferralsTableAddressCell>
-            0xa12E2661ec6603CBbB891072b2Ad5b3d5edb48bd
-          </ReferralsTableAddressCell>
+          <ReferralsTableAddressCell>{account ?? ''}</ReferralsTableAddressCell>
         </ReferralsTableAddressDiv>
         <ReferralsTableComissionDiv>
           <ReferralsTableComissionCell>10,000 PLS</ReferralsTableComissionCell>
@@ -106,7 +110,7 @@ export default function ReferralsTable() {
           <ReferralsTableComissionCell>10,000 PLS</ReferralsTableComissionCell>
         </ReferralsTableComissionDiv>
       </ReferralsTableRowDiv>
-      <ReferralsTableRowDiv borderDisabled>
+      <ReferralsTableRowDiv borderdisabled={true}>
         <ReferralsTableAddressDiv>
           <ReferralsTableAddressCell></ReferralsTableAddressCell>
         </ReferralsTableAddressDiv>

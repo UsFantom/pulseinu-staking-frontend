@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
+import { ethers } from 'ethers';
 
 import PulseInuBtnBgImage from '../../assets/images/pulseinubtn.svg';
+import { useStakeMutation } from '../../queries/useStakeMutation';
+import { useWeb3React } from '@web3-react/core';
 
 const StakeButtonDiv = styled.div`
   width: 40%;
@@ -63,10 +66,28 @@ const PulseInuBtnBgImg = styled.img`
 `;
 
 export default function StakeButton() {
+  const stakeMutation = useStakeMutation();
+  const { account } = useWeb3React();
+
+  const handleConfirm = useCallback(async () => {
+    if (!account) {
+      return;
+    }
+    try {
+      const tx = await stakeMutation.mutateAsync({
+        amount: ethers.parseUnits('101', 12),
+        days: 30
+      });
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [stakeMutation, account]);
+
   return (
     <StakeButtonDiv>
       <StakeButtonDivTitle>PLS Fee: 100,000 PLS</StakeButtonDivTitle>
-      <StakeBtn>
+      <StakeBtn onClick={handleConfirm}>
         <PulseInuBtnBgImg src={PulseInuBtnBgImage} />
         Stake Pulse Inu
       </StakeBtn>

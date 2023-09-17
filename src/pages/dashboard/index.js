@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../../components/Header';
@@ -7,6 +7,14 @@ import PulseInuBgImage from '../../components/PulseInuBgImage';
 import StatisticData from '../../components/StatisticData';
 import PulseInuDistribution from '../../components/PulseInuDistribution';
 import { PulseInuPieChart } from '../../components/PulseInuPieChart';
+import {
+  useStakingTokenBurnedAmount,
+  useStakingTokenTotalSupply,
+  useStakingTotalReward,
+  useStakingTotalStaked
+} from '../../queries/useStaking';
+import { LoadableContent } from '../../components/Custom/LoadableContent';
+import { isValidValue } from '../../utils';
 
 const PageLayout = styled.div`
   position: relative;
@@ -258,17 +266,60 @@ const DashboardPulseInuDistPieChartDiv = styled.div`
 `;
 
 export default function Dashboard() {
-  const data = [
-    { label: 'Liquidity', percent: 0.53, fill: 'url(#paint0_linear_91_230)' },
-    { label: 'Stakes', percent: 0.19, fill: 'url(#paint0_radial_91_231)' },
-    { label: 'Burns', percent: 0.28, fill: 'url(#paint0_radial_91_232)' }
-  ];
+  const stakingTokenTotalSupplyQuery = useStakingTokenTotalSupply();
+
+  const stakingTokenBurnedAmountQuery = useStakingTokenBurnedAmount();
+
+  const stakingTotalRewardQuery = useStakingTotalReward();
+
+  const stakingTotalStakedQuery = useStakingTotalStaked();
 
   const navigate = useNavigate();
 
   const navigateTo = (to) => {
     navigate(to);
   };
+
+  const [chartData, setChartData] = useState(null);
+
+  const generateChartData = () => {
+    const chart = [
+      {
+        label: 'Liquidity',
+        percent:
+          (stakingTokenTotalSupplyQuery.data -
+            stakingTotalStakedQuery.data -
+            stakingTokenBurnedAmountQuery.data) /
+          stakingTokenTotalSupplyQuery.data,
+        fill: 'url(#paint0_linear_91_230)'
+      },
+      {
+        label: 'Stakes',
+        percent: stakingTotalStakedQuery.data / stakingTokenTotalSupplyQuery.data,
+        fill: 'url(#paint0_radial_91_231)'
+      },
+      {
+        label: 'Burns',
+        percent: stakingTokenBurnedAmountQuery.data / stakingTokenTotalSupplyQuery.data,
+        fill: 'url(#paint0_radial_91_232)'
+      }
+    ];
+    return chart;
+  };
+
+  useEffect(() => {
+    if (
+      isValidValue(stakingTokenTotalSupplyQuery.data) &&
+      isValidValue(stakingTokenBurnedAmountQuery.data) &&
+      isValidValue(stakingTotalStakedQuery.data)
+    ) {
+      setChartData(generateChartData());
+    }
+  }, [
+    stakingTokenTotalSupplyQuery.data,
+    stakingTokenBurnedAmountQuery.data,
+    stakingTotalStakedQuery.data
+  ]);
 
   return (
     <PageLayout>
@@ -299,7 +350,16 @@ export default function Dashboard() {
         </DashboardStakeDiv>
         <DashboardStatistics>
           <DashboardStatisticMarketDiv>
-            <StatisticData title="TOTAL SUPPLY" amount="18.790T" unit equals="≈ $17,974,670" />
+            <LoadableContent query={stakingTokenTotalSupplyQuery} fallback={null}>
+              {() => (
+                <StatisticData
+                  title="TOTAL SUPPLY"
+                  amount={`${stakingTokenTotalSupplyQuery.data / 1e12}T`}
+                  unit
+                  equals={`≈ $${stakingTokenTotalSupplyQuery.data}`}
+                />
+              )}
+            </LoadableContent>
             <StatisticData
               title="MARKET CAP"
               amount="$14,876,730"
@@ -312,7 +372,16 @@ export default function Dashboard() {
             />
           </DashboardStatisticMarketDiv>
           <DashboardStatisticPaidAPYDiv>
-            <StatisticData title="PLS Dividends Paid" amount="$1234,123123" />
+            <LoadableContent
+              query={stakingTotalRewardQuery}
+              fallback={<StatisticData title="PLS Dividends Paid" amount={`$${0}`} />}>
+              {() => (
+                <StatisticData
+                  title="PLS Dividends Paid"
+                  amount={`$${stakingTotalRewardQuery.data}`}
+                />
+              )}
+            </LoadableContent>
           </DashboardStatisticPaidAPYDiv>
           <DashboardStatisticPaidAPYDiv>
             <StatisticData title="Current APY %" amount="$1234.00" />
@@ -324,29 +393,78 @@ export default function Dashboard() {
             <DashboardPulseInuDistTitle>Pulse Inu Distribution</DashboardPulseInuDistTitle>
             <DashboardPulseInuDistDiv>
               <DashboardPulseInuDistStatsDiv>
-                <PulseInuDistribution
-                  title="BURNS"
-                  amount="7,816,912,001,480"
-                  equals="≈ $7,205,629"
-                  color="#F60954"
-                />
-                <PulseInuDistribution
-                  title="STAKES"
-                  amount="3,242,024,673,941"
-                  equals="≈ $2,998,549"
-                  color="#D7E0FF"
-                />
-                <PulseInuDistribution
-                  title="LIQUIDITY"
-                  amount="15,552,952,310,300"
-                  equals="≈ $14,336,711"
-                  color="#3D83FD"
-                />
+                <LoadableContent
+                  query={stakingTokenBurnedAmountQuery}
+                  fallback={
+                    <PulseInuDistribution
+                      title="BURNS"
+                      amount={`${0}`}
+                      equals={`≈ $${0}`}
+                      color="#F60954"
+                    />
+                  }>
+                  {() => (
+                    <PulseInuDistribution
+                      title="BURNS"
+                      amount={`${stakingTokenBurnedAmountQuery.data}`}
+                      equals={`≈ $${stakingTokenBurnedAmountQuery.data}`}
+                      color="#F60954"
+                    />
+                  )}
+                </LoadableContent>
+                <LoadableContent
+                  query={stakingTotalStakedQuery}
+                  fallback={
+                    <PulseInuDistribution
+                      title="STAKES"
+                      amount={`${0}`}
+                      equals={`≈ $${0}`}
+                      color="#F60954"
+                    />
+                  }>
+                  {() => (
+                    <PulseInuDistribution
+                      title="STAKES"
+                      amount={`${stakingTotalStakedQuery.data}`}
+                      equals={`≈ $${stakingTotalStakedQuery.data}`}
+                      color="#D7E0FF"
+                    />
+                  )}
+                </LoadableContent>
+                <LoadableContent
+                  query={[
+                    stakingTokenTotalSupplyQuery,
+                    stakingTotalStakedQuery,
+                    stakingTokenBurnedAmountQuery
+                  ]}
+                  fallback={
+                    <PulseInuDistribution
+                      title="LIQUIDITY"
+                      amount={0}
+                      equals={`≈ $${0}`}
+                      color="#3D83FD"
+                    />
+                  }>
+                  <PulseInuDistribution
+                    title="LIQUIDITY"
+                    amount={
+                      stakingTokenTotalSupplyQuery.data -
+                      stakingTotalStakedQuery.data -
+                      stakingTokenBurnedAmountQuery.data
+                    }
+                    equals={`≈ $${
+                      stakingTokenTotalSupplyQuery.data -
+                      stakingTotalStakedQuery.data -
+                      stakingTokenBurnedAmountQuery.data
+                    }`}
+                    color="#3D83FD"
+                  />
+                </LoadableContent>
               </DashboardPulseInuDistStatsDiv>
             </DashboardPulseInuDistDiv>
           </DashboardDistributionStatsDiv>
           <DashboardPulseInuDistPieChartDiv>
-            <PulseInuPieChart data={data} />
+            {chartData && <PulseInuPieChart data={chartData} />}
           </DashboardPulseInuDistPieChartDiv>
         </DashboardDistribution>
       </ContentDiv>

@@ -11,7 +11,7 @@ const BonusDivs = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  border-bottom: ${(props) => (props.borderDisabled !== undefined ? 'none' : '0.5px solid')};
+  border-bottom: ${(props) => (props.borderdisabled !== undefined ? 'none' : '0.5px solid')};
   border-image: linear-gradient(
       100.73deg,
       #413fff -0.17%,
@@ -64,7 +64,7 @@ export default function StakeBonus() {
           <BonusData>0.000 PINU</BonusData>
         </BonusDetailDiv>
       </BonusDivs>
-      <BonusDivs borderDisabled>
+      <BonusDivs borderdisabled={true}>
         <BonusDetailDiv>
           <BonusTitle>Share price</BonusTitle>
           <BonusData>1,000 PINU/Share</BonusData>

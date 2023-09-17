@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useStakingInfo } from '../../queries/useStaking';
+import { ethers } from 'ethers';
 
 const StakeTableDiv = styled.div`
   width: Calc(100% - 40px);
@@ -39,6 +41,7 @@ const StakeTableData = styled.td`
 `;
 
 export default function StakeTable() {
+  const stakingInfoQuery = useStakingInfo();
   return (
     <StakeTableDiv>
       <StakeTableComp>
@@ -49,27 +52,27 @@ export default function StakeTable() {
           <StakeTableHeader>Shares</StakeTableHeader>
           <StakeTableHeader>PLS Earned</StakeTableHeader>
         </StakeTableRow>
-        <StakeTableRow>
-          <StakeTableData>841</StakeTableData>
-          <StakeTableData>6396</StakeTableData>
-          <StakeTableData></StakeTableData>
-          <StakeTableData>2.555</StakeTableData>
-          <StakeTableData>25,964</StakeTableData>
-        </StakeTableRow>
-        <StakeTableRow>
-          <StakeTableData>614</StakeTableData>
-          <StakeTableData>2689</StakeTableData>
-          <StakeTableData></StakeTableData>
-          <StakeTableData>30.432</StakeTableData>
-          <StakeTableData>398,286</StakeTableData>
-        </StakeTableRow>
-        <StakeTableRow>
-          <StakeTableData>600</StakeTableData>
-          <StakeTableData>5528</StakeTableData>
-          <StakeTableData></StakeTableData>
-          <StakeTableData>81.998</StakeTableData>
-          <StakeTableData>875,353</StakeTableData>
-        </StakeTableRow>
+        {stakingInfoQuery.data?.stakingInfo && (
+          <StakeTableRow>
+            <StakeTableData>{stakingInfoQuery.data?.stakingInfo[3].toString()}</StakeTableData>
+            <StakeTableData>{stakingInfoQuery.data?.stakingInfo[4].toString()}</StakeTableData>
+            <StakeTableData>
+              {ethers.formatUnits(
+                stakingInfoQuery.data?.stakingInfo[0].toString(),
+                stakingInfoQuery.data.decimals
+              )}
+            </StakeTableData>
+            <StakeTableData>
+              {ethers.formatUnits(
+                stakingInfoQuery.data?.stakingInfo[1].toString(),
+                stakingInfoQuery.data.decimals
+              )}
+            </StakeTableData>
+            <StakeTableData>
+              {ethers.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())}
+            </StakeTableData>
+          </StakeTableRow>
+        )}
       </StakeTableComp>
     </StakeTableDiv>
   );
