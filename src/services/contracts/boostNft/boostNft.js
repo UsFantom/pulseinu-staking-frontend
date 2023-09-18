@@ -6,7 +6,7 @@ export class BoostNftContract extends BaseContract {
     super(address, contractAbi, provider);
   }
 
-  async mint(amount, days, referrer = ethers.ZeroAddress) {
-    return this.writer.stake(amount, days, referrer);
+  async tokenTypePrice(type) {
+    return this.reader.tokenTypePrice(type);
   }
 }
