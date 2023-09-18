@@ -4,6 +4,18 @@ if (typeof INFURA_KEY === 'undefined') {
   throw new Error('REACT_APP_INFURA_KEY must be a defined in .env file\n');
 }
 
+export const DEXTOOL_API_URL = process.env.REACT_APP_DEXTOOL_API_URL;
+
+if (typeof DEXTOOL_API_URL === 'undefined') {
+  throw new Error('REACT_APP_DEXTOOL_API_URL must be a defined in .env file\n');
+}
+
+export const DEXTOOL_API_KEY = process.env.REACT_APP_DEXTOOL_API_KEY;
+
+if (typeof DEXTOOL_API_KEY === 'undefined') {
+  throw new Error('REACT_APP_DEXTOOL_API_KEY must be a defined in .env file\n');
+}
+
 export const CONFIG = {
   11155111: {
     contracts: {
@@ -17,6 +29,9 @@ export const CONFIG = {
       stakingToken: '0xbFb94A0736681D35EA3AE16838F50378788d5182',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
+    chainSlug: 'pulse',
+    stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',
+    stakingTokenToUSDC: '0x3e520cc96a444256d6d8bd220233554daec51e42',
     rpcUrl: `https://sepolia.infura.io/v3/${INFURA_KEY}`,
     network: {
       chainId: '0xAA36A7',
@@ -28,7 +43,12 @@ export const CONFIG = {
     }
   },
   369: {
-    contracts: {},
+    contracts: {
+      stakingToken: '0xa12e2661ec6603cbbb891072b2ad5b3d5edb48bd'
+    },
+    chainSlug: 'pulse',
+    stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',
+    stakingTokenToUSDC: '0x3e520cc96a444256d6d8bd220233554daec51e42',
     rpcUrl: `https://pulsechain.publicnode.com`,
     network: {
       chainId: '0x171',
@@ -51,6 +71,9 @@ export const CONFIG = {
       stakingToken: '0x6eB0864C8568dC4361CC8A56703F154cC44dF353',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
+    chainSlug: 'pulse',
+    stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',
+    stakingTokenToUSDC: '0x3e520cc96a444256d6d8bd220233554daec51e42',
     rpcUrl: `https://pulsechain-testnet.publicnode.com`,
     network: {
       chainId: '0x3AF',

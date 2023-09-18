@@ -17,6 +17,7 @@ import {
 import { LoadableContent } from '../../components/Custom/LoadableContent';
 import { isValidValue } from '../../utils';
 import { formatNumber } from '../../utils/utils';
+import { usestakingTokenToWrapperInfo } from '../../queries/usePrice';
 
 const PageLayout = styled.div`
   position: relative;
@@ -323,6 +324,9 @@ export default function Dashboard() {
     stakingTokenBurnedAmountQuery.data,
     stakingTotalStakedQuery.data
   ]);
+
+  const stakingTokenPair = usestakingTokenToWrapperInfo();
+  console.log(stakingTokenPair);
 
   return (
     <PageLayout>
