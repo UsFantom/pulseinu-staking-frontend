@@ -4,6 +4,7 @@ export const formatNumber = (value) => {
   }
   try {
     return parseFloat(value)
+      .toFixed(2)
       .toLocaleString(undefined, {
         minimumFractionDigits: 3,
         maximumFractionDigits: 3

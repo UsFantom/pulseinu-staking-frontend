@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import { getConfig } from '../config';
 import { ethers } from 'ethers';
 import { isValidValue } from '../utils';
+import { formatNumber } from '../utils/utils';
 
 export const useStakingToken = () => {
   const config = getConfig();
@@ -45,7 +46,7 @@ export const useGetUserBoostPercent = (amount) => {
     {
       enabled: Boolean(contract && amount && account),
       select: (userBoostPercent) => {
-        return parseFloat(amount * parseFloat(userBoostPercent)).toFixed(3);
+        return formatNumber(amount * parseFloat(userBoostPercent));
       }
     }
   );
@@ -67,7 +68,7 @@ export const useGetLengthBonus = (amount, days) => {
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && amount && days),
       select: ([decimals, lengthBonus]) =>
-        parseFloat(ethers.utils.formatUnits(lengthBonus, decimals)).toFixed(3)
+        formatNumber(ethers.utils.formatUnits(lengthBonus, decimals))
     }
   );
 };
