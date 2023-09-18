@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Header from '../../components/Header';
 import Referrals from '../../components/Referrals';
 import StakeAmountLength from '../../components/StakeAmountLength';
-import StakeBonus from '../../components/StakeBonus';
-import StakeButton from '../../components/StakeButton';
 import StakeTable from '../../components/StakeTable';
 import NavigateBack from '../../components/NavigateBack';
 import BurnBgImg from '../../assets/images/burn_bg.svg';
@@ -121,15 +119,6 @@ const BurnBgImage = styled.img`
   height: 180px;
 `;
 
-const StakeBonusDiv = styled.div`
-  display: flex;
-  justify-item: space-between;
-  align-items: center;
-  @media (max-width: 1044px) {
-    flex-direction: column;
-  }
-`;
-
 const YourStakeTitle = styled.p`
   font-family: Poppins;
   font-size: 22px;
@@ -177,17 +166,7 @@ export default function Stake() {
           </StakeTitleBurnButton>
         </StakeTitleDiv>
         <Referrals showReferrals={showReferrals} toggleReferrals={() => toggleReferrals()} />
-        <StakeTitleDiv>
-          <StakeTitle>STAKE</StakeTitle>
-        </StakeTitleDiv>
         <StakeAmountLength />
-        <StakeTitleDiv>
-          <StakeTitle>STAKE BONUSES</StakeTitle>
-        </StakeTitleDiv>
-        <StakeBonusDiv>
-          <StakeBonus />
-          <StakeButton />
-        </StakeBonusDiv>
       </ContentDiv>
       <ContentDiv>
         <YourStakeTitle>Your Stakes</YourStakeTitle>
