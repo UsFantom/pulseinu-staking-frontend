@@ -118,6 +118,7 @@ const NFTDetailContent = styled.p`
 
 export default function LegendaryCollectorSelect(props) {
   const boostNftTokenTypesPricesQuery = useBoostNftTokenTypesPrices();
+  console.log(boostNftTokenTypesPricesQuery);
 
   return (
     <LegendaryCollectorSelectDiv>
@@ -146,7 +147,7 @@ export default function LegendaryCollectorSelect(props) {
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
             </NFTImgWrap>
-            <NFTAmount>{formatNumber(boostNftTokenTypesPricesQuery.data[0])}</NFTAmount>
+            <NFTAmount>{formatNumber(boostNftTokenTypesPricesQuery.data?.[0])}</NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle>Legendary</NFTDetailTitle>
@@ -164,7 +165,7 @@ export default function LegendaryCollectorSelect(props) {
             </NFTImgWrap>
             <NFTAmount color="#D7E0FF">
               {boostNftTokenTypesPricesQuery.data
-                ? boostNftTokenTypesPricesQuery.data[1].toString()
+                ? boostNftTokenTypesPricesQuery.data?.[1].toString()
                 : '-'}
             </NFTAmount>
           </NFTImageDiv>
@@ -180,7 +181,7 @@ export default function LegendaryCollectorSelect(props) {
               <NFTImg src={CollectorImage} width="108" height="98" />
             </NFTImgWrap>
             <NFTAmount color="#D7E0FF">
-              {formatNumber(boostNftTokenTypesPricesQuery.data[1])}
+              {formatNumber(boostNftTokenTypesPricesQuery.data?.[1])}
             </NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
