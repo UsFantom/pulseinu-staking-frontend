@@ -1,0 +1,36 @@
+{
+  "dna": "ee965d3f545bf1f5b8977f78ba8974a19c1d6663d3ca75c290bfa46d827b7456",
+  "name": "Pulse Inu #1370",
+  "description": "A true mascot of the Pulse Ecosystem. 'I'm stronger. I'm smarter. I'm faster. I'm better, BOW WOW! c[:[. ' ",
+  "image": "ipfs://bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/1370.gif",
+  "imageName": "1370.gif",
+  "edition": 1370,
+  "date": 1688915906813,
+  "attributes": [
+    {
+      "trait_type": "BACKGROUND",
+      "value": "Hogwarts School"
+    },
+    {
+      "trait_type": "SKIN",
+      "value": "Base"
+    },
+    {
+      "trait_type": "NECK ACCESSORY",
+      "value": "Gryffindor Scarf"
+    },
+    {
+      "trait_type": "HEADGEAR",
+      "value": "Dumbledore's Hat"
+    },
+    {
+      "trait_type": "EYEWEAR",
+      "value": "Harry Potter's Glasses"
+    },
+    {
+      "trait_type": "MOUTH ACCESSORY",
+      "value": "Cigarette"
+    }
+  ],
+  "compiler": "Jalagar Animated Art Engine"
+}

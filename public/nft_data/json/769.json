@@ -1,0 +1,32 @@
+{
+  "dna": "62d3894cfe1ede4e88205d1db3e0b5c26ffd8feec5a6bc226d9d591c90e075a2",
+  "name": "Pulse Inu #769",
+  "description": "A true mascot of the Pulse Ecosystem. 'I'm stronger. I'm smarter. I'm faster. I'm better, BOW WOW! c[:[. ' ",
+  "image": "ipfs://bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/769.gif",
+  "imageName": "769.gif",
+  "edition": 769,
+  "date": 1688912519829,
+  "attributes": [
+    {
+      "trait_type": "BACKGROUND",
+      "value": "Dark Green"
+    },
+    {
+      "trait_type": "SKIN",
+      "value": "Base"
+    },
+    {
+      "trait_type": "NECK ACCESSORY",
+      "value": "Emerald Necklace"
+    },
+    {
+      "trait_type": "FACEWEAR",
+      "value": "Me Gusta Mask"
+    },
+    {
+      "trait_type": "HEADGEAR",
+      "value": "Viking Helmet"
+    }
+  ],
+  "compiler": "Jalagar Animated Art Engine"
+}

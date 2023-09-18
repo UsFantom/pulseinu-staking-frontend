@@ -1,0 +1,28 @@
+{
+  "dna": "15b3d0e29e4fda2c609cbec5362713f8bac64b61ca6f02853f20e21db392d69c",
+  "name": "Pulse Inu #1236",
+  "description": "A true mascot of the Pulse Ecosystem. 'I'm stronger. I'm smarter. I'm faster. I'm better, BOW WOW! c[:[. ' ",
+  "image": "ipfs://bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/1236.gif",
+  "imageName": "1236.gif",
+  "edition": 1236,
+  "date": 1688915183375,
+  "attributes": [
+    {
+      "trait_type": "BACKGROUND",
+      "value": "Dark Green"
+    },
+    {
+      "trait_type": "SKIN",
+      "value": "Base"
+    },
+    {
+      "trait_type": "NECK ACCESSORY",
+      "value": "Blue Scarf"
+    },
+    {
+      "trait_type": "HEADGEAR",
+      "value": "Spotted Cone"
+    }
+  ],
+  "compiler": "Jalagar Animated Art Engine"
+}
