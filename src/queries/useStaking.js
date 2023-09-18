@@ -36,6 +36,20 @@ export const useStakingTokenUserBalance = () => {
   );
 };
 
+export const useGetLengthBonus = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  const erc20Contract = useERC20Contract(stakingTokenQuery.data);
+  return useQuery(
+    ['useGetLengthBonus'],
+    async () => await Promise.all([contract.getLengthBonus(), erc20Contract.decimals()]),
+    {
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
+      select: ([lengthBonus, decimals]) => ethers.formatUnits(lengthBonus, decimals)
+    }
+  );
+};
+
 export const useStakingTotalReward = () => {
   const contract = useStakingPoolContract();
 

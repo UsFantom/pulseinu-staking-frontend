@@ -20,7 +20,7 @@ const LegendaryCollectorSelectDiv = styled.div`
 const SelectItemDiv = styled.div`
   width: 48%;
   display: flex;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgcolor};
   border-radius: 30px;
   cursor: pointer;
   @media (max-width: 1044px) {
@@ -38,8 +38,8 @@ const NFTImageDiv = styled.div`
   height: 200px;
   border-radius: 30px;
   background: ${(props) =>
-    props.bgColor !== undefined
-      ? props.bgColor
+    props.bgcolor !== undefined
+      ? props.bgcolor
       : 'linear-gradient( 315deg, rgba(252, 0, 33, 0.2) 0%, rgba(79, 48, 255, 0.2) 52.08%, rgba(240, 15, 142, 0.2) 100%  )'};
 `;
 
@@ -118,8 +118,8 @@ export default function LegendaryCollectorSelect(props) {
   return (
     <LegendaryCollectorSelectDiv>
       {props.selected === 'legendary' ? (
-        <SelectItemDiv bgColor="#4F30FF" onClick={() => props.setSelected(null)}>
-          <NFTImageDiv bgColor="transparent">
+        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+          <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
             </NFTImgWrap>
@@ -149,8 +149,8 @@ export default function LegendaryCollectorSelect(props) {
         </SelectItemDiv>
       )}
       {props.selected === 'collector' ? (
-        <SelectItemDiv bgColor="#4F30FF" onClick={() => props.setSelected(null)}>
-          <NFTImageDiv bgColor="transparent">
+        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+          <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
             </NFTImgWrap>
@@ -163,7 +163,7 @@ export default function LegendaryCollectorSelect(props) {
         </SelectItemDiv>
       ) : (
         <SelectItemDiv onClick={() => props.setSelected('collector')}>
-          <NFTImageDiv bgColor="#D7E0FF0D">
+          <NFTImageDiv bgcolor="#D7E0FF0D">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
             </NFTImgWrap>

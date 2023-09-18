@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import PulseInuLogo from '../../assets/images/pulseinulogo.svg';
@@ -7,6 +7,8 @@ import TelegramLogo from '../../assets/images/telegram.svg';
 import MetaMaskLogo from '../../assets/images/metamask.svg';
 import WalletConnectButton from './connect';
 import { useWeb3React } from '@web3-react/core';
+import { useCorrectChain } from '../../hooks/useProvider';
+import { useStakingTokenMutation } from '../../queries/useTokenMutation';
 
 const HeaderDiv = styled.div`
   display: flex;
@@ -84,8 +86,35 @@ const HeaderMenuIcon = styled.img`
 `;
 
 export default function AmountBurned() {
-  const { account } = useWeb3React();
-  const handleAddToken = () => {};
+  const { account, library } = useWeb3React();
+  const correctChain = useCorrectChain();
+  const stakingTokenMutation = useStakingTokenMutation();
+
+  const addToken = async (token) => {
+    console.log(token, library);
+    try {
+      const wasAdded = await library.provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: token
+        }
+      });
+      console.log(wasAdded);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleAddToken = useCallback(async () => {
+    if (!correctChain) return;
+    try {
+      const token = await stakingTokenMutation.mutateAsync();
+      addToken(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [correctChain]);
   return (
     <HeaderDiv>
       <HeaderLogoDiv>

@@ -3,6 +3,7 @@ import { getConfig } from '../config';
 import { ERC20Contract } from '../services/contracts/erc20Contract/erc20Contract';
 import { StakingPoolContract } from '../services/contracts/stackingPoolContract/stakingPoolContract';
 import { useProvider } from './useProvider';
+import { BoostNftContract } from '../services/contracts/boostNft/boostNft';
 
 export const useStakingPoolContract = (readOnly = true) => {
   const provider = useProvider(readOnly);
@@ -10,6 +11,15 @@ export const useStakingPoolContract = (readOnly = true) => {
   return useMemo(
     () =>
       provider ? new StakingPoolContract(config.contracts.stakingPool.address, provider) : null,
+    [provider]
+  );
+};
+
+export const useBoostNftContract = (readOnly = true) => {
+  const provider = useProvider(readOnly);
+  const config = getConfig();
+  return useMemo(
+    () => (provider ? new BoostNftContract(config.contracts.boostNft.address, provider) : null),
     [provider]
   );
 };

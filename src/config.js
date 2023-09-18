@@ -11,7 +11,8 @@ export const CONFIG = {
         address: '0x3Eb2eD7209e01a2e187eC5437FC48eD44FFa90CE'
       },
       boostNft: {
-        address: '0x7AaF731E0275705298EA0f541C0C455aE8E4Bd88'
+        address: '0x7AaF731E0275705298EA0f541C0C455aE8E4Bd88',
+        tokenTypes: [0, 1]
       },
       stakingToken: '0xbFb94A0736681D35EA3AE16838F50378788d5182',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
@@ -44,7 +45,8 @@ export const CONFIG = {
         address: '0xDB5977307398081C4d8Db2CC73F98B4DCA442575'
       },
       boostNft: {
-        address: '0xcC1424a159118de710a4f011feBf663ed9A5e8b4'
+        address: '0xcC1424a159118de710a4f011feBf663ed9A5e8b4',
+        tokenTypes: [0, 1]
       },
       stakingToken: '0x6eB0864C8568dC4361CC8A56703F154cC44dF353',
       burnAddress: '0x000000000000000000000000000000000000dEaD'

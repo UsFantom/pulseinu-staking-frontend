@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import MaxPinuImage from '../../assets/images/maxpinu.svg';
@@ -58,10 +58,16 @@ const StakeLengthImg = styled.img`
 
 export default function StakeAmountLength() {
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
+
+  const [stakeAmount, setStakeAmount] = useState('');
+  const [stakeDays, setStakeDays] = useState('');
+
   return (
     <>
       <StakeAmountLengthDiv>
         <StakeAmountLengthInput
+          value={stakeAmount}
+          onChange={(e) => setStakeAmount(e.target.value)}
           placeholder={
             stakingTokenuserBalanceQuery.data
               ? stakingTokenuserBalanceQuery.data
@@ -71,7 +77,11 @@ export default function StakeAmountLength() {
         <StakeAmountImg src={MaxPinuImage} />
       </StakeAmountLengthDiv>
       <StakeAmountLengthDiv>
-        <StakeAmountLengthInput placeholder="Stake Length in Days" />
+        <StakeAmountLengthInput
+          value={stakeDays}
+          onChange={(e) => setStakeDays(e.target.value)}
+          placeholder="Stake Length in Days"
+        />
         <StakeLengthImg src={CalendarImage} />
       </StakeAmountLengthDiv>
     </>
