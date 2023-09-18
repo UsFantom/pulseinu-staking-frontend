@@ -6,13 +6,11 @@ import CalendarImage from '../../assets/images/calendar.svg';
 import { useStakingTokenUserBalance } from '../../queries/useStaking';
 
 const StakeAmountLengthDiv = styled.div`
-  width: 860px;
-  height: 40px;
-  padding: 5px 30px 5px 30px;
+  width: 920px;
+  height: 50px;
+  padding: 0px;
   border-radius: 200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: relative;
   background: #d7e0ff0d;
   margin: auto;
   margin-bottom: 20px;
@@ -25,7 +23,7 @@ const StakeAmountLengthDiv = styled.div`
   }
 `;
 
-const StakeAmountLengthTitle = styled.p`
+const StakeAmountLengthInput = styled.input`
   font-family: Poppins;
   font-size: 16px;
   font-weight: 400;
@@ -33,18 +31,29 @@ const StakeAmountLengthTitle = styled.p`
   letter-spacing: 0.05em;
   text-align: left;
   color: #696969;
-  text-transform: uppercase;
+  width: Calc(100% - 30px);
+  height: 100%;
+  padding: 0 15px 0px 15px;
+  margin: 0px;
+  border: none;
+  border-radius: 200px;
+  background: transparent;
 `;
 
 const StakeAmountImg = styled.img`
   width: 48px;
   height: 48px;
-  margin-right: -15px;
+  position: absolute;
+  top: 0px;
+  right: 15px;
 `;
 
 const StakeLengthImg = styled.img`
   width: 18px;
   height: 18px;
+  position: absolute;
+  top: 15px;
+  right: 30px;
 `;
 
 export default function StakeAmountLength() {
@@ -52,15 +61,17 @@ export default function StakeAmountLength() {
   return (
     <>
       <StakeAmountLengthDiv>
-        <StakeAmountLengthTitle>
-          {`Stake Amount in PINU (${
-            stakingTokenuserBalanceQuery.data ? stakingTokenuserBalanceQuery.data : '-'
-          } PINU available)`}
-        </StakeAmountLengthTitle>
+        <StakeAmountLengthInput
+          placeholder={
+            stakingTokenuserBalanceQuery.data
+              ? stakingTokenuserBalanceQuery.data
+              : '-PINU available)'
+          }
+        />
         <StakeAmountImg src={MaxPinuImage} />
       </StakeAmountLengthDiv>
       <StakeAmountLengthDiv>
-        <StakeAmountLengthTitle>Stake Length in Days</StakeAmountLengthTitle>
+        <StakeAmountLengthInput placeholder="Stake Length in Days" />
         <StakeLengthImg src={CalendarImage} />
       </StakeAmountLengthDiv>
     </>

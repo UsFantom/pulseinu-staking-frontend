@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Header from '../../components/Header';
 import Referrals from '../../components/Referrals';
 import StakeAmountLength from '../../components/StakeAmountLength';
 import StakeBonus from '../../components/StakeBonus';
@@ -22,6 +23,20 @@ const PageLayout = styled.div`
     rgba(0, 181, 255, 0.1664) 97.51%
   );
   overflow-y: auto;
+`;
+
+const HeaderDiv = styled.div`
+  width: 940px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: -150px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  // background: #d7e0ff0d;
+  // border-radius: 30px;
+  @media (max-width: 1044px) {
+    width: 90%;
+  }
 `;
 
 const ContentDiv = styled.div`
@@ -149,6 +164,9 @@ export default function Stake() {
 
   return (
     <PageLayout>
+      <HeaderDiv>
+        <Header />
+      </HeaderDiv>
       <NavigateBack title="STAKE PULSE INU" navigateTo="/" />
       <ContentDiv>
         <StakeTitleDiv>
