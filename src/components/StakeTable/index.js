@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useStakingInfo } from '../../queries/useStaking';
 import { ethers } from 'ethers';
+import { formatNumber } from '../../utils/utils';
 
 const StakeTableDiv = styled.div`
   width: Calc(100% - 40px);
@@ -52,24 +53,34 @@ export default function StakeTable() {
           <StakeTableHeader>Shares</StakeTableHeader>
           <StakeTableHeader>PLS Earned</StakeTableHeader>
         </StakeTableRow>
-        {stakingInfoQuery.data?.stakingInfo && (
+        {stakingInfoQuery.data?.stakingInfo && stakingInfoQuery.data?.stakingInfo[0] > 0 && (
           <StakeTableRow>
-            <StakeTableData>{stakingInfoQuery.data?.stakingInfo[3].toString()}</StakeTableData>
-            <StakeTableData>{stakingInfoQuery.data?.stakingInfo[4].toString()}</StakeTableData>
             <StakeTableData>
-              {ethers.formatUnits(
-                stakingInfoQuery.data?.stakingInfo[0].toString(),
-                stakingInfoQuery.data.decimals
+              {formatNumber(stakingInfoQuery.data?.stakingInfo[3].toString())}
+            </StakeTableData>
+            <StakeTableData>
+              {formatNumber(stakingInfoQuery.data?.stakingInfo[4].toString())}
+            </StakeTableData>
+            <StakeTableData>
+              {formatNumber(
+                ethers.utils.formatUnits(
+                  stakingInfoQuery.data?.stakingInfo[0].toString(),
+                  stakingInfoQuery.data.decimals
+                )
               )}
             </StakeTableData>
             <StakeTableData>
-              {ethers.formatUnits(
-                stakingInfoQuery.data?.stakingInfo[1].toString(),
-                stakingInfoQuery.data.decimals
+              {formatNumber(
+                ethers.utils.formatUnits(
+                  stakingInfoQuery.data?.stakingInfo[1].toString(),
+                  stakingInfoQuery.data.decimals
+                )
               )}
             </StakeTableData>
             <StakeTableData>
-              {ethers.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())}
+              {formatNumber(
+                ethers.utils.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())
+              )}
             </StakeTableData>
           </StakeTableRow>
         )}

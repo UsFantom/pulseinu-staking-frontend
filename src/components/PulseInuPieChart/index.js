@@ -100,7 +100,7 @@ export function PulseInuPieChart(props) {
         label.innerHTML =
           slice.label.toUpperCase() +
           "<br /><span style='font-weight: 700;'>" +
-          (slice.percent * 100).toFixed(0).toString() +
+          (slice.percent * 100).toFixed(3).toString() +
           '%</span>';
 
         pieChartRef.current.appendChild(label);

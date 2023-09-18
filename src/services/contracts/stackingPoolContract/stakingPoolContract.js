@@ -11,6 +11,14 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.totalReward();
   }
 
+  async totalRewardPaid() {
+    return this.reader.totalRewardPaid();
+  }
+
+  async getShareRateBasis() {
+    return this.reader.SHARE_RATE_BASIS();
+  }
+
   async totalStaked() {
     return this.reader.totalStaked();
   }
@@ -19,11 +27,23 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.userStakingInfo(account);
   }
 
-  async stake(amount, days, referrer = ethers.ZeroAddress) {
-    return this.writer.stake(amount, days, referrer);
+  async stake(amount, days, referrer = ethers.constants.AddressZero, stakingFee) {
+    return this.writer.stake(amount, days, referrer, { value: stakingFee });
   }
 
   async referrals(account) {
     return this.reader.referrals(account);
+  }
+
+  async stakingFee() {
+    return this.reader.stakingFee();
+  }
+
+  async getLengthBonus(amount, days) {
+    return this.reader.getLengthBonus(amount, days);
+  }
+
+  async getUserBoostPercent(account) {
+    return this.reader.getUserBoostPercent(account);
   }
 }

@@ -11,10 +11,12 @@ import {
   useStakingTokenBurnedAmount,
   useStakingTokenTotalSupply,
   useStakingTotalReward,
+  useStakingTotalRewardPaid,
   useStakingTotalStaked
 } from '../../queries/useStaking';
 import { LoadableContent } from '../../components/Custom/LoadableContent';
 import { isValidValue } from '../../utils';
+import { formatNumber } from '../../utils/utils';
 
 const PageLayout = styled.div`
   position: relative;
@@ -271,6 +273,7 @@ export default function Dashboard() {
   const stakingTokenBurnedAmountQuery = useStakingTokenBurnedAmount();
 
   const stakingTotalRewardQuery = useStakingTotalReward();
+  const stakingTotalRewardPaidQuery = useStakingTotalRewardPaid();
 
   const stakingTotalStakedQuery = useStakingTotalStaked();
 
@@ -354,9 +357,9 @@ export default function Dashboard() {
               {() => (
                 <StatisticData
                   title="TOTAL SUPPLY"
-                  amount={`${stakingTokenTotalSupplyQuery.data / 1e12}T`}
+                  amount={`${formatNumber(stakingTokenTotalSupplyQuery.data / 1e12)}T`}
                   unit
-                  equals={`≈ $${stakingTokenTotalSupplyQuery.data}`}
+                  equals={`≈ $${formatNumber(stakingTokenTotalSupplyQuery.data)}`}
                 />
               )}
             </LoadableContent>
@@ -372,19 +375,16 @@ export default function Dashboard() {
             />
           </DashboardStatisticMarketDiv>
           <DashboardStatisticPaidAPYDiv>
-            <LoadableContent
-              query={stakingTotalRewardQuery}
-              fallback={<StatisticData title="PLS Dividends Paid" amount={`$${0}`} />}>
-              {() => (
-                <StatisticData
-                  title="PLS Dividends Paid"
-                  amount={`$${stakingTotalRewardQuery.data}`}
-                />
-              )}
-            </LoadableContent>
+            <StatisticData
+              title="PLS Dividends Paid $"
+              amount={`${formatNumber(stakingTotalRewardPaidQuery.data)}`}
+            />
           </DashboardStatisticPaidAPYDiv>
           <DashboardStatisticPaidAPYDiv>
-            <StatisticData title="Current APY %" amount="$1234.00" />
+            <StatisticData
+              title="Current APY %"
+              amount={`${formatNumber(100 * stakingTotalRewardQuery.data)}`}
+            />
           </DashboardStatisticPaidAPYDiv>
         </DashboardStatistics>
         <DashboardDistribution>
@@ -406,8 +406,8 @@ export default function Dashboard() {
                   {() => (
                     <PulseInuDistribution
                       title="BURNS"
-                      amount={`${stakingTokenBurnedAmountQuery.data}`}
-                      equals={`≈ $${stakingTokenBurnedAmountQuery.data}`}
+                      amount={`${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
+                      equals={`≈ $${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
                       color="#F60954"
                     />
                   )}
@@ -425,8 +425,8 @@ export default function Dashboard() {
                   {() => (
                     <PulseInuDistribution
                       title="STAKES"
-                      amount={`${stakingTotalStakedQuery.data}`}
-                      equals={`≈ $${stakingTotalStakedQuery.data}`}
+                      amount={`${formatNumber(stakingTotalStakedQuery.data)}`}
+                      equals={`≈ $${formatNumber(stakingTotalStakedQuery.data)}`}
                       color="#D7E0FF"
                     />
                   )}
@@ -447,16 +447,16 @@ export default function Dashboard() {
                   }>
                   <PulseInuDistribution
                     title="LIQUIDITY"
-                    amount={
+                    amount={formatNumber(
                       stakingTokenTotalSupplyQuery.data -
-                      stakingTotalStakedQuery.data -
-                      stakingTokenBurnedAmountQuery.data
-                    }
-                    equals={`≈ $${
+                        stakingTotalStakedQuery.data -
+                        stakingTokenBurnedAmountQuery.data
+                    )}
+                    equals={`≈ $${formatNumber(
                       stakingTokenTotalSupplyQuery.data -
-                      stakingTotalStakedQuery.data -
-                      stakingTokenBurnedAmountQuery.data
-                    }`}
+                        stakingTotalStakedQuery.data -
+                        stakingTokenBurnedAmountQuery.data
+                    )}`}
                     color="#3D83FD"
                   />
                 </LoadableContent>

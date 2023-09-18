@@ -8,7 +8,7 @@ export const CONFIG = {
   11155111: {
     contracts: {
       stakingPool: {
-        address: '0x3Eb2eD7209e01a2e187eC5437FC48eD44FFa90CE'
+        address: '0x53A13FA150C288d0464508B1140f8C6340B416aD'
       },
       boostNft: {
         address: '0x7AaF731E0275705298EA0f541C0C455aE8E4Bd88',

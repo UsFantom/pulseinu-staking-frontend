@@ -31,21 +31,43 @@ export const useStakingTokenUserBalance = () => {
     async () => await Promise.all([contract.balanceOf(account), contract.decimals()]),
     {
       enabled: Boolean(contract && account),
-      select: ([balance, decimals]) => ethers.formatUnits(balance, decimals)
+      select: ([balance, decimals]) => ethers.utils.formatUnits(balance, decimals)
     }
   );
 };
 
-export const useGetLengthBonus = () => {
+export const useGetUserBoostPercent = (amount) => {
+  const { account } = useWeb3React();
+  const contract = useStakingPoolContract(false);
+  return useQuery(
+    ['useGetUserBoostPercent', amount],
+    async () => await contract.getUserBoostPercent(account),
+    {
+      enabled: Boolean(contract && amount && account),
+      select: (userBoostPercent) => {
+        return parseFloat(amount * parseFloat(userBoostPercent)).toFixed(3);
+      }
+    }
+  );
+};
+
+export const useGetLengthBonus = (amount, days) => {
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
   const erc20Contract = useERC20Contract(stakingTokenQuery.data);
   return useQuery(
-    ['useGetLengthBonus'],
-    async () => await Promise.all([contract.getLengthBonus(), erc20Contract.decimals()]),
+    ['useGetLengthBonus', amount, days],
+    async () => {
+      const decimals = await erc20Contract.decimals();
+      return [
+        decimals,
+        ...[await contract.getLengthBonus(ethers.utils.parseUnits(amount, decimals), days)]
+      ];
+    },
     {
-      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
-      select: ([lengthBonus, decimals]) => ethers.formatUnits(lengthBonus, decimals)
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && amount && days),
+      select: ([decimals, lengthBonus]) =>
+        parseFloat(ethers.utils.formatUnits(lengthBonus, decimals)).toFixed(3)
     }
   );
 };
@@ -55,7 +77,34 @@ export const useStakingTotalReward = () => {
 
   return useQuery(['useStakingTotalReward'], async () => await contract.totalReward(), {
     enabled: Boolean(contract),
-    select: (totalReward) => ethers.formatUnits(totalReward, 18)
+    select: (totalReward) => ethers.utils.formatEther(totalReward)
+  });
+};
+
+export const useStakingFee = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(['useStakingFee'], async () => await contract.stakingFee(), {
+    enabled: Boolean(contract),
+    select: (stakingFee) => ethers.utils.formatEther(stakingFee)
+  });
+};
+
+export const useStakingTotalRewardPaid = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(['useStakingTotalRewardPaid'], async () => await contract.totalRewardPaid(), {
+    enabled: Boolean(contract),
+    select: (totalRewardPaid) => ethers.utils.formatEther(totalRewardPaid)
+  });
+};
+
+export const useStakingShareRateBasis = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(['useStakingShareRateBasis'], async () => await contract.getShareRateBasis(), {
+    enabled: Boolean(contract),
+    select: (shareRateBasis) => shareRateBasis
   });
 };
 
@@ -68,7 +117,7 @@ export const useStakingTotalStaked = () => {
     async () => await Promise.all([contract.totalStaked(), erc20Contract.decimals()]),
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
-      select: ([totalStaked, decimals]) => ethers.formatUnits(totalStaked, decimals)
+      select: ([totalStaked, decimals]) => ethers.utils.formatUnits(totalStaked, decimals)
     }
   );
 };
@@ -111,7 +160,7 @@ export const useStakingTokenBurnedAmount = () => {
     async () => await Promise.all([contract.balanceOf(burnAddressQuery.data), contract.decimals()]),
     {
       enabled: Boolean(contract && burnAddressQuery.data && stakingTokenQuery.data),
-      select: ([balance, decimals]) => ethers.formatUnits(balance, decimals)
+      select: ([balance, decimals]) => ethers.utils.formatUnits(balance, decimals)
     }
   );
 };
@@ -124,7 +173,7 @@ export const useStakingTokenTotalSupply = () => {
     async () => await Promise.all([contract.totalSupply(), contract.decimals()]),
     {
       enabled: Boolean(contract && stakingTokenQuery.data),
-      select: ([totalSupply, decimals]) => ethers.formatUnits(totalSupply, decimals)
+      select: ([totalSupply, decimals]) => ethers.utils.formatUnits(totalSupply, decimals)
     }
   );
 };

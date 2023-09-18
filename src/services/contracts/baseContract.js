@@ -1,4 +1,4 @@
-import { Contract } from 'ethers';
+import { ethers } from 'ethers';
 
 export class BaseContract {
   constructor(address, abi, provider) {
@@ -10,7 +10,7 @@ export class BaseContract {
   }
 
   connect(address = this.address, abi, provider) {
-    this.reader = new Contract(address, abi, provider);
-    this.writer = new Contract(address, abi, provider.getSigner());
+    this.reader = new ethers.Contract(address, abi, provider);
+    this.writer = new ethers.Contract(address, abi, provider.getSigner());
   }
 }
