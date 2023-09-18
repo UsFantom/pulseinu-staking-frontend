@@ -85,7 +85,7 @@ const HeaderMenuIcon = styled.img`
 
 export default function AmountBurned() {
   const { account } = useWeb3React();
-
+  const handleAddToken = () => {};
   return (
     <HeaderDiv>
       <HeaderLogoDiv>
@@ -97,7 +97,7 @@ export default function AmountBurned() {
         <HeaderMenuItem>WHITEPAPER</HeaderMenuItem>
         <HeaderMenuIcon src={TwitterLogo} width={19} height={17} />
         <HeaderMenuIcon src={TelegramLogo} width={21} height={21} />
-        <HeaderMenuIcon src={MetaMaskLogo} width={25} height={25} />
+        <HeaderMenuIcon src={MetaMaskLogo} width={25} height={25} onClick={handleAddToken} />
         <WalletConnectButton />
       </HeaderMenuDiv>
     </HeaderDiv>

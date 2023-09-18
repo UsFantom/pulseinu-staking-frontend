@@ -27,6 +27,18 @@ export const CONFIG = {
     }
   },
   369: {
+    contracts: {},
+    rpcUrl: `https://pulsechain.publicnode.com`,
+    network: {
+      chainId: '0x171',
+      rpcUrls: ['https://pulsechain.publicnode.com'],
+      chainName: 'PulseChain',
+      nativeCurrency: { name: 'PLS', decimals: 18, symbol: 'PLS' },
+      blockExplorerUrls: ['https://scan.pulsechain.com'],
+      iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_pulse.jpg']
+    }
+  },
+  943: {
     contracts: {
       stakingPool: {
         address: '0xDB5977307398081C4d8Db2CC73F98B4DCA442575'
@@ -37,14 +49,14 @@ export const CONFIG = {
       stakingToken: '0x6eB0864C8568dC4361CC8A56703F154cC44dF353',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
-    rpcUrl: `https://pulsechain.publicnode.com`,
+    rpcUrl: `https://pulsechain-testnet.publicnode.com`,
     network: {
-      chainId: 369,
-      rpcUrls: ['https://pulsechain.publicnode.com'],
-      chainName: 'PulseChain',
-      nativeCurrency: { name: 'PLS', decimals: 18, symbol: 'PLS' },
-      blockExplorerUrls: ['https://scan.pulsechain.com'],
-      iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_pulse.jpg']
+      chainId: '0x3AF',
+      rpcUrls: ['https://pulsechain-testnet.publicnode.com'],
+      chainName: 'PulseChain Testnet v4',
+      nativeCurrency: { name: 'tPLS', decimals: 18, symbol: 'tPLS' },
+      blockExplorerUrls: ['https://scan.v4.testnet.pulsechain.com'],
+      iconUrls: ['https://chainlist.org/unknown-logo.png']
     }
   }
 };
