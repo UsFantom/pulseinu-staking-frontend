@@ -6,6 +6,7 @@ import { useBoostNftTotalSupply } from '../../queries/useBoostNft';
 import { formatNumber } from '../../utils/utils';
 
 const MintedNFTsDiv = styled.div`
+  justify-content: center;
   margin-bottom: 150px;
   padding-bottom: 20px;
   display: flex;
