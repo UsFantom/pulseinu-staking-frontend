@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import PULSEINULOGO from '../../assets/images/pulseinu.svg';
+import PULSEINULOGO from '../../assets/images/pulseinulogo.svg';
 
 const PieChartDiv = styled.div`
   position: relative;
@@ -14,19 +14,21 @@ const PieChartDiv = styled.div`
 
 const PulseInuImgDiv = styled.div`
   height: 100%;
-  width: 50%;
+  width: 100%;
   position: absolute;
+  top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   overflow: hidden;
-  border-radius: 0 110px 110px 0;
+  border-radius: 50%;
 `;
 
 const PulseInuImg = styled.img`
-  height: 55%;
   position: absolute;
-  bottom: 0%;
-  left: 0%;
-  transform: translate(-120px, 0);
+  width: 150%;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export function PulseInuPieChart(props) {
@@ -54,7 +56,9 @@ export function PulseInuPieChart(props) {
         return [x, y];
       };
 
-      props.data.forEach((slice) => {
+      let sliceLabels = [];
+
+      props.data.forEach((slice, index) => {
         const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
         const [labelX, labelY] = getCoordinatesForLabel(slice.percent);
         cumulativePercent += slice.percent;
@@ -94,7 +98,17 @@ export function PulseInuPieChart(props) {
         label.style.textAlign = 'center';
         label.style.fontFamily = 'Poppins';
         label.style.fontWeight = '400';
-        label.style.fontSize = slice.label === 'Liquidity' ? '16px' : '12px';
+        let fontSize = 12;
+        if (slice.percent > 0.35 && slice.percent <= 0.4) {
+          fontSize = 13;
+        } else if (slice.percent > 0.4 && slice.percent <= 0.45) {
+          fontSize = 14;
+        } else if (slice.percent > 0.45 && slice.percent <= 0.5) {
+          fontSize = 15;
+        } else if (slice.percent > 0.5) {
+          fontSize = 16;
+        }
+        label.style.fontSize = `${fontSize}px`;
         label.style.transform = 'translate(-50%, -100%)';
 
         label.innerHTML =
@@ -102,8 +116,21 @@ export function PulseInuPieChart(props) {
           "<br /><span style='font-weight: 700;'>" +
           (slice.percent * 100).toFixed(0).toString() +
           '%</span>';
-
-        pieChartRef.current.appendChild(label);
+        sliceLabels.push(label);
+        if (slice.percent > 0.1) {
+          pieChartRef.current.appendChild(label);
+        } else {
+          if (props.data[index - 1] !== undefined && props.data[index - 1].percent < 0.1) {
+            if (props.data[index - 1].percent <= slice.percent) {
+              pieChartRef.current.appendChild(label);
+            }
+          }
+          if (props.data[index + 1] !== undefined && props.data[index + 1].percent < 0.1) {
+            if (props.data[index + 1].percent <= slice.percent) {
+              pieChartRef.current.appendChild(label);
+            }
+          }
+        }
         initialized.current = true;
       });
     }
