@@ -2,9 +2,11 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useDraggable } from 'react-use-draggable-scroll';
 
-import LegendaryImage from '../../assets/images/legendary.png';
+import { useBoostNftTotalSupply } from '../../queries/useBoostNft';
+import { formatNumber } from '../../utils/utils';
 
 const MintedNFTsDiv = styled.div`
+  justify-content: center;
   margin-bottom: 150px;
   padding-bottom: 20px;
   display: flex;
@@ -78,18 +80,26 @@ export default function MintedNFTs() {
   const ref = useRef();
   const { events } = useDraggable(ref);
 
+  const boostNftTotalSupply = useBoostNftTotalSupply();
   return (
     <MintedNFTsDiv {...events} ref={ref}>
-      {Array.from(Array(50), (e, index) => (
-        <MintedNFTsItemDiv key={index}>
-          <MintedNFTsImgDiv>
-            <NFTImgWrap>
-              <NFTImg src={LegendaryImage} width="140" height="134" />
-            </NFTImgWrap>
-          </MintedNFTsImgDiv>
-          <MintedAmount color="#696969">10,000,000,000 PINU</MintedAmount>
-        </MintedNFTsItemDiv>
-      ))}
+      {boostNftTotalSupply.data &&
+        boostNftTotalSupply.data.map((item, index) => (
+          <MintedNFTsItemDiv key={index}>
+            <MintedNFTsImgDiv>
+              <NFTImgWrap>
+                <NFTImg
+                  src={`https://ipfs.io/ipfs/bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/${
+                    item.id % 1500
+                  }.gif`}
+                  width="140"
+                  height="134"
+                />
+              </NFTImgWrap>
+            </MintedNFTsImgDiv>
+            <MintedAmount color="#696969">{`${formatNumber(item.price)} PINU`}</MintedAmount>
+          </MintedNFTsItemDiv>
+        ))}
     </MintedNFTsDiv>
   );
 }

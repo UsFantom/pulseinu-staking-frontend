@@ -9,4 +9,16 @@ export class BoostNftContract extends BaseContract {
   async tokenTypePrice(type) {
     return this.reader.tokenTypePrice(type);
   }
+
+  async mint(type) {
+    return this.writer.mint(type);
+  }
+
+  async totalSupply() {
+    return this.reader.totalSupply();
+  }
+
+  async tokenIdToType(id) {
+    return this.reader.tokenIdToType(id);
+  }
 }

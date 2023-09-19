@@ -14,7 +14,6 @@ export const LoadableContent = ({ query, fallback, children }) => {
   if (!Array.isArray(query) && (isLoading || !isValidValue(query.data))) {
     return fallback;
   }
-
   if (typeof children === 'function') {
     const data = Array.isArray(query) ? queries.map((q) => q.data) : query.data;
     return children({ data });

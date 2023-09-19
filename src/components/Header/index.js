@@ -91,7 +91,6 @@ export default function AmountBurned() {
   const stakingTokenMutation = useStakingTokenMutation();
 
   const addToken = async (token) => {
-    console.log(token, library);
     try {
       const wasAdded = await library.provider.request({
         method: 'wallet_watchAsset',

@@ -31,21 +31,47 @@ export const useStakingTokenUserBalance = () => {
     async () => await Promise.all([contract.balanceOf(account), contract.decimals()]),
     {
       enabled: Boolean(contract && account),
-      select: ([balance, decimals]) => ethers.formatUnits(balance, decimals)
+      select: ([balance, decimals]) => ethers.utils.formatUnits(balance, decimals)
     }
   );
 };
 
-export const useGetLengthBonus = () => {
+export const useGetUserBoostPercent = (amount) => {
+  const { account } = useWeb3React();
+  const contract = useStakingPoolContract(false);
+  return useQuery(
+    ['useGetUserBoostPercent', amount],
+    async () => {
+      if (!amount) return 0;
+      return await contract.getUserBoostPercent(account);
+    },
+    {
+      enabled: Boolean(contract && account),
+      select: (userBoostPercent) => {
+        return !amount ? 0 : (amount * parseFloat(userBoostPercent)) / 1e4;
+      }
+    }
+  );
+};
+
+export const useGetLengthBonus = (amount, days) => {
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
   const erc20Contract = useERC20Contract(stakingTokenQuery.data);
   return useQuery(
-    ['useGetLengthBonus'],
-    async () => await Promise.all([contract.getLengthBonus(), erc20Contract.decimals()]),
+    ['useGetLengthBonus', amount, days],
+    async () => {
+      if (!amount) return [0, 0];
+      const decimals = await erc20Contract.decimals();
+      return [
+        decimals,
+        ...[await contract.getLengthBonus(ethers.utils.parseUnits(amount, decimals), days)]
+      ];
+    },
     {
-      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
-      select: ([lengthBonus, decimals]) => ethers.formatUnits(lengthBonus, decimals)
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && days),
+      select: ([decimals, lengthBonus]) =>
+        !amount ? 0 : ethers.utils.formatUnits(lengthBonus, decimals)
     }
   );
 };
@@ -55,8 +81,39 @@ export const useStakingTotalReward = () => {
 
   return useQuery(['useStakingTotalReward'], async () => await contract.totalReward(), {
     enabled: Boolean(contract),
-    select: (totalReward) => ethers.formatUnits(totalReward, 18)
+    select: (totalReward) => ethers.utils.formatEther(totalReward)
   });
+};
+
+export const useStakingFee = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(['useStakingFee'], async () => await contract.stakingFee(), {
+    enabled: Boolean(contract),
+    select: (stakingFee) => ethers.utils.formatEther(stakingFee)
+  });
+};
+
+export const useStakingTotalRewardPaid = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(['useStakingTotalRewardPaid'], async () => await contract.totalRewardPaid(), {
+    enabled: Boolean(contract),
+    select: (totalRewardPaid) => ethers.utils.formatEther(totalRewardPaid)
+  });
+};
+
+export const useStakingSharePrice = () => {
+  const contract = useStakingPoolContract();
+
+  return useQuery(
+    ['useStakingSharePrice'],
+    async () => await Promise.all([contract.getShareRateBasis(), contract.currentShareRate()]),
+    {
+      enabled: Boolean(contract),
+      select: ([shareRateBasis, currentShare]) => currentShare / shareRateBasis
+    }
+  );
 };
 
 export const useStakingTotalStaked = () => {
@@ -68,18 +125,84 @@ export const useStakingTotalStaked = () => {
     async () => await Promise.all([contract.totalStaked(), erc20Contract.decimals()]),
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
-      select: ([totalStaked, decimals]) => ethers.formatUnits(totalStaked, decimals)
+      select: ([totalStaked, decimals]) => ethers.utils.formatUnits(totalStaked, decimals)
     }
   );
 };
 
-export const useStakingReferrals = () => {
+export const useGetCurrentDay = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetCurrentDay', stakingTokenQuery.data],
+    async () => await contract.getCurrentDay(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (currentDay) => currentDay
+    }
+  );
+};
+
+export const useGetUserRewards = () => {
+  const contract = useStakingPoolContract();
+  const { account } = useWeb3React();
+  return useQuery(
+    ['useGetUserRewards', account],
+    async () => await contract.getUserRewards(account),
+    {
+      enabled: Boolean(contract && account),
+      select: (userRewards) => ethers.utils.formatEther(userRewards)
+    }
+  );
+};
+
+export const useGetPlsPriceOfUsd = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetPlsPriceOfUsd', stakingTokenQuery.data],
+    async () => await contract.getPlsPriceOfUsd(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (plsPrice) => ethers.utils.formatEther(plsPrice)
+    }
+  );
+};
+
+export const useGetPinuPriceOfPls = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetPinuPriceOfPls', stakingTokenQuery.data],
+    async () => await contract.getPinuPriceOfPls(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (pinuPrice) => ethers.utils.formatEther(pinuPrice)
+    }
+  );
+};
+
+export const useStakingUserReferrals = () => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();
-  return useQuery(['useStakingReferrals', account], async () => await contract.referrals(account), {
-    enabled: Boolean(contract && account),
-    select: (referrals) => referrals
-  });
+  const stakingTokenQuery = useStakingToken();
+  const stakingFeeQuery = useStakingFee();
+  return useQuery(
+    ['useStakingUserReferrals', account],
+    async () =>
+      await Promise.all([contract.getUserReferrals(account), contract.getStakingReferrerPercent()]),
+    {
+      enabled: Boolean(contract && stakingFeeQuery.data && stakingTokenQuery.data && account),
+      select: ([userReferrals, stakingReferrerPercent]) => {
+        return userReferrals.map((referral) => {
+          return {
+            address: referral,
+            amount: (stakingFeeQuery.data * stakingReferrerPercent) / 1e4
+          };
+        });
+      }
+    }
+  );
 };
 
 export const useStakingInfo = () => {
@@ -102,6 +225,27 @@ export const useStakingInfo = () => {
   );
 };
 
+export const useStakingHistory = () => {
+  const { account } = useWeb3React();
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  const erc20Contract = useERC20Contract(stakingTokenQuery.data);
+  return useQuery(
+    ['useStakingHistory', stakingTokenQuery.data, account],
+    async () =>
+      await Promise.all([contract.getUserStakeHistory(account), erc20Contract.decimals()]),
+    {
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && account),
+      select: ([stakingInfo, decimals]) => {
+        return {
+          stakingInfo: stakingInfo,
+          decimals
+        };
+      }
+    }
+  );
+};
+
 export const useStakingTokenBurnedAmount = () => {
   const stakingTokenQuery = useStakingToken();
   const burnAddressQuery = useBurnAddress();
@@ -111,7 +255,7 @@ export const useStakingTokenBurnedAmount = () => {
     async () => await Promise.all([contract.balanceOf(burnAddressQuery.data), contract.decimals()]),
     {
       enabled: Boolean(contract && burnAddressQuery.data && stakingTokenQuery.data),
-      select: ([balance, decimals]) => ethers.formatUnits(balance, decimals)
+      select: ([balance, decimals]) => ethers.utils.formatUnits(balance, decimals)
     }
   );
 };
@@ -124,7 +268,7 @@ export const useStakingTokenTotalSupply = () => {
     async () => await Promise.all([contract.totalSupply(), contract.decimals()]),
     {
       enabled: Boolean(contract && stakingTokenQuery.data),
-      select: ([totalSupply, decimals]) => ethers.formatUnits(totalSupply, decimals)
+      select: ([totalSupply, decimals]) => ethers.utils.formatUnits(totalSupply, decimals)
     }
   );
 };

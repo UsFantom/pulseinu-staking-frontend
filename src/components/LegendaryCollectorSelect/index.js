@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import LegendaryImage from '../../assets/images/legendary.png';
 import CollectorImage from '../../assets/images/collector.png';
+import { useBoostNftTokenTypesPrices } from '../../queries/useBoostNft';
+import { formatNumber } from '../../utils/utils';
 
 const LegendaryCollectorSelectDiv = styled.div`
   width: 940px;
@@ -115,63 +117,71 @@ const NFTDetailContent = styled.p`
 `;
 
 export default function LegendaryCollectorSelect(props) {
+  const boostNftTokenTypesPricesQuery = useBoostNftTokenTypesPrices();
+
   return (
     <LegendaryCollectorSelectDiv>
-      {props.selected === 'legendary' ? (
+      {props.selected === 0 ? (
         <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
             </NFTImgWrap>
-            <NFTAmount color="#D7E0FF">10,000,000,000</NFTAmount>
+            <NFTAmount color="#D7E0FF">
+              {formatNumber(boostNftTokenTypesPricesQuery.data?.[0])}
+            </NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Legendary</NFTDetailTitle>
             <NFTDetailContent color="#D7E0FF">
-              Earn a 10% Yield boost on staking potential future yield opportunities
+              Earn a 30% Yield boost on staking potential future yield opportunities
             </NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       ) : (
-        <SelectItemDiv onClick={() => props.setSelected('legendary')}>
+        <SelectItemDiv onClick={() => props.setSelected(0)}>
           <NFTImageDiv>
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
             </NFTImgWrap>
-            <NFTAmount>10,000,000,000</NFTAmount>
+            <NFTAmount>{formatNumber(boostNftTokenTypesPricesQuery.data?.[0])}</NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle>Legendary</NFTDetailTitle>
             <NFTDetailContent>
-              Earn a 10% Yield boost on staking potential future yield opportunities
+              Earn a 30% Yield boost on staking potential future yield opportunities
             </NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       )}
-      {props.selected === 'collector' ? (
+      {props.selected === 1 ? (
         <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
             </NFTImgWrap>
-            <NFTAmount color="#D7E0FF">10,000,000,000</NFTAmount>
+            <NFTAmount color="#D7E0FF">
+              {formatNumber(boostNftTokenTypesPricesQuery.data?.[1])}
+            </NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Collector</NFTDetailTitle>
-            <NFTDetailContent color="#D7E0FF">Earn a 10% Yield boost on staking</NFTDetailContent>
+            <NFTDetailContent color="#D7E0FF">Earn a 5% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       ) : (
-        <SelectItemDiv onClick={() => props.setSelected('collector')}>
+        <SelectItemDiv onClick={() => props.setSelected(1)}>
           <NFTImageDiv bgcolor="#D7E0FF0D">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
             </NFTImgWrap>
-            <NFTAmount color="#D7E0FF">10,000,000,000</NFTAmount>
+            <NFTAmount color="#D7E0FF">
+              {formatNumber(boostNftTokenTypesPricesQuery.data?.[1])}
+            </NFTAmount>
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Collector</NFTDetailTitle>
-            <NFTDetailContent color="#696969">Earn a 10% Yield boost on staking</NFTDetailContent>
+            <NFTDetailContent color="#696969">Earn a 5% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       )}

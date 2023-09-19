@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import PULSEINULOGO from '../../assets/images/pulseinulogo.svg';
+import { formatNumber } from '../../utils/utils';
 
 const PieChartDiv = styled.div`
   position: relative;
@@ -114,7 +115,7 @@ export function PulseInuPieChart(props) {
         label.innerHTML =
           slice.label.toUpperCase() +
           "<br /><span style='font-weight: 700;'>" +
-          (slice.percent * 100).toFixed(0).toString() +
+          formatNumber(slice.percent * 100).toString() +
           '%</span>';
         sliceLabels.push(label);
         if (slice.percent > 0.1) {

@@ -3,12 +3,18 @@ import styled from 'styled-components';
 
 import MaxPinuImage from '../../assets/images/maxpinu.svg';
 import CalendarImage from '../../assets/images/calendar.svg';
-import { useStakingTokenUserBalance } from '../../queries/useStaking';
-import { ethers } from 'ethers';
+import {
+  useGetLengthBonus,
+  useGetUserBoostPercent,
+  useStakingFee,
+  useStakingSharePrice,
+  useStakingTokenUserBalance
+} from '../../queries/useStaking';
 
 import PulseInuBtnBgImage from '../../assets/images/pulseinubtn.svg';
 import { useStakeMutation } from '../../queries/useStakeMutation';
 import { useWeb3React } from '@web3-react/core';
+import { formatNumber } from '../../utils/utils';
 
 const StakeAmountLengthDiv = styled.div`
   width: 920px;
@@ -200,27 +206,63 @@ const PulseInuBtnBgImg = styled.img`
 
 export default function StakeAmountLength() {
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
-
+  const stakingSharePrice = useStakingSharePrice();
   const [stakeAmount, setStakeAmount] = useState('');
   const [stakeDays, setStakeDays] = useState('');
 
   const stakeMutation = useStakeMutation();
   const { account } = useWeb3React();
 
+  const useAllTokenAmounts = () => {
+    if (!stakingTokenuserBalanceQuery.data) return;
+    setStakeAmount(stakingTokenuserBalanceQuery.data);
+  };
+
+  const getLengthBonusQuery = useGetLengthBonus(stakeAmount, stakeDays);
+  const getNftBonusQuery = useGetUserBoostPercent(stakeAmount);
+  const stakingFeeQuery = useStakingFee();
+
+  const getTotal = () => {
+    if (getLengthBonusQuery.isFetching || getNftBonusQuery.isFetching) return '0';
+    let total = 0;
+    try {
+      if (stakeAmount) total += parseFloat(stakeAmount);
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      if (getLengthBonusQuery.data) total += parseFloat(getLengthBonusQuery.data);
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(stakeAmount, getNftBonusQuery.data, getLengthBonusQuery.data);
+    return total;
+  };
+
+  const isInvalid = () => {
+    return !account || !stakeAmount || !stakeDays || stakeDays < 2 || stakeDays > 1000;
+  };
+
   const handleConfirm = useCallback(async () => {
-    if (!account) {
+    if (isInvalid()) {
       return;
     }
     try {
       const tx = await stakeMutation.mutateAsync({
-        amount: ethers.parseUnits('101', 12),
-        days: 30
+        amount: stakeAmount,
+        days: stakeDays,
+        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
       });
       console.log(tx);
     } catch (err) {
       console.log(err);
     }
-  }, [stakeMutation, account]);
+  }, [stakeMutation, account, stakeAmount, stakeDays]);
 
   return (
     <>
@@ -231,19 +273,17 @@ export default function StakeAmountLength() {
         <StakeAmountLengthInput
           value={stakeAmount}
           onChange={(e) => setStakeAmount(e.target.value)}
-          placeholder={
-            stakingTokenuserBalanceQuery.data
-              ? stakingTokenuserBalanceQuery.data
-              : '-PINU available)'
-          }
+          placeholder={`( ${formatNumber(stakingTokenuserBalanceQuery.data)} PINU available)`}
         />
-        <StakeAmountImg src={MaxPinuImage} />
+        <StakeAmountImg onClick={useAllTokenAmounts} src={MaxPinuImage} />
       </StakeAmountLengthDiv>
       <StakeAmountLengthDiv>
         <StakeAmountLengthInput
           value={stakeDays}
+          min={2}
+          max={1000}
           onChange={(e) => setStakeDays(e.target.value)}
-          placeholder="Stake Length in Days"
+          placeholder={`Stake Length in Days(2 to ${formatNumber(1000)})`}
         />
         <StakeLengthImg src={CalendarImage} />
       </StakeAmountLengthDiv>
@@ -255,27 +295,31 @@ export default function StakeAmountLength() {
           <BonusDivs>
             <BonusDetailDiv>
               <BonusTitle>Length Bonus:</BonusTitle>
-              <BonusData>+0.000 PINU</BonusData>
+              <BonusData>{`+${formatNumber(getLengthBonusQuery.data)} PINU`}</BonusData>
             </BonusDetailDiv>
-            <BonusDetailDiv>
-              <BonusTitle>NFT Bonuses:</BonusTitle>
-              <BonusData>+0.000 PINU</BonusData>
-            </BonusDetailDiv>
+            {account && (
+              <BonusDetailDiv>
+                <BonusTitle>NFT Bonuses:</BonusTitle>
+                <BonusData>{`+${formatNumber(getNftBonusQuery.data)} PINU`}</BonusData>
+              </BonusDetailDiv>
+            )}
             <BonusDetailDiv>
               <BonusTitle>Total:</BonusTitle>
-              <BonusData>0.000 PINU</BonusData>
+              <BonusData>{`+${formatNumber(getTotal())} PINU`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
           <BonusDivs borderdisabled={true}>
             <BonusDetailDiv>
               <BonusTitle>Share price</BonusTitle>
-              <BonusData>1,000 PINU/Share</BonusData>
+              <BonusData>{`${formatNumber(stakingSharePrice.data)} PINU/Share`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
         </StakeBonusWrapDiv>
         <StakeButtonDiv>
-          <StakeButtonDivTitle>PLS Fee: 100,000 PLS</StakeButtonDivTitle>
-          <StakeBtn onClick={handleConfirm}>
+          <StakeButtonDivTitle>{`PLS Fee: ${formatNumber(
+            stakingFeeQuery.data
+          )} PLS`}</StakeButtonDivTitle>
+          <StakeBtn onClick={handleConfirm} disabled={isInvalid()}>
             <PulseInuBtnBgImg src={PulseInuBtnBgImage} />
             Stake Pulse Inu
           </StakeBtn>

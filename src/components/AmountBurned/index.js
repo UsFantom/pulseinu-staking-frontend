@@ -7,6 +7,7 @@ import {
   useStakingTokenTotalSupply
 } from '../../queries/useStaking';
 import { LoadableContent } from '../Custom/LoadableContent';
+import { formatNumber } from '../../utils/utils';
 
 const AmountBurnedDiv = styled.div`
   width: 96%;
@@ -117,7 +118,7 @@ export default function AmountBurned() {
         <AmountBurnedTitle>AMOUNT BURNED</AmountBurnedTitle>
         <AmountBurnedPercent>
           <LoadableContent query={stakingTokenBurnedPercentQuery} fallback={null}>
-            {() => stakingTokenBurnedPercentQuery.data.toFixed(2)}
+            {() => formatNumber(stakingTokenBurnedPercentQuery.data)}
           </LoadableContent>
           %
         </AmountBurnedPercent>
@@ -130,7 +131,7 @@ export default function AmountBurned() {
           BURNED:
           <AmountBurnedSpanContent1>
             <LoadableContent query={stakingTokenBurnedAmountQuery} fallback={null}>
-              {() => stakingTokenBurnedAmountQuery.data}
+              {() => formatNumber(stakingTokenBurnedAmountQuery.data)}
             </LoadableContent>
           </AmountBurnedSpanContent1>
         </AmountBurnedSpanTitle1>
@@ -138,7 +139,7 @@ export default function AmountBurned() {
           TOTAL SUPPLY:
           <AmountBurnedSpanContent2>
             <LoadableContent query={stakingTokenTotalSupply} fallback={null}>
-              {() => stakingTokenTotalSupply.data}
+              {() => formatNumber(stakingTokenTotalSupply.data)}
             </LoadableContent>
           </AmountBurnedSpanContent2>
         </AmountBurnedSpanTitle2>

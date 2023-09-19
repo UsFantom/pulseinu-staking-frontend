@@ -1,466 +1,508 @@
 [
   {
-    "inputs": [
-      { "internalType": "address", "name": "_pinuToken", "type": "address" },
-      { "internalType": "address", "name": "_boostNft", "type": "address" },
-      { "internalType": "uint256", "name": "_stakingFee", "type": "uint256" },
-      { "internalType": "uint256", "name": "_shareRate", "type": "uint256" }
-    ],
+    "type": "constructor",
     "stateMutability": "nonpayable",
-    "type": "constructor"
+    "inputs": [
+      { "type": "address", "name": "_pinuToken", "internalType": "address" },
+      { "type": "address", "name": "_routerAddress", "internalType": "address" },
+      { "type": "address", "name": "_daiToken", "internalType": "address" },
+      { "type": "address", "name": "_boostNft", "internalType": "address" },
+      { "type": "uint256", "name": "_stakingFee", "internalType": "uint256" },
+      { "type": "uint256", "name": "_shareRate", "internalType": "uint256" }
+    ]
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "type": "event",
     "name": "Paused",
-    "type": "event"
+    "inputs": [
+      { "type": "address", "name": "account", "internalType": "address", "indexed": false }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "reward", "type": "uint256" }
-    ],
+    "type": "event",
     "name": "RewardPaid",
-    "type": "event"
+    "inputs": [
+      { "type": "address", "name": "user", "internalType": "address", "indexed": true },
+      { "type": "uint256", "name": "reward", "internalType": "uint256", "indexed": false }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "previousAdminRole",
-        "type": "bytes32"
-      },
-      { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" }
-    ],
+    "type": "event",
     "name": "RoleAdminChanged",
-    "type": "event"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32", "indexed": true },
+      {
+        "type": "bytes32",
+        "name": "previousAdminRole",
+        "internalType": "bytes32",
+        "indexed": true
+      },
+      { "type": "bytes32", "name": "newAdminRole", "internalType": "bytes32", "indexed": true }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
-      { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }
-    ],
+    "type": "event",
     "name": "RoleGranted",
-    "type": "event"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32", "indexed": true },
+      { "type": "address", "name": "account", "internalType": "address", "indexed": true },
+      { "type": "address", "name": "sender", "internalType": "address", "indexed": true }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
-      { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }
-    ],
+    "type": "event",
     "name": "RoleRevoked",
-    "type": "event"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32", "indexed": true },
+      { "type": "address", "name": "account", "internalType": "address", "indexed": true },
+      { "type": "address", "name": "sender", "internalType": "address", "indexed": true }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
+    "type": "event",
     "name": "Staked",
-    "type": "event"
+    "inputs": [
+      { "type": "address", "name": "user", "internalType": "address", "indexed": true },
+      { "type": "uint256", "name": "amount", "internalType": "uint256", "indexed": false }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "type": "event",
     "name": "Unpaused",
-    "type": "event"
+    "inputs": [
+      { "type": "address", "name": "account", "internalType": "address", "indexed": false }
+    ],
+    "anonymous": false
   },
   {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
+    "type": "event",
     "name": "Unstaked",
-    "type": "event"
+    "inputs": [
+      { "type": "address", "name": "user", "internalType": "address", "indexed": true },
+      { "type": "uint256", "name": "amount", "internalType": "uint256", "indexed": false }
+    ],
+    "anonymous": false
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
     "name": "BURN_ADDRESS",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "COLLECTOR_BOOST_PERCENT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bytes32", "name": "", "internalType": "bytes32" }],
     "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "LEGENDARY_BOOST_PERCENT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "PERCENT_BASIS",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "PINU_UNIT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "PLS_TO_PINU_RATE",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "SHARE_RATE_BASIS",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "STAKING_BURN_PERCENT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bytes32", "name": "", "internalType": "bytes32" }],
     "name": "STAKING_MODIFY_ROLE",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "STAKING_REFERRER_PERCENT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "STAKING_REWARDS_PERCENT",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "_getTokenPrice",
+    "inputs": [
+      { "type": "address", "name": "_tokenIn", "internalType": "address" },
+      { "type": "address", "name": "_tokenOut", "internalType": "address" },
+      { "type": "uint256", "name": "_amountIn", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
     "name": "boostNft",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "boostNftToUser",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_stakedAmount", "type": "uint256" },
-      { "internalType": "uint256", "name": "_stakingDays", "type": "uint256" }
-    ],
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "calcShares",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [
+      { "type": "uint256", "name": "_stakedAmount", "internalType": "uint256" },
+      { "type": "uint256", "name": "_stakingDays", "internalType": "uint256" }
+    ]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "currentReward",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "currentShareRate",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "daiToken",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "getCurrentDay",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "_days", "type": "uint256" }
-    ],
-    "name": "getLengthBonus",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "type": "function",
     "stateMutability": "pure",
-    "type": "function"
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "getLengthBonus",
+    "inputs": [
+      { "type": "uint256", "name": "_amount", "internalType": "uint256" },
+      { "type": "uint256", "name": "_days", "internalType": "uint256" }
+    ]
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }],
-    "name": "getNftBonus",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "getPinuPriceOfPls",
+    "inputs": []
   },
   {
-    "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "getPlsPriceOfUsd",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bytes32", "name": "", "internalType": "bytes32" }],
     "name": "getRoleAdmin",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "bytes32", "name": "role", "internalType": "bytes32" }]
   },
   {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "uint256", "name": "index", "type": "uint256" }
-    ],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
     "name": "getRoleMember",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32" },
+      { "type": "uint256", "name": "index", "internalType": "uint256" }
+    ]
   },
   {
-    "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "getRoleMemberCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "bytes32", "name": "role", "internalType": "bytes32" }]
   },
   {
-    "inputs": [{ "internalType": "address", "name": "_user", "type": "address" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "getUserBoostPercent",
+    "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address[]", "name": "", "internalType": "address[]" }],
+    "name": "getUserReferrals",
+    "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "getUserRewards",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
   },
   {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      {
+        "type": "tuple[]",
+        "name": "",
+        "internalType": "struct IStakingPool.StakingInfo[]",
+        "components": [
+          { "type": "uint256", "name": "balance", "internalType": "uint256" },
+          { "type": "uint256", "name": "shares", "internalType": "uint256" },
+          { "type": "uint256", "name": "rewards", "internalType": "uint256" },
+          { "type": "uint16", "name": "startDay", "internalType": "uint16" },
+          { "type": "uint16", "name": "stakeDays", "internalType": "uint16" }
+        ]
+      }
     ],
+    "name": "getUserStakeHistory",
+    "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "grantRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32" },
+      { "type": "address", "name": "account", "internalType": "address" }
+    ]
   },
   {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
     "name": "hasRole",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32" },
+      { "type": "address", "name": "account", "internalType": "address" }
+    ]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
     "name": "paused",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "contract IERC20" }],
     "name": "pinuToken",
-    "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "referrals",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "pulseXRouter02",
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32" },
+      { "type": "address", "name": "account", "internalType": "address" }
+    ]
   },
   {
-    "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "revokeRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": [
+      { "type": "bytes32", "name": "role", "internalType": "bytes32" },
+      { "type": "address", "name": "account", "internalType": "address" }
+    ]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "rewardPerShare",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "rewardPerShareStored",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "rewards",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "setPause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "_stakeDays", "type": "uint256" },
-      { "internalType": "address", "name": "_referrer", "type": "address" }
-    ],
-    "name": "stake",
-    "outputs": [],
+    "type": "function",
     "stateMutability": "payable",
-    "type": "function"
+    "outputs": [],
+    "name": "stake",
+    "inputs": [
+      { "type": "uint256", "name": "_amount", "internalType": "uint256" },
+      { "type": "uint256", "name": "_stakeDays", "internalType": "uint256" },
+      { "type": "address", "name": "_referrer", "internalType": "address" }
+    ]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "stakingFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "stakingInfos",
-    "outputs": [
-      { "internalType": "uint256", "name": "balance", "type": "uint256" },
-      { "internalType": "uint256", "name": "shares", "type": "uint256" },
-      { "internalType": "uint256", "name": "rewards", "type": "uint256" },
-      { "internalType": "uint16", "name": "startDay", "type": "uint16" },
-      { "internalType": "uint16", "name": "stakeDays", "type": "uint16" }
-    ],
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "startsAt",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
     "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "bytes4", "name": "interfaceId", "internalType": "bytes4" }]
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "totalReward",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "totalRewardPaid",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "totalShares",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "totalStaked",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "unstake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": []
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "tokenSender", "type": "address" },
-      { "internalType": "address", "name": "tokenReceiver", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
     "name": "updateBoostNftBonusShares",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "inputs": [
+      { "type": "address", "name": "tokenSender", "internalType": "address" },
+      { "type": "address", "name": "tokenReceiver", "internalType": "address" },
+      { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+    ]
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "userRewardPerSharePaid",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "userStakingInfo",
-    "outputs": [
-      { "internalType": "uint256", "name": "balance", "type": "uint256" },
-      { "internalType": "uint256", "name": "shares", "type": "uint256" },
-      { "internalType": "uint256", "name": "rewards", "type": "uint256" },
-      { "internalType": "uint16", "name": "startDay", "type": "uint16" },
-      { "internalType": "uint16", "name": "stakeDays", "type": "uint16" }
-    ],
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
+    "outputs": [
+      { "type": "uint256", "name": "balance", "internalType": "uint256" },
+      { "type": "uint256", "name": "shares", "internalType": "uint256" },
+      { "type": "uint256", "name": "rewards", "internalType": "uint256" },
+      { "type": "uint16", "name": "startDay", "internalType": "uint16" },
+      { "type": "uint16", "name": "stakeDays", "internalType": "uint16" }
+    ],
+    "name": "userStakingInfo",
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
   }
 ]
