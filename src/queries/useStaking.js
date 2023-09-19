@@ -4,7 +4,6 @@ import { useQuery } from 'react-query';
 import { getConfig } from '../config';
 import { ethers } from 'ethers';
 import { isValidValue } from '../utils';
-import { formatNumber } from '../utils/utils';
 
 export const useStakingToken = () => {
   const config = getConfig();
@@ -42,11 +41,14 @@ export const useGetUserBoostPercent = (amount) => {
   const contract = useStakingPoolContract(false);
   return useQuery(
     ['useGetUserBoostPercent', amount],
-    async () => await contract.getUserBoostPercent(account),
+    async () => {
+      if (!amount) return 0;
+      return await contract.getUserBoostPercent(account);
+    },
     {
-      enabled: Boolean(contract && amount && account),
+      enabled: Boolean(contract && account),
       select: (userBoostPercent) => {
-        return formatNumber(amount * parseFloat(userBoostPercent));
+        return !amount ? 0 : (amount * parseFloat(userBoostPercent)) / 1e4;
       }
     }
   );
@@ -59,6 +61,7 @@ export const useGetLengthBonus = (amount, days) => {
   return useQuery(
     ['useGetLengthBonus', amount, days],
     async () => {
+      if (!amount) return [0, 0];
       const decimals = await erc20Contract.decimals();
       return [
         decimals,
@@ -66,9 +69,9 @@ export const useGetLengthBonus = (amount, days) => {
       ];
     },
     {
-      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && amount && days),
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && days),
       select: ([decimals, lengthBonus]) =>
-        formatNumber(ethers.utils.formatUnits(lengthBonus, decimals))
+        !amount ? 0 : ethers.utils.formatUnits(lengthBonus, decimals)
     }
   );
 };
@@ -100,13 +103,17 @@ export const useStakingTotalRewardPaid = () => {
   });
 };
 
-export const useStakingShareRateBasis = () => {
+export const useStakingSharePrice = () => {
   const contract = useStakingPoolContract();
 
-  return useQuery(['useStakingShareRateBasis'], async () => await contract.getShareRateBasis(), {
-    enabled: Boolean(contract),
-    select: (shareRateBasis) => shareRateBasis
-  });
+  return useQuery(
+    ['useStakingSharePrice'],
+    async () => await Promise.all([contract.getShareRateBasis(), contract.currentShareRate()]),
+    {
+      enabled: Boolean(contract),
+      select: ([shareRateBasis, currentShare]) => currentShare / shareRateBasis
+    }
+  );
 };
 
 export const useStakingTotalStaked = () => {

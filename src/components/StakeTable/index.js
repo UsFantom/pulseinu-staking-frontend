@@ -80,7 +80,6 @@ export default function StakeTable() {
   const stakingInfoQuery = useStakingInfo();
 
   const currentDayQuery = useGetCurrentDay();
-  console.log(currentDayQuery);
 
   const stakingHistoryQuery = useStakingHistory();
 

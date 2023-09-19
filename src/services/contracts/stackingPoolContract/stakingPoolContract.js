@@ -19,6 +19,10 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.SHARE_RATE_BASIS();
   }
 
+  async currentShareRate() {
+    return this.reader.currentShareRate();
+  }
+
   async totalStaked() {
     return this.reader.totalStaked();
   }

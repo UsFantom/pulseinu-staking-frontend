@@ -7,7 +7,7 @@ import {
   useGetLengthBonus,
   useGetUserBoostPercent,
   useStakingFee,
-  useStakingShareRateBasis,
+  useStakingSharePrice,
   useStakingTokenUserBalance
 } from '../../queries/useStaking';
 
@@ -206,7 +206,7 @@ const PulseInuBtnBgImg = styled.img`
 
 export default function StakeAmountLength() {
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
-  const stakingShareRateBasis = useStakingShareRateBasis();
+  const stakingSharePrice = useStakingSharePrice();
   const [stakeAmount, setStakeAmount] = useState('');
   const [stakeDays, setStakeDays] = useState('');
 
@@ -240,6 +240,7 @@ export default function StakeAmountLength() {
     } catch (error) {
       console.log(error);
     }
+    console.log(stakeAmount, getNftBonusQuery.data, getLengthBonusQuery.data);
     return total;
   };
 
@@ -310,7 +311,7 @@ export default function StakeAmountLength() {
           <BonusDivs borderdisabled={true}>
             <BonusDetailDiv>
               <BonusTitle>Share price</BonusTitle>
-              <BonusData>{`${formatNumber(stakingShareRateBasis.data)} PINU/Share`}</BonusData>
+              <BonusData>{`${formatNumber(stakingSharePrice.data)} PINU/Share`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
         </StakeBonusWrapDiv>
