@@ -213,22 +213,6 @@ export default function StakeAmountLength() {
   const stakeMutation = useStakeMutation();
   const { account } = useWeb3React();
 
-  const handleConfirm = useCallback(async () => {
-    if (!account || !stakeAmount || !stakeDays || stakeDays < 2 || stakeDays > 1000) {
-      return;
-    }
-    try {
-      const tx = await stakeMutation.mutateAsync({
-        amount: stakeAmount,
-        days: stakeDays,
-        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
-      });
-      console.log(tx);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [stakeMutation, account, stakeAmount, stakeDays]);
-
   const useAllTokenAmounts = () => {
     if (!stakingTokenuserBalanceQuery.data) return;
     setStakeAmount(stakingTokenuserBalanceQuery.data);
@@ -258,6 +242,26 @@ export default function StakeAmountLength() {
     }
     return total;
   };
+
+  const isInvalid = () => {
+    return !account || !stakeAmount || !stakeDays || stakeDays < 2 || stakeDays > 1000;
+  };
+
+  const handleConfirm = useCallback(async () => {
+    if (isInvalid()) {
+      return;
+    }
+    try {
+      const tx = await stakeMutation.mutateAsync({
+        amount: stakeAmount,
+        days: stakeDays,
+        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
+      });
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [stakeMutation, account, stakeAmount, stakeDays]);
 
   return (
     <>
@@ -314,7 +318,7 @@ export default function StakeAmountLength() {
           <StakeButtonDivTitle>{`PLS Fee: ${formatNumber(
             stakingFeeQuery.data
           )} PLS`}</StakeButtonDivTitle>
-          <StakeBtn onClick={handleConfirm}>
+          <StakeBtn onClick={handleConfirm} disabled={isInvalid()}>
             <PulseInuBtnBgImg src={PulseInuBtnBgImage} />
             Stake Pulse Inu
           </StakeBtn>

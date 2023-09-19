@@ -123,6 +123,19 @@ export const useStakingTotalStaked = () => {
   );
 };
 
+export const useGetCurrentDay = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetCurrentDay', stakingTokenQuery.data],
+    async () => await contract.getCurrentDay(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (currentDay) => currentDay
+    }
+  );
+};
+
 export const useGetPlsPriceOfUsd = () => {
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
