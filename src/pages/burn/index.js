@@ -188,7 +188,7 @@ export default function Burn() {
   const mintMutation = useMintMutation();
 
   const handleConfirm = useCallback(async () => {
-    if (!account || !selected || !boostNftTokenTypesPricesQuery.data) {
+    if (!account || (!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
       return;
     }
     try {
