@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import PulseInuLogo from '../../assets/images/pulseinulogo.svg';
 import TwitterLogo from '../../assets/images/twitter.svg';
 import TelegramLogo from '../../assets/images/telegram.svg';
 import MetaMaskLogo from '../../assets/images/metamask.svg';
+import WalletConnectButton from './connect';
+import { useWeb3React } from '@web3-react/core';
+import { useCorrectChain } from '../../hooks/useProvider';
+import { useStakingTokenMutation } from '../../queries/useTokenMutation';
 
 const HeaderDiv = styled.div`
   display: flex;
@@ -81,33 +85,35 @@ const HeaderMenuIcon = styled.img`
   }
 `;
 
-const HeaderConnectBtn = styled.button`
-  width: 152px;
-  height: 50px;
-  padding: 14px 20px 14px 20px;
-  border-radius: 100px;
-  font-family: Poppins;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 22px;
-  letter-spacing: 0.02em;
-  text-align: center;
-  color: #d7e0ff;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0px 0px 52px 0px #cc13ec75;
-  background: radial-gradient(
-      farthest-corner at -17% 291%,
-      #00e8fc 0%,
-      #4f30ff 60%,
-      #f00f8e 95%,
-      #ff0000 100%
-    ),
-    linear-gradient(0deg, #ffffff, #ffffff);
-`;
-
 export default function AmountBurned() {
+  const { account, library } = useWeb3React();
+  const correctChain = useCorrectChain();
+  const stakingTokenMutation = useStakingTokenMutation();
+
+  const addToken = async (token) => {
+    try {
+      const wasAdded = await library.provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: token
+        }
+      });
+      console.log(wasAdded);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleAddToken = useCallback(async () => {
+    if (!correctChain) return;
+    try {
+      const token = await stakingTokenMutation.mutateAsync();
+      addToken(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [correctChain]);
   return (
     <HeaderDiv>
       <HeaderLogoDiv>
@@ -115,12 +121,12 @@ export default function AmountBurned() {
         <HeaderLogoTitle>PULSE INU</HeaderLogoTitle>
       </HeaderLogoDiv>
       <HeaderMenuDiv>
-        <HeaderMenuItem>0xa12E...</HeaderMenuItem>
+        <HeaderMenuItem>{account ? `${account.substring(0, 6)}...` : ''}</HeaderMenuItem>
         <HeaderMenuItem>WHITEPAPER</HeaderMenuItem>
         <HeaderMenuIcon src={TwitterLogo} width={19} height={17} />
         <HeaderMenuIcon src={TelegramLogo} width={21} height={21} />
-        <HeaderMenuIcon src={MetaMaskLogo} width={25} height={25} />
-        <HeaderConnectBtn>connect</HeaderConnectBtn>
+        <HeaderMenuIcon src={MetaMaskLogo} width={25} height={25} onClick={handleAddToken} />
+        <WalletConnectButton />
       </HeaderMenuDiv>
     </HeaderDiv>
   );

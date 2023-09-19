@@ -1,6 +1,13 @@
 import React from 'react';
 import PercentBar from '../PercentBar';
 import styled from 'styled-components';
+import {
+  useStakingTokenBurnPercent,
+  useStakingTokenBurnedAmount,
+  useStakingTokenTotalSupply
+} from '../../queries/useStaking';
+import { LoadableContent } from '../Custom/LoadableContent';
+import { formatNumber } from '../../utils/utils';
 
 const AmountBurnedDiv = styled.div`
   width: 96%;
@@ -101,19 +108,40 @@ const AmountBurnedSpanContent2 = styled(AmountBurnedSpan)`
 `;
 
 export default function AmountBurned() {
+  const stakingTokenBurnedAmountQuery = useStakingTokenBurnedAmount();
+  const stakingTokenTotalSupply = useStakingTokenTotalSupply();
+  const stakingTokenBurnedPercentQuery = useStakingTokenBurnPercent();
+
   return (
     <AmountBurnedDiv>
       <AmountBurnedTitleDiv>
         <AmountBurnedTitle>AMOUNT BURNED</AmountBurnedTitle>
-        <AmountBurnedPercent>43.23%</AmountBurnedPercent>
+        <AmountBurnedPercent>
+          <LoadableContent query={stakingTokenBurnedPercentQuery} fallback={null}>
+            {() => formatNumber(stakingTokenBurnedPercentQuery.data)}
+          </LoadableContent>
+          %
+        </AmountBurnedPercent>
       </AmountBurnedTitleDiv>
-      <PercentBar percent="43.23" />
+      <LoadableContent query={stakingTokenBurnedPercentQuery} fallback={<PercentBar percent="0" />}>
+        {() => <PercentBar percent={stakingTokenBurnedPercentQuery.data} />}
+      </LoadableContent>
       <AmountBurnedTitleDiv>
         <AmountBurnedSpanTitle1>
-          BURNED:<AmountBurnedSpanContent1>&nbsp;99,000,000</AmountBurnedSpanContent1>
+          BURNED:
+          <AmountBurnedSpanContent1>
+            <LoadableContent query={stakingTokenBurnedAmountQuery} fallback={null}>
+              {() => formatNumber(stakingTokenBurnedAmountQuery.data)}
+            </LoadableContent>
+          </AmountBurnedSpanContent1>
         </AmountBurnedSpanTitle1>
         <AmountBurnedSpanTitle2>
-          TOTAL SUPPLY:<AmountBurnedSpanContent2>&nbsp;100,000,000</AmountBurnedSpanContent2>
+          TOTAL SUPPLY:
+          <AmountBurnedSpanContent2>
+            <LoadableContent query={stakingTokenTotalSupply} fallback={null}>
+              {() => formatNumber(stakingTokenTotalSupply.data)}
+            </LoadableContent>
+          </AmountBurnedSpanContent2>
         </AmountBurnedSpanTitle2>
       </AmountBurnedTitleDiv>
     </AmountBurnedDiv>

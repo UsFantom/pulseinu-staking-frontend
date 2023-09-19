@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useStakingUserReferrals } from '../../queries/useStaking';
+import { formatNumber } from '../../utils/utils';
 
 const ReferralsTableDiv = styled.div`
   width: 860px;
@@ -17,7 +19,7 @@ const ReferralsTableRowDiv = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  border-bottom: ${(props) => (props.borderDisabled !== undefined ? 'none' : '0.5px solid')};
+  border-bottom: ${(props) => (props.borderdisabled !== undefined ? 'none' : '0.5px solid')};
   border-color: #696969;
   border-image: ${(props) => (props.border !== undefined ? props.border : 'none')};
 `;
@@ -78,6 +80,19 @@ const ReferralsTableTotalComissionCell = styled.p`
 `;
 
 export default function ReferralsTable() {
+  const stakingUserReferralsQuery = useStakingUserReferrals();
+
+  const [total, setTotal] = useState(null);
+
+  useEffect(() => {
+    if (!stakingUserReferralsQuery.data) return;
+    let sum = 0;
+    stakingUserReferralsQuery.data.forEach((referral) => {
+      sum += parseFloat(referral.amount);
+    });
+    setTotal(sum);
+  }, [stakingUserReferralsQuery.data]);
+
   return (
     <ReferralsTableDiv>
       <ReferralsTableRowDiv>
@@ -88,30 +103,48 @@ export default function ReferralsTable() {
           <ReferralsTableHeader>Comission</ReferralsTableHeader>
         </ReferralsTableComissionDiv>
       </ReferralsTableRowDiv>
-      <ReferralsTableRowDiv>
-        <ReferralsTableAddressDiv>
-          <ReferralsTableAddressCell>
-            0xa12E2661ec6603CBbB891072b2Ad5b3d5edb48bd
-          </ReferralsTableAddressCell>
-        </ReferralsTableAddressDiv>
-        <ReferralsTableComissionDiv>
-          <ReferralsTableComissionCell>10,000 PLS</ReferralsTableComissionCell>
-        </ReferralsTableComissionDiv>
-      </ReferralsTableRowDiv>
-      <ReferralsTableRowDiv border="linear-gradient(100.73deg, #413FFF -0.17%, #00E8FF 23.82%, #E916CB 56.09%, rgba(0, 0, 0, 0) 121.96%) 1">
-        <ReferralsTableAddressDiv>
-          <ReferralsTableAddressCell>0xa12E...</ReferralsTableAddressCell>
-        </ReferralsTableAddressDiv>
-        <ReferralsTableComissionDiv>
-          <ReferralsTableComissionCell>10,000 PLS</ReferralsTableComissionCell>
-        </ReferralsTableComissionDiv>
-      </ReferralsTableRowDiv>
-      <ReferralsTableRowDiv borderDisabled>
+      {stakingUserReferralsQuery.data &&
+        stakingUserReferralsQuery.data.map((referral, index) => {
+          if (index < stakingUserReferralsQuery.data.length - 1) {
+            return (
+              <ReferralsTableRowDiv key={index}>
+                <ReferralsTableAddressDiv>
+                  <ReferralsTableAddressCell>{referral.address}</ReferralsTableAddressCell>
+                </ReferralsTableAddressDiv>
+                <ReferralsTableComissionDiv>
+                  <ReferralsTableComissionCell>{`${formatNumber(
+                    referral.amount
+                  )} PLS`}</ReferralsTableComissionCell>
+                </ReferralsTableComissionDiv>
+              </ReferralsTableRowDiv>
+            );
+          } else {
+            return (
+              <ReferralsTableRowDiv
+                key={index}
+                border="linear-gradient(100.73deg, #413FFF -0.17%, #00E8FF 23.82%, #E916CB 56.09%, rgba(0, 0, 0, 0) 121.96%) 1">
+                <ReferralsTableAddressDiv>
+                  <ReferralsTableAddressCell>{referral.address}</ReferralsTableAddressCell>
+                </ReferralsTableAddressDiv>
+                <ReferralsTableComissionDiv>
+                  <ReferralsTableComissionCell>{`${formatNumber(
+                    referral.amount,
+                    4
+                  )} PLS`}</ReferralsTableComissionCell>
+                </ReferralsTableComissionDiv>
+              </ReferralsTableRowDiv>
+            );
+          }
+        })}
+      <ReferralsTableRowDiv borderdisabled={true}>
         <ReferralsTableAddressDiv>
           <ReferralsTableAddressCell></ReferralsTableAddressCell>
         </ReferralsTableAddressDiv>
         <ReferralsTableComissionDiv>
-          <ReferralsTableTotalComissionCell>= 20,000 PLS</ReferralsTableTotalComissionCell>
+          <ReferralsTableTotalComissionCell>{`= ${formatNumber(
+            total,
+            4
+          )} PLS`}</ReferralsTableTotalComissionCell>
         </ReferralsTableComissionDiv>
       </ReferralsTableRowDiv>
     </ReferralsTableDiv>

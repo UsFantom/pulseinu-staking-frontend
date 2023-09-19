@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Header from '../../components/Header';
 import Referrals from '../../components/Referrals';
 import StakeAmountLength from '../../components/StakeAmountLength';
-import StakeBonus from '../../components/StakeBonus';
-import StakeButton from '../../components/StakeButton';
 import StakeTable from '../../components/StakeTable';
 import NavigateBack from '../../components/NavigateBack';
 import BurnBgImg from '../../assets/images/burn_bg.svg';
@@ -22,6 +21,20 @@ const PageLayout = styled.div`
     rgba(0, 181, 255, 0.1664) 97.51%
   );
   overflow-y: auto;
+`;
+
+const HeaderDiv = styled.div`
+  width: 940px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: -150px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  // background: #d7e0ff0d;
+  // border-radius: 30px;
+  @media (max-width: 1044px) {
+    width: 90%;
+  }
 `;
 
 const ContentDiv = styled.div`
@@ -106,15 +119,6 @@ const BurnBgImage = styled.img`
   height: 180px;
 `;
 
-const StakeBonusDiv = styled.div`
-  display: flex;
-  justify-item: space-between;
-  align-items: center;
-  @media (max-width: 1044px) {
-    flex-direction: column;
-  }
-`;
-
 const YourStakeTitle = styled.p`
   font-family: Poppins;
   font-size: 22px;
@@ -149,6 +153,9 @@ export default function Stake() {
 
   return (
     <PageLayout>
+      <HeaderDiv>
+        <Header />
+      </HeaderDiv>
       <NavigateBack title="STAKE PULSE INU" navigateTo="/" />
       <ContentDiv>
         <StakeTitleDiv>
@@ -159,17 +166,7 @@ export default function Stake() {
           </StakeTitleBurnButton>
         </StakeTitleDiv>
         <Referrals showReferrals={showReferrals} toggleReferrals={() => toggleReferrals()} />
-        <StakeTitleDiv>
-          <StakeTitle>STAKE</StakeTitle>
-        </StakeTitleDiv>
         <StakeAmountLength />
-        <StakeTitleDiv>
-          <StakeTitle>STAKE BONUSES</StakeTitle>
-        </StakeTitleDiv>
-        <StakeBonusDiv>
-          <StakeBonus />
-          <StakeButton />
-        </StakeBonusDiv>
       </ContentDiv>
       <ContentDiv>
         <YourStakeTitle>Your Stakes</YourStakeTitle>

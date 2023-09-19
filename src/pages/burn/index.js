@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+import Header from '../../components/Header';
 import NavigateBack from '../../components/NavigateBack';
 import LegendaryCollectorSelect from '../../components/LegendaryCollectorSelect';
 import RecentMint from '../../components/RecentMint';
 
 import BurnImage from '../../assets/images/burn.svg';
+import { useBoostNftTokenTypesPrices } from '../../queries/useBoostNft';
+import { useWeb3React } from '@web3-react/core';
+import { useMintMutation } from '../../queries/useMintMutation';
 
 const PageLayout = styled.div`
   position: relative;
@@ -19,6 +23,20 @@ const PageLayout = styled.div`
     rgba(0, 181, 255, 0.1664) 97.51%
   );
   overflow-y: auto;
+`;
+
+const HeaderDiv = styled.div`
+  width: 940px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: -150px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  // background: #d7e0ff0d;
+  // border-radius: 30px;
+  @media (max-width: 1044px) {
+    width: 90%;
+  }
 `;
 
 const ContentDiv = styled.div`
@@ -165,8 +183,30 @@ export default function Burn() {
     setSelected(select);
   };
 
+  const boostNftTokenTypesPricesQuery = useBoostNftTokenTypesPrices();
+  const { account } = useWeb3React();
+  const mintMutation = useMintMutation();
+
+  const handleConfirm = useCallback(async () => {
+    if (!account || !selected || !boostNftTokenTypesPricesQuery.data) {
+      return;
+    }
+    try {
+      const tx = await mintMutation.mutateAsync({
+        type: selected,
+        amount: boostNftTokenTypesPricesQuery.data[selected]
+      });
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [mintMutation, account, selected, boostNftTokenTypesPricesQuery.data]);
+
   return (
     <PageLayout>
+      <HeaderDiv>
+        <Header />
+      </HeaderDiv>
       <NavigateBack title="BURN PULSE INU" navigateTo="/stake" />
       <ContentDiv>
         {selected === null ? (
@@ -186,7 +226,7 @@ export default function Burn() {
             </BurnConfirmTitleDiv>
             <BurnConfirmButtonDiv>
               <BurnCancelBtn onClick={() => handleSelect(null)}>Cancel</BurnCancelBtn>
-              <BurnConfirmBtn>Confirm</BurnConfirmBtn>
+              <BurnConfirmBtn onClick={handleConfirm}>Confirm</BurnConfirmBtn>
             </BurnConfirmButtonDiv>
           </BurnConfirmDiv>
         )}
