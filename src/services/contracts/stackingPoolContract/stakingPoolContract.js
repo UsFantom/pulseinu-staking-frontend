@@ -74,4 +74,8 @@ export class StakingPoolContract extends BaseContract {
   async getUserBoostPercent(account) {
     return this.reader.getUserBoostPercent(account);
   }
+
+  async getUserRewards(account) {
+    return this.reader.getUserRewards(account);
+  }
 }

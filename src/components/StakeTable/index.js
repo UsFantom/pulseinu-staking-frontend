@@ -1,6 +1,11 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { useGetCurrentDay, useStakingHistory, useStakingInfo } from '../../queries/useStaking';
+import {
+  useGetCurrentDay,
+  useGetUserRewards,
+  useStakingHistory,
+  useStakingInfo
+} from '../../queries/useStaking';
 import { ethers } from 'ethers';
 import { formatNumber } from '../../utils/utils';
 import { useUnStakeMutation } from '../../queries/useUnStakeMutation';
@@ -83,6 +88,9 @@ export default function StakeTable() {
 
   const stakingHistoryQuery = useStakingHistory();
 
+  const userRewards = useGetUserRewards();
+  console.log(userRewards.data);
+
   const unStakeMutation = useUnStakeMutation();
   const { account } = useWeb3React();
 
@@ -137,11 +145,7 @@ export default function StakeTable() {
                 )
               )}
             </StakeTableData>
-            <StakeTableData>
-              {formatNumber(
-                ethers.utils.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())
-              )}
-            </StakeTableData>
+            <StakeTableData>{formatNumber(userRewards.data)}</StakeTableData>
             <LoadableContent
               query={[currentDayQuery, stakingInfoQuery, stakingHistoryQuery]}
               fallback={

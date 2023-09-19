@@ -143,6 +143,19 @@ export const useGetCurrentDay = () => {
   );
 };
 
+export const useGetUserRewards = () => {
+  const contract = useStakingPoolContract();
+  const { account } = useWeb3React();
+  return useQuery(
+    ['useGetUserRewards', account],
+    async () => await contract.getUserRewards(account),
+    {
+      enabled: Boolean(contract && account),
+      select: (userRewards) => ethers.utils.formatEther(userRewards)
+    }
+  );
+};
+
 export const useGetPlsPriceOfUsd = () => {
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
