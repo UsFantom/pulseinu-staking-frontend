@@ -1,5 +1,5 @@
 export const formatNumber = (value, count) => {
-  if (value === null || value === undefined) {
+  if (value === null || value === undefined || isNaN(value)) {
     return '';
   }
   try {

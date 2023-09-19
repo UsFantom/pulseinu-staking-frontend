@@ -27,6 +27,14 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.userStakingInfo(account);
   }
 
+  async getPinuPriceOfPls() {
+    return this.reader.getPinuPriceOfPls();
+  }
+
+  async getPlsPriceOfUsd() {
+    return this.reader.getPlsPriceOfUsd();
+  }
+
   async getUserStakeHistory(account) {
     return this.reader.getUserStakeHistory(account);
   }

@@ -123,6 +123,32 @@ export const useStakingTotalStaked = () => {
   );
 };
 
+export const useGetPlsPriceOfUsd = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetPlsPriceOfUsd', stakingTokenQuery.data],
+    async () => await contract.getPlsPriceOfUsd(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (plsPrice) => ethers.utils.formatEther(plsPrice)
+    }
+  );
+};
+
+export const useGetPinuPriceOfPls = () => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  return useQuery(
+    ['useGetPinuPriceOfPls', stakingTokenQuery.data],
+    async () => await contract.getPinuPriceOfPls(),
+    {
+      enabled: Boolean(contract && stakingTokenQuery.data),
+      select: (pinuPrice) => ethers.utils.formatEther(pinuPrice)
+    }
+  );
+};
+
 export const useStakingUserReferrals = () => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();

@@ -8,6 +8,8 @@ import StatisticData from '../../components/StatisticData';
 import PulseInuDistribution from '../../components/PulseInuDistribution';
 import { PulseInuPieChart } from '../../components/PulseInuPieChart';
 import {
+  useGetPinuPriceOfPls,
+  useGetPlsPriceOfUsd,
   useStakingTokenBurnedAmount,
   useStakingTokenTotalSupply,
   useStakingTotalReward,
@@ -17,7 +19,6 @@ import {
 import { LoadableContent } from '../../components/Custom/LoadableContent';
 import { isValidValue } from '../../utils';
 import { formatNumber } from '../../utils/utils';
-import { usestakingTokenToWrapperInfo } from '../../queries/usePrice';
 
 const PageLayout = styled.div`
   position: relative;
@@ -325,8 +326,8 @@ export default function Dashboard() {
     stakingTotalStakedQuery.data
   ]);
 
-  const stakingTokenPair = usestakingTokenToWrapperInfo();
-  console.log(stakingTokenPair);
+  const plsPriceOfUsdQuery = useGetPlsPriceOfUsd();
+  const pinuPriceOfPls = useGetPinuPriceOfPls();
 
   return (
     <PageLayout>
@@ -363,31 +364,44 @@ export default function Dashboard() {
                   title="TOTAL SUPPLY"
                   amount={`${formatNumber(stakingTokenTotalSupplyQuery.data / 1e12)}T`}
                   unit
-                  equals={`≈ $${formatNumber(stakingTokenTotalSupplyQuery.data)}`}
+                  equals={`≈ $${formatNumber(
+                    stakingTokenTotalSupplyQuery.data *
+                      pinuPriceOfPls.data *
+                      plsPriceOfUsdQuery.data
+                  )}`}
                 />
               )}
             </LoadableContent>
             <StatisticData
               title="MARKET CAP"
-              amount="$14,876,730"
+              amount={`$${formatNumber(
+                (stakingTokenTotalSupplyQuery.data -
+                  stakingTotalStakedQuery.data -
+                  stakingTokenBurnedAmountQuery.data) *
+                  pinuPriceOfPls.data *
+                  plsPriceOfUsdQuery.data
+              )}`}
               amountDiff={{ '24h': 5.85, '72h': '-1.65' }}
             />
             <StatisticData
               title="PRICE"
-              amount="$0.0000009566"
+              amount={`$${formatNumber(pinuPriceOfPls.data * plsPriceOfUsdQuery.data, 8)}`}
               amountDiff={{ '24h': 5.48, '72h': '-3.84' }}
             />
           </DashboardStatisticMarketDiv>
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
-              title="PLS Dividends Paid $"
-              amount={`${formatNumber(stakingTotalRewardPaidQuery.data)}`}
+              title="PLS Dividends Paid"
+              amount={`$${formatNumber(
+                stakingTotalRewardPaidQuery.data * plsPriceOfUsdQuery.data,
+                8
+              )}`}
             />
           </DashboardStatisticPaidAPYDiv>
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
               title="Current APY %"
-              amount={`${formatNumber(100 * stakingTotalRewardQuery.data)}`}
+              amount={`$${formatNumber(stakingTotalRewardQuery.data * plsPriceOfUsdQuery.data, 8)}`}
             />
           </DashboardStatisticPaidAPYDiv>
         </DashboardStatistics>
@@ -397,73 +411,40 @@ export default function Dashboard() {
             <DashboardPulseInuDistTitle>Pulse Inu Distribution</DashboardPulseInuDistTitle>
             <DashboardPulseInuDistDiv>
               <DashboardPulseInuDistStatsDiv>
-                <LoadableContent
-                  query={stakingTokenBurnedAmountQuery}
-                  fallback={
-                    <PulseInuDistribution
-                      title="BURNS"
-                      amount={`${0}`}
-                      equals={`≈ $${0}`}
-                      color="#F60954"
-                    />
-                  }>
-                  {() => (
-                    <PulseInuDistribution
-                      title="BURNS"
-                      amount={`${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
-                      equals={`≈ $${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
-                      color="#F60954"
-                    />
+                <PulseInuDistribution
+                  title="BURNS"
+                  amount={`${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
+                  equals={`≈ $${formatNumber(
+                    stakingTokenBurnedAmountQuery.data *
+                      pinuPriceOfPls.data *
+                      plsPriceOfUsdQuery.data
+                  )}`}
+                  color="#F60954"
+                />
+                <PulseInuDistribution
+                  title="STAKES"
+                  amount={`${formatNumber(stakingTotalStakedQuery.data)}`}
+                  equals={`≈ $${formatNumber(
+                    stakingTotalStakedQuery.data * pinuPriceOfPls.data * plsPriceOfUsdQuery.data
+                  )}`}
+                  color="#D7E0FF"
+                />
+                <PulseInuDistribution
+                  title="LIQUIDITY"
+                  amount={formatNumber(
+                    stakingTokenTotalSupplyQuery.data -
+                      stakingTotalStakedQuery.data -
+                      stakingTokenBurnedAmountQuery.data
                   )}
-                </LoadableContent>
-                <LoadableContent
-                  query={stakingTotalStakedQuery}
-                  fallback={
-                    <PulseInuDistribution
-                      title="STAKES"
-                      amount={`${0}`}
-                      equals={`≈ $${0}`}
-                      color="#F60954"
-                    />
-                  }>
-                  {() => (
-                    <PulseInuDistribution
-                      title="STAKES"
-                      amount={`${formatNumber(stakingTotalStakedQuery.data)}`}
-                      equals={`≈ $${formatNumber(stakingTotalStakedQuery.data)}`}
-                      color="#D7E0FF"
-                    />
-                  )}
-                </LoadableContent>
-                <LoadableContent
-                  query={[
-                    stakingTokenTotalSupplyQuery,
-                    stakingTotalStakedQuery,
-                    stakingTokenBurnedAmountQuery
-                  ]}
-                  fallback={
-                    <PulseInuDistribution
-                      title="LIQUIDITY"
-                      amount={0}
-                      equals={`≈ $${0}`}
-                      color="#3D83FD"
-                    />
-                  }>
-                  <PulseInuDistribution
-                    title="LIQUIDITY"
-                    amount={formatNumber(
-                      stakingTokenTotalSupplyQuery.data -
-                        stakingTotalStakedQuery.data -
-                        stakingTokenBurnedAmountQuery.data
-                    )}
-                    equals={`≈ $${formatNumber(
-                      stakingTokenTotalSupplyQuery.data -
-                        stakingTotalStakedQuery.data -
-                        stakingTokenBurnedAmountQuery.data
-                    )}`}
-                    color="#3D83FD"
-                  />
-                </LoadableContent>
+                  equals={`≈ $${formatNumber(
+                    (stakingTokenTotalSupplyQuery.data -
+                      stakingTotalStakedQuery.data -
+                      stakingTokenBurnedAmountQuery.data) *
+                      pinuPriceOfPls.data *
+                      plsPriceOfUsdQuery.data
+                  )}`}
+                  color="#3D83FD"
+                />
               </DashboardPulseInuDistStatsDiv>
             </DashboardPulseInuDistDiv>
           </DashboardDistributionStatsDiv>
