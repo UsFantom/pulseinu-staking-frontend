@@ -87,7 +87,11 @@ export default function MintedNFTs() {
           <MintedNFTsItemDiv key={index}>
             <MintedNFTsImgDiv>
               <NFTImgWrap>
-                <NFTImg src={`/nft_data/gifs/${item.id}.gif`} width="140" height="134" />
+                <NFTImg
+                  src={`https://ipfs.io/ipfs/bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/${item.id}.gif`}
+                  width="140"
+                  height="134"
+                />
               </NFTImgWrap>
             </MintedNFTsImgDiv>
             <MintedAmount color="#696969">{`${formatNumber(item.price)} PINU`}</MintedAmount>
