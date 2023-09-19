@@ -166,6 +166,27 @@ export const useStakingInfo = () => {
   );
 };
 
+export const useStakingHistory = () => {
+  const { account } = useWeb3React();
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  const erc20Contract = useERC20Contract(stakingTokenQuery.data);
+  return useQuery(
+    ['useStakingHistory', stakingTokenQuery.data, account],
+    async () =>
+      await Promise.all([contract.getUserStakeHistory(account), erc20Contract.decimals()]),
+    {
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && account),
+      select: ([stakingInfo, decimals]) => {
+        return {
+          stakingInfo: stakingInfo,
+          decimals
+        };
+      }
+    }
+  );
+};
+
 export const useStakingTokenBurnedAmount = () => {
   const stakingTokenQuery = useStakingToken();
   const burnAddressQuery = useBurnAddress();

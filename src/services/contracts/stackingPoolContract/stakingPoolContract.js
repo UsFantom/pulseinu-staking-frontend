@@ -27,8 +27,16 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.userStakingInfo(account);
   }
 
+  async getUserStakeHistory(account) {
+    return this.reader.getUserStakeHistory(account);
+  }
+
   async stake(amount, days, referrer = ethers.constants.AddressZero, stakingFee) {
     return this.writer.stake(amount, days, referrer, { value: stakingFee });
+  }
+
+  async unstake() {
+    return this.writer.unstake();
   }
 
   async getUserReferrals(account) {

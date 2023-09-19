@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { useStakingInfo } from '../../queries/useStaking';
+import { useStakingHistory, useStakingInfo } from '../../queries/useStaking';
 import { ethers } from 'ethers';
 import { formatNumber } from '../../utils/utils';
+import { useUnStakeMutation } from '../../queries/useUnStakeMutation';
+import { useWeb3React } from '@web3-react/core';
 
 const StakeTableDiv = styled.div`
   width: Calc(100% - 40px);
@@ -41,8 +43,57 @@ const StakeTableData = styled.td`
   text-transform: uppercase;
 `;
 
+const UnStakeButton = styled.button`
+  width: 96px;
+  height: 28px;
+  border-radius: 100px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(215, 224, 255, 1);
+  text-transform: uppercase;
+  margin-right: 2px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 0px 52px 0px #cc13ec75;
+  background: radial-gradient(
+      farthest-corner at -17% 291%,
+      #00e8fc 0%,
+      #4f30ff 60%,
+      #f00f8e 95%,
+      #ff0000 100%
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
+  @media (max-width: 1044px) {
+    margin-right: 0px;
+  }
+  @media (max-width: 500px) {
+    width: 80%;
+  }
+`;
+
 export default function StakeTable() {
   const stakingInfoQuery = useStakingInfo();
+  const stakingHistoryQuery = useStakingHistory();
+
+  const unStakeMutation = useUnStakeMutation();
+  const { account } = useWeb3React();
+
+  const handleConfirm = useCallback(async () => {
+    if (!account) {
+      return;
+    }
+    try {
+      const tx = await unStakeMutation.mutateAsync();
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [unStakeMutation, account]);
+
   return (
     <StakeTableDiv>
       <StakeTableComp>
@@ -52,6 +103,7 @@ export default function StakeTable() {
           <StakeTableHeader>Pulse Inu</StakeTableHeader>
           <StakeTableHeader>Shares</StakeTableHeader>
           <StakeTableHeader>PLS Earned</StakeTableHeader>
+          <StakeTableHeader />
         </StakeTableRow>
         {stakingInfoQuery.data?.stakingInfo && stakingInfoQuery.data?.stakingInfo[0] > 0 && (
           <StakeTableRow>
@@ -82,8 +134,35 @@ export default function StakeTable() {
                 ethers.utils.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())
               )}
             </StakeTableData>
+            <StakeTableData>
+              <UnStakeButton onClick={() => handleConfirm()}>Unstake</UnStakeButton>
+            </StakeTableData>
           </StakeTableRow>
         )}
+        {stakingHistoryQuery.data?.stakingInfo &&
+          stakingHistoryQuery.data?.stakingInfo.map((staking, index) => {
+            return (
+              <StakeTableRow key={index}>
+                <StakeTableData>{formatNumber(staking[3].toString())}</StakeTableData>
+                <StakeTableData>{formatNumber(staking[4].toString())}</StakeTableData>
+                <StakeTableData>
+                  {formatNumber(
+                    ethers.utils.formatUnits(staking[0].toString(), stakingInfoQuery.data.decimals)
+                  )}
+                </StakeTableData>
+                <StakeTableData>
+                  {formatNumber(
+                    ethers.utils.formatUnits(staking[1].toString(), stakingInfoQuery.data.decimals)
+                  )}
+                </StakeTableData>
+                <StakeTableData>
+                  {formatNumber(ethers.utils.formatEther(staking[2].toString()))}
+                </StakeTableData>
+                {stakingInfoQuery.data?.stakingInfo &&
+                  stakingInfoQuery.data?.stakingInfo[0] > 0 && <StakeTableData />}
+              </StakeTableRow>
+            );
+          })}
       </StakeTableComp>
     </StakeTableDiv>
   );
