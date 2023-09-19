@@ -6,15 +6,15 @@ if (typeof INFURA_KEY === 'undefined') {
 
 export const DEXTOOL_API_URL = process.env.REACT_APP_DEXTOOL_API_URL;
 
-if (typeof DEXTOOL_API_URL === 'undefined') {
-  throw new Error('REACT_APP_DEXTOOL_API_URL must be a defined in .env file\n');
-}
+// if (typeof DEXTOOL_API_URL === 'undefined') {
+//   throw new Error('REACT_APP_DEXTOOL_API_URL must be a defined in .env file\n');
+// }
 
 export const DEXTOOL_API_KEY = process.env.REACT_APP_DEXTOOL_API_KEY;
 
-if (typeof DEXTOOL_API_KEY === 'undefined') {
-  throw new Error('REACT_APP_DEXTOOL_API_KEY must be a defined in .env file\n');
-}
+// if (typeof DEXTOOL_API_KEY === 'undefined') {
+//   throw new Error('REACT_APP_DEXTOOL_API_KEY must be a defined in .env file\n');
+// }
 
 export const CONFIG = {
   11155111: {
