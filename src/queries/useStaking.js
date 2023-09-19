@@ -123,13 +123,27 @@ export const useStakingTotalStaked = () => {
   );
 };
 
-export const useStakingReferrals = () => {
+export const useStakingUserReferrals = () => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();
-  return useQuery(['useStakingReferrals', account], async () => await contract.referrals(account), {
-    enabled: Boolean(contract && account),
-    select: (referrals) => referrals
-  });
+  const stakingTokenQuery = useStakingToken();
+  const stakingFeeQuery = useStakingFee();
+  return useQuery(
+    ['useStakingUserReferrals', account],
+    async () =>
+      await Promise.all([contract.getUserReferrals(account), contract.getStakingReferrerPercent()]),
+    {
+      enabled: Boolean(contract && stakingFeeQuery.data && stakingTokenQuery.data && account),
+      select: ([userReferrals, stakingReferrerPercent]) => {
+        return userReferrals.map((referral) => {
+          return {
+            address: referral,
+            amount: (stakingFeeQuery.data * stakingReferrerPercent) / 1e4
+          };
+        });
+      }
+    }
+  );
 };
 
 export const useStakingInfo = () => {

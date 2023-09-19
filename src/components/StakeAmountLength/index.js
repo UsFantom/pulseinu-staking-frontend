@@ -221,7 +221,7 @@ export default function StakeAmountLength() {
       const tx = await stakeMutation.mutateAsync({
         amount: stakeAmount,
         days: stakeDays,
-        account
+        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
       });
       console.log(tx);
     } catch (err) {

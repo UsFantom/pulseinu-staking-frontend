@@ -31,8 +31,12 @@ export class StakingPoolContract extends BaseContract {
     return this.writer.stake(amount, days, referrer, { value: stakingFee });
   }
 
-  async referrals(account) {
-    return this.reader.referrals(account);
+  async getUserReferrals(account) {
+    return this.reader.getUserReferrals(account);
+  }
+
+  async getStakingReferrerPercent() {
+    return this.reader.STAKING_REFERRER_PERCENT();
   }
 
   async stakingFee() {
