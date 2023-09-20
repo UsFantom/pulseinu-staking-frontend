@@ -220,9 +220,9 @@ export default function StakeAmountLength() {
   };
 
   const getLengthBonusQuery = useGetLengthBonus(stakeAmount, stakeDays);
-  const getNftBonusQuery = useGetUserBoostPercent(stakeAmount);
+  const getNftBonusQuery = useGetUserBoostPercent();
   const stakingFeeQuery = useStakingFee();
-  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data / 1e4);
+  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data);
   console.log(calcSharesQuery);
   console.log(getNftBonusQuery);
   const getTotal = () => {
@@ -239,7 +239,8 @@ export default function StakeAmountLength() {
       console.log(error);
     }
     try {
-      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data / 1e4);
+      if (getNftBonusQuery.data && stakeAmount)
+        total += stakeAmount * parseFloat(getNftBonusQuery.data / 1e4);
     } catch (error) {
       console.log(error);
     }
@@ -302,7 +303,9 @@ export default function StakeAmountLength() {
             {account && (
               <BonusDetailDiv>
                 <BonusTitle>NFT Bonuses:</BonusTitle>
-                <BonusData>{`+${formatNumber(getNftBonusQuery.data / 1e4)} PINU`}</BonusData>
+                <BonusData>{`+${formatNumber(
+                  (stakeAmount * getNftBonusQuery.data) / 1e4
+                )} PINU`}</BonusData>
               </BonusDetailDiv>
             )}
             <BonusDetailDiv>

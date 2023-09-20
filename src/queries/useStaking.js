@@ -36,19 +36,18 @@ export const useStakingTokenUserBalance = () => {
   );
 };
 
-export const useGetUserBoostPercent = (amount) => {
+export const useGetUserBoostPercent = () => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract(false);
   return useQuery(
-    ['useGetUserBoostPercent', amount, account],
+    ['useGetUserBoostPercent', account],
     async () => {
-      if (!isValidValue(amount)) return 0;
       return await contract.getUserBoostPercent(account);
     },
     {
       enabled: Boolean(contract && account),
       select: (userBoostPercent) => {
-        return !isValidValue(amount) ? 0 : amount * parseFloat(userBoostPercent);
+        return userBoostPercent;
       }
     }
   );
