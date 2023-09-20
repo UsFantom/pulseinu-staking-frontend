@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 // import UpArrow from '../../assets/images/uparrow.svg';
 // import DownArrow from '../../assets/images/downarrow.svg';
@@ -123,11 +123,18 @@ const StatisticAmountEquals = styled.p`
 // `;
 
 export default function StatisticData(props) {
+  const [symbol, setSymbol] = useState(props.symbol);
+
+  useEffect(() => {
+    setSymbol(props.symbol);
+  }, [props.symbol]);
+
   return (
     <StatisticDataDiv>
       <StatisticTitle>{props.title}</StatisticTitle>
       <StatisticAmount>
-        {props.amount}&nbsp;{props.unit && <StatisticAmountUnit>PINU</StatisticAmountUnit>}
+        {props.amount}&nbsp;
+        {props.unit && <StatisticAmountUnit>{symbol || 'PINU'}</StatisticAmountUnit>}
       </StatisticAmount>
       <StatisticAmountEquals>{props.equals}</StatisticAmountEquals>
       {/* {props.amountDiff && props.amountDiff['24h'] && (

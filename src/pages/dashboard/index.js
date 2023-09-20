@@ -392,7 +392,10 @@ export default function Dashboard() {
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
               title="PLS Dividends Paid"
-              amount={`$${formatNumber(
+              amount={`≈ $${formatNumber(stakingTotalRewardPaidQuery.data)}`}
+              unit
+              symbol={'PLS'}
+              equals={`≈ $${formatNumber(
                 stakingTotalRewardPaidQuery.data * plsPriceOfUsdQuery.data
               )}`}
             />
@@ -400,7 +403,11 @@ export default function Dashboard() {
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
               title="Current APY %"
-              amount={`$${formatNumber(stakingTotalRewardQuery.data * plsPriceOfUsdQuery.data)}`}
+              amount={`${formatNumber(
+                ((stakingTotalRewardQuery.data * plsPriceOfUsdQuery.data) /
+                  (stakingTotalStakedQuery.data * pinuPriceOfPls.data * plsPriceOfUsdQuery.data)) *
+                  100
+              )}`}
             />
           </DashboardStatisticPaidAPYDiv>
         </DashboardStatistics>
