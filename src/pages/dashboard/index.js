@@ -392,7 +392,7 @@ export default function Dashboard() {
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
               title="PLS Dividends Paid"
-              amount={`≈ ${formatNumber(stakingTotalRewardPaidQuery.data)}`}
+              amount={`${formatNumber(stakingTotalRewardPaidQuery.data)}`}
               unit
               symbol={'PLS'}
               equals={`≈ $${formatNumber(
