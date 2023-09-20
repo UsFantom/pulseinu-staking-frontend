@@ -62,7 +62,7 @@ export const CONFIG = {
   943: {
     contracts: {
       stakingPool: {
-        address: '0x7Cb7b34ba6cF31Bb8c123295c0822fc1c2F072F7'
+        address: '0x9D7dBbE1d0f91DEAc99036904e7d10544CB20B5a'
       },
       boostNft: {
         address: '0xcC1424a159118de710a4f011feBf663ed9A5e8b4',
