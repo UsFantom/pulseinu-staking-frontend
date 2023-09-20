@@ -84,8 +84,15 @@ export const useCalcShares = (amount, days, boostPercent) => {
     ['useCalcShares', amount, days, boostPercent],
     async () => {
       const decimals = await erc20Contract.decimals();
-      if (!isValidValue(amount) || !isValidValue(days) || !isValidValue(boostPercent))
-        return [decimals, 0];
+      if (!isValidValue(amount)) {
+        amount = 0;
+      }
+      if (!isValidValue(days)) {
+        days = 0;
+      }
+      if (!isValidValue(boostPercent)) {
+        boostPercent = 0;
+      }
       return [
         decimals,
         await contract.calcShares(ethers.utils.parseUnits(amount, decimals), days, boostPercent)
