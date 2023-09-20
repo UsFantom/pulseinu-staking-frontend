@@ -40,7 +40,7 @@ export const useGetUserBoostPercent = (amount) => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract(false);
   return useQuery(
-    ['useGetUserBoostPercent', amount],
+    ['useGetUserBoostPercent', amount, account],
     async () => {
       if (!isValidValue(amount)) return 0;
       return await contract.getUserBoostPercent(account);

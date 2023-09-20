@@ -222,7 +222,7 @@ export default function StakeAmountLength() {
   const getLengthBonusQuery = useGetLengthBonus(stakeAmount, stakeDays);
   const getNftBonusQuery = useGetUserBoostPercent(stakeAmount);
   const stakingFeeQuery = useStakingFee();
-  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data);
+  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data / 1e4);
   console.log(calcSharesQuery);
   console.log(getNftBonusQuery);
   const getTotal = () => {
@@ -307,7 +307,7 @@ export default function StakeAmountLength() {
             )}
             <BonusDetailDiv>
               <BonusTitle>Total:</BonusTitle>
-              <BonusData>{`+${formatNumber(getTotal())} PINU`}</BonusData>
+              <BonusData>{`${formatNumber(getTotal())} PINU`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
           <BonusDivs borderdisabled={true}>
