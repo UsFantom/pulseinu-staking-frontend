@@ -239,7 +239,7 @@ export default function StakeAmountLength() {
       console.log(error);
     }
     try {
-      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data * 1e4);
+      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data / 1e4);
     } catch (error) {
       console.log(error);
     }
