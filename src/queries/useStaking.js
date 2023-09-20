@@ -85,7 +85,7 @@ export const useCalcShares = (amount, days, boostPercent) => {
     async () => {
       const decimals = await erc20Contract.decimals();
       if (!isValidValue(amount)) {
-        amount = 0;
+        amount = '0';
       }
       if (!isValidValue(days)) {
         days = 0;
