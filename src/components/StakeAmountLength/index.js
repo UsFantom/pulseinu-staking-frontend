@@ -317,7 +317,7 @@ export default function StakeAmountLength() {
             </BonusDetailDiv>
             <BonusDetailDiv>
               <BonusTitle>Total shares</BonusTitle>
-              <BonusData>{`${formatNumber(calcSharesQuery.data)} PINU`}</BonusData>
+              <BonusData>{`${formatNumber(calcSharesQuery.data)}`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
         </StakeBonusWrapDiv>
