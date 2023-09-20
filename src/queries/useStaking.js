@@ -88,7 +88,7 @@ export const useCalcShares = (amount, days, boostPercent) => {
         amount = '0';
       }
       if (!isValidValue(days)) {
-        days = 0;
+        return [decimals, 0];
       }
       if (!isValidValue(boostPercent)) {
         boostPercent = 0;
