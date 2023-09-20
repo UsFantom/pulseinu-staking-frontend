@@ -89,7 +89,6 @@ export default function StakeTable() {
   const stakingHistoryQuery = useStakingHistory();
 
   const userRewards = useGetUserRewards();
-  console.log(userRewards.data);
 
   const unStakeMutation = useUnStakeMutation();
   const { account } = useWeb3React();

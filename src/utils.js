@@ -1,3 +1,9 @@
 export const isValidValue = (data) => {
-  return data !== null && data !== undefined && data !== 'null' && data !== 'undefined';
+  return (
+    data !== null &&
+    data !== undefined &&
+    data !== 'null' &&
+    data !== 'undefined' &&
+    data.toString().trim() !== ''
+  );
 };

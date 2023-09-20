@@ -42,13 +42,13 @@ export const useGetUserBoostPercent = (amount) => {
   return useQuery(
     ['useGetUserBoostPercent', amount],
     async () => {
-      if (!amount) return 0;
+      if (!isValidValue(amount)) return 0;
       return await contract.getUserBoostPercent(account);
     },
     {
       enabled: Boolean(contract && account),
       select: (userBoostPercent) => {
-        return !amount ? 0 : (amount * parseFloat(userBoostPercent)) / 1e4;
+        return !isValidValue(amount) ? 0 : amount * parseFloat(userBoostPercent);
       }
     }
   );
@@ -61,7 +61,7 @@ export const useGetLengthBonus = (amount, days) => {
   return useQuery(
     ['useGetLengthBonus', amount, days],
     async () => {
-      if (!amount) return [0, 0];
+      if (!isValidValue(amount) || !isValidValue(days)) return [0, 0];
       const decimals = await erc20Contract.decimals();
       return [
         decimals,
@@ -69,9 +69,31 @@ export const useGetLengthBonus = (amount, days) => {
       ];
     },
     {
-      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && days),
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
       select: ([decimals, lengthBonus]) =>
-        !amount ? 0 : ethers.utils.formatUnits(lengthBonus, decimals)
+        !isValidValue(amount) ? 0 : ethers.utils.formatUnits(lengthBonus, decimals)
+    }
+  );
+};
+
+export const useCalcShares = (amount, days, boostPercent) => {
+  const contract = useStakingPoolContract();
+  const stakingTokenQuery = useStakingToken();
+  const erc20Contract = useERC20Contract(stakingTokenQuery.data);
+  return useQuery(
+    ['useCalcShares', amount, days, boostPercent],
+    async () => {
+      const decimals = await erc20Contract.decimals();
+      if (!isValidValue(amount) || !isValidValue(days) || !isValidValue(boostPercent))
+        return [decimals, 0];
+      return [
+        decimals,
+        await contract.calcShares(ethers.utils.parseUnits(amount, decimals), days, boostPercent)
+      ];
+    },
+    {
+      enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data),
+      select: ([decimals, calcShares]) => ethers.utils.formatUnits(calcShares, decimals)
     }
   );
 };

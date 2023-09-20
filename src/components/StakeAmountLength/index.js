@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import MaxPinuImage from '../../assets/images/maxpinu.svg';
 import CalendarImage from '../../assets/images/calendar.svg';
 import {
+  useCalcShares,
   useGetLengthBonus,
   useGetUserBoostPercent,
   useStakingFee,
@@ -221,7 +222,9 @@ export default function StakeAmountLength() {
   const getLengthBonusQuery = useGetLengthBonus(stakeAmount, stakeDays);
   const getNftBonusQuery = useGetUserBoostPercent(stakeAmount);
   const stakingFeeQuery = useStakingFee();
-
+  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data);
+  console.log(calcSharesQuery);
+  console.log(getNftBonusQuery);
   const getTotal = () => {
     if (getLengthBonusQuery.isFetching || getNftBonusQuery.isFetching) return '0';
     let total = 0;
@@ -236,11 +239,10 @@ export default function StakeAmountLength() {
       console.log(error);
     }
     try {
-      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data);
+      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data * 1e4);
     } catch (error) {
       console.log(error);
     }
-    console.log(stakeAmount, getNftBonusQuery.data, getLengthBonusQuery.data);
     return total;
   };
 
@@ -300,7 +302,7 @@ export default function StakeAmountLength() {
             {account && (
               <BonusDetailDiv>
                 <BonusTitle>NFT Bonuses:</BonusTitle>
-                <BonusData>{`+${formatNumber(getNftBonusQuery.data)} PINU`}</BonusData>
+                <BonusData>{`+${formatNumber(getNftBonusQuery.data / 1e4)} PINU`}</BonusData>
               </BonusDetailDiv>
             )}
             <BonusDetailDiv>
@@ -312,6 +314,10 @@ export default function StakeAmountLength() {
             <BonusDetailDiv>
               <BonusTitle>Share price</BonusTitle>
               <BonusData>{`${formatNumber(stakingSharePrice.data)} PINU/Share`}</BonusData>
+            </BonusDetailDiv>
+            <BonusDetailDiv>
+              <BonusTitle>Total shares</BonusTitle>
+              <BonusData>{`${formatNumber(calcSharesQuery.data)} PINU`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
         </StakeBonusWrapDiv>

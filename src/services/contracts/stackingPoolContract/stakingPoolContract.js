@@ -78,4 +78,8 @@ export class StakingPoolContract extends BaseContract {
   async getUserRewards(account) {
     return this.reader.getUserRewards(account);
   }
+
+  async calcShares(amount, days, boostPercent) {
+    return this.reader.calcShares(amount, days, boostPercent);
+  }
 }
