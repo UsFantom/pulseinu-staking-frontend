@@ -368,7 +368,6 @@ export default function Dashboard() {
 
   return (
     <PageLayout>
-      <InuBgImg src={InuBgImage} />
       <ContentDiv>
         <Header />
         <DashboardTitleDiv>
@@ -497,6 +496,7 @@ export default function Dashboard() {
           </DashboardPulseInuDistPieChartDiv>
         </DashboardDistribution>
       </ContentDiv>
+      <InuBgImg src={InuBgImage} />
     </PageLayout>
   );
 }
