@@ -42,6 +42,8 @@ const InuBgImg = styled.img`
 `;
 
 const ContentDiv = styled.div`
+  position: relative;
+  z-index: 1;
   width: 940px;
   margin: auto;
   margin-top: 40px;
