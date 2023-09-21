@@ -16,6 +16,8 @@ import PulseInuBtnBgImage from '../../assets/images/pulseinubtn.svg';
 import { useStakeMutation } from '../../queries/useStakeMutation';
 import { useWeb3React } from '@web3-react/core';
 import { formatNumber } from '../../utils/utils';
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
 
 const StakeAmountLengthDiv = styled.div`
   width: 920px;
@@ -206,6 +208,8 @@ const PulseInuBtnBgImg = styled.img`
 `;
 
 export default function StakeAmountLength() {
+  const { referrer } = useParams();
+
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
   const stakingSharePrice = useStakingSharePrice();
   const [stakeAmount, setStakeAmount] = useState('');
@@ -223,8 +227,7 @@ export default function StakeAmountLength() {
   const getNftBonusQuery = useGetUserBoostPercent();
   const stakingFeeQuery = useStakingFee();
   const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data);
-  console.log(calcSharesQuery);
-  console.log(getNftBonusQuery);
+
   const getTotal = () => {
     if (getLengthBonusQuery.isFetching || getNftBonusQuery.isFetching) return '0';
     let total = 0;
@@ -259,7 +262,7 @@ export default function StakeAmountLength() {
       const tx = await stakeMutation.mutateAsync({
         amount: stakeAmount,
         days: stakeDays,
-        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
+        referrer: ethers.utils.isAddress(referrer) ? referrer : ethers.constants.AddressZero
       });
       console.log(tx);
     } catch (err) {
