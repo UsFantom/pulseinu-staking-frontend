@@ -61,14 +61,15 @@ const HeaderMenuDiv = styled.div`
 `;
 
 const HeaderMenuItem = styled.p`
+  color: #d7e0ff;
+  text-align: center;
   font-family: Poppins;
   font-size: 14px;
+  font-style: normal;
   font-weight: 700;
-  line-height: 21px;
-  letter-spacing: 0.02em;
+  line-height: normal;
+  letter-spacing: 0.28px;
   margin-right: 20px;
-  text-align: center;
-  color: #d7e0ff;
   cursor: pointer;
   @media (max-width: 650px) {
     margin-bottom: 20px;
