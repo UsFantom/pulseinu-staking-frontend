@@ -19,6 +19,7 @@ import {
 import { LoadableContent } from '../../components/Custom/LoadableContent';
 import { isValidValue } from '../../utils';
 import { formatNumber } from '../../utils/utils';
+import InuBgImage from '../../assets/images/Inu.png';
 
 const PageLayout = styled.div`
   position: relative;
@@ -32,6 +33,12 @@ const PageLayout = styled.div`
     rgba(0, 181, 255, 0.1664) 97.51%
   );
   overflow-y: auto;
+`;
+
+const InuBgImg = styled.img`
+  position: absolute;
+  top: 0px;
+  right: 0px;
 `;
 
 const ContentDiv = styled.div`
@@ -89,17 +96,47 @@ const DashboardTitleContentDiv = styled.div`
   }
 `;
 
+// const DashboardTitleContent1 = styled.p`
+//   font-family: Poppins;
+//   font-size: 18px;
+//   font-weight: 400;
+//   line-height: 33px;
+//   text-align: center;
+//   letter-spacing: 0em;
+//   color: #696969;
+//   margin-left: 0px;
+//   margin-top: 0px;
+//   margin-bottom: 5px;
+// `;
+
 const DashboardTitleContent = styled.p`
+  text-align: center;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Poppins;
   font-size: 18px;
-  font-weight: 400;
-  line-height: 33px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  background: var(--lux, linear-gradient(97deg, #d7e0ff 28.37%, rgba(215, 224, 255, 0) 113.3%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const DashboardTitleMiddleContent = styled.p`
   text-align: center;
-  letter-spacing: 0em;
-  color: #696969;
-  margin-left: 0px;
-  margin-top: 0px;
-  margin-bottom: 5px;
+  leading-trim: both;
+  text-edge: cap;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  background: linear-gradient(264deg, #d7e0ff 51.42%, rgba(215, 224, 255, 0) 111.49%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 const DashboardStakeDiv = styled.div`
@@ -331,6 +368,7 @@ export default function Dashboard() {
 
   return (
     <PageLayout>
+      <InuBgImg src={InuBgImage} />
       <ContentDiv>
         <Header />
         <DashboardTitleDiv>
@@ -343,9 +381,9 @@ export default function Dashboard() {
             <DashboardTitleContent>
               Pulse Inu is a community meme coin on Pulsechain.
             </DashboardTitleContent>
-            <DashboardTitleContent>
+            <DashboardTitleMiddleContent>
               Better pumpamentals than the original Shiba Inu.
-            </DashboardTitleContent>
+            </DashboardTitleMiddleContent>
             <DashboardTitleContent>Buy, stake or burn Pulse Inu for NFTs.</DashboardTitleContent>
           </DashboardTitleContentDiv>
         </DashboardTitleDiv>

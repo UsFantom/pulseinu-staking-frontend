@@ -22,7 +22,10 @@ const LegendaryCollectorSelectDiv = styled.div`
 const SelectItemDiv = styled.div`
   width: 48%;
   display: flex;
-  background-color: ${(props) => props.bgcolor};
+  background-image: ${(props) =>
+    props.bgcolor
+      ? 'radial-gradient(185343.5% 457.11% at -17% 291%, #00E8FC 0%, #4F30FF 39.37%, #F00F8E 72.03%, #F00 97.26%)'
+      : 'none'};
   border-radius: 30px;
   cursor: pointer;
   @media (max-width: 1044px) {
@@ -122,7 +125,7 @@ export default function LegendaryCollectorSelect(props) {
   return (
     <LegendaryCollectorSelectDiv>
       {props.selected === 0 ? (
-        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+        <SelectItemDiv bgcolor onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
@@ -155,7 +158,7 @@ export default function LegendaryCollectorSelect(props) {
         </SelectItemDiv>
       )}
       {props.selected === 1 ? (
-        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+        <SelectItemDiv bgcolor onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
