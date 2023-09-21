@@ -57,8 +57,6 @@ export function PulseInuPieChart(props) {
         return [x, y];
       };
 
-      let sliceLabels = [];
-
       props.data.forEach((slice, index) => {
         const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
         const [labelX, labelY] = getCoordinatesForLabel(slice.percent);
@@ -76,7 +74,6 @@ export function PulseInuPieChart(props) {
         pathEl.setAttribute('fill', slice.fill);
         const gEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         if (slice.label === 'Stakes') {
-          gEl.setAttribute('opacity', '0.1');
           gEl.appendChild(pathEl);
           svgEl.appendChild(gEl);
         } else {
@@ -85,7 +82,7 @@ export function PulseInuPieChart(props) {
             pathImgEl.setAttribute('d', pathData);
             pathImgEl.setAttribute('fill', 'url(#pulse_inu_bg)');
             // svgEl.appendChild(pathImgEl);
-            pathEl.setAttribute('opacity', '0.85');
+            pathEl.setAttribute('opacity', '0.95');
           }
           svgEl.appendChild(pathEl);
         }
@@ -117,16 +114,22 @@ export function PulseInuPieChart(props) {
           "<br /><span style='font-weight: 700;'>" +
           formatNumber(slice.percent * 100).toString() +
           '%</span>';
-        sliceLabels.push(label);
-        if (slice.percent > 0.1) {
+        const labelShowPercent = 0.08;
+        if (slice.percent > labelShowPercent) {
           pieChartRef.current.appendChild(label);
         } else {
-          if (props.data[index - 1] !== undefined && props.data[index - 1].percent < 0.1) {
+          if (
+            props.data[index - 1] !== undefined &&
+            props.data[index - 1].percent < labelShowPercent
+          ) {
             if (props.data[index - 1].percent <= slice.percent) {
               pieChartRef.current.appendChild(label);
             }
           }
-          if (props.data[index + 1] !== undefined && props.data[index + 1].percent < 0.1) {
+          if (
+            props.data[index + 1] !== undefined &&
+            props.data[index + 1].percent < labelShowPercent
+          ) {
             if (props.data[index + 1].percent <= slice.percent) {
               pieChartRef.current.appendChild(label);
             }
@@ -149,84 +152,27 @@ export function PulseInuPieChart(props) {
         <defs>
           <linearGradient
             id="paint0_linear_91_230"
-            x1="-150%"
-            y1="50%"
-            x2="150%"
-            y2="-50%"
-            gradientTransform="rotate(129.38)">
-            <stop offset="35.71%" stopColor="#00EAFF" />
-            <stop offset="76.1%" stopColor="#8000FF" />
-            <stop offset="95.4%" stopColor="#E619E6" />
-            <stop offset="122.61%" stopColor="#FF0000" />
+            x1="-30%"
+            y1="-30%"
+            x2="70%"
+            y2="70%"
+            gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor="#00EAFF" />
+            <stop offset="51.91%" stopColor="#8000FF" />
+            <stop offset="81.93%" stopColor="#E619E6" />
+            <stop offset="95.15%" stopColor="#FF0000" />
           </linearGradient>
-          <radialGradient
-            id="paint0_radial_91_231"
-            cx="0"
-            cy="0"
-            r="1"
-            gradientUnits="userSpaceOnUse"
-            gradientTransform="translate(70.0563 319.682) rotate(-68.8673) scale(843.988 173098)">
-            <stop stopColor="#00E8FC" />
-            <stop offset="0.393686" stopColor="#4F30FF" />
-            <stop offset="0.720277" stopColor="#F00F8E" />
-            <stop offset="0.972607" stopColor="#FF0000" />
-          </radialGradient>
-          <filter
-            id="filter0_d_91_232"
-            x="0"
-            y="0"
-            width="230.5"
-            height="254.174"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB">
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
-            <feOffset />
-            <feGaussianBlur stdDeviation="26" />
-            <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0.8 0 0 0 0 0.0745098 0 0 0 0 0.92549 0 0 0 0.46 0"
-            />
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_91_232" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="effect1_dropShadow_91_232"
-              result="shape"
-            />
-          </filter>
           <radialGradient
             id="paint0_radial_91_232"
             gradientUnits="userSpaceOnUse"
             cx="0%"
             cy="100%"
-            r="170%">
-            <stop offset="0" stopColor="#00E8FC" />
-            <stop offset="0.393686" stopColor="#4F30FF" />
-            <stop offset="0.720277" stopColor="#F00F8E" />
-            <stop offset="0.972607" stopColor="#FF0000" />
+            r="210%">
+            <stop offset="0" stopColor="#FF0000" />
+            <stop offset="0.593686" stopColor="#F00F8E" />
+            <stop offset="0.720277" stopColor="#4F30FF" />
+            <stop offset="0.972607" stopColor="#00E8FC" />
           </radialGradient>
-          <pattern
-            id="pulse_inu_bg"
-            patternUnits="userSpaceOnUse"
-            width="100%"
-            height="100%"
-            patternTransform="rotate(90)">
-            <image
-              href="./pulseinu.svg"
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMinYMin slice"
-            />
-          </pattern>
         </defs>
       </svg>
     </PieChartDiv>
