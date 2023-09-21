@@ -24,7 +24,7 @@ const SelectItemDiv = styled.div`
   display: flex;
   background-image: ${(props) =>
     props.bgcolor
-      ? 'radial-gradient(185343.5% 457.11% at -17% 291%, #00E8FC 0%, #4F30FF 39.37%, #F00F8E 72.03%, #F00 97.26%)'
+      ? 'radial-gradient(457.11% 185343.5% at 291% -17% , #F00 0%, #F00F8E 39.37%, #4F30FF 62.03%, #00E8FC 97.26%)'
       : 'none'};
   border-radius: 30px;
   cursor: pointer;
