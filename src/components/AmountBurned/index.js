@@ -128,7 +128,7 @@ export default function AmountBurned() {
       </LoadableContent>
       <AmountBurnedTitleDiv>
         <AmountBurnedSpanTitle1>
-          BURNED:
+          BURNED:&nbsp;
           <AmountBurnedSpanContent1>
             <LoadableContent query={stakingTokenBurnedAmountQuery} fallback={null}>
               {() => formatNumber(stakingTokenBurnedAmountQuery.data)}
@@ -136,7 +136,7 @@ export default function AmountBurned() {
           </AmountBurnedSpanContent1>
         </AmountBurnedSpanTitle1>
         <AmountBurnedSpanTitle2>
-          TOTAL SUPPLY:
+          TOTAL SUPPLY:&nbsp;
           <AmountBurnedSpanContent2>
             <LoadableContent query={stakingTokenTotalSupply} fallback={null}>
               {() => formatNumber(stakingTokenTotalSupply.data)}

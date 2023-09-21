@@ -155,7 +155,7 @@ export default function Referrals(props) {
       return;
     }
     setCopied(true);
-    navigator.clipboard.writeText(`pulseinu.org/referrals/${account}`);
+    navigator.clipboard.writeText(`${process.env.REACT_APP_WEB_LINK}/referrals/${account}`);
     setTimeout(() => {
       setCopied(false);
     }, 2000);
@@ -180,7 +180,9 @@ export default function Referrals(props) {
             ) : (
               <ReferralLinkCopyBtn onClick={() => copyToClipboard()}>Copy</ReferralLinkCopyBtn>
             )}
-            <ReferralLink>{`pulseinu.org/referrals/${account ?? ''}`}</ReferralLink>
+            <ReferralLink>{`${process.env.REACT_APP_WEB_LINK}/referrals/${
+              account ?? ''
+            }`}</ReferralLink>
           </ReferralLinkDiv>
           <ReferralDetailTitle>Your referrals</ReferralDetailTitle>
           <ReferralsTable />

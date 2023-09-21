@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import MaxPinuImage from '../../assets/images/maxpinu.svg';
 import CalendarImage from '../../assets/images/calendar.svg';
 import {
+  useCalcShares,
   useGetLengthBonus,
   useGetUserBoostPercent,
   useStakingFee,
-  useStakingShareRateBasis,
+  useStakingSharePrice,
   useStakingTokenUserBalance
 } from '../../queries/useStaking';
 
@@ -15,6 +16,8 @@ import PulseInuBtnBgImage from '../../assets/images/pulseinubtn.svg';
 import { useStakeMutation } from '../../queries/useStakeMutation';
 import { useWeb3React } from '@web3-react/core';
 import { formatNumber } from '../../utils/utils';
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
 
 const StakeAmountLengthDiv = styled.div`
   width: 920px;
@@ -205,29 +208,15 @@ const PulseInuBtnBgImg = styled.img`
 `;
 
 export default function StakeAmountLength() {
+  const { referrer } = useParams();
+
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
-  const stakingShareRateBasis = useStakingShareRateBasis();
+  const stakingSharePrice = useStakingSharePrice();
   const [stakeAmount, setStakeAmount] = useState('');
   const [stakeDays, setStakeDays] = useState('');
 
   const stakeMutation = useStakeMutation();
   const { account } = useWeb3React();
-
-  const handleConfirm = useCallback(async () => {
-    if (!account || !stakeAmount || !stakeDays || stakeDays < 2 || stakeDays > 1000) {
-      return;
-    }
-    try {
-      const tx = await stakeMutation.mutateAsync({
-        amount: stakeAmount,
-        days: stakeDays,
-        referrer: '0x18757C4Cd0d5DabAF86bC979Bac238cBEcBE964c'
-      });
-      console.log(tx);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [stakeMutation, account, stakeAmount, stakeDays]);
 
   const useAllTokenAmounts = () => {
     if (!stakingTokenuserBalanceQuery.data) return;
@@ -235,8 +224,9 @@ export default function StakeAmountLength() {
   };
 
   const getLengthBonusQuery = useGetLengthBonus(stakeAmount, stakeDays);
-  const getNftBonusQuery = useGetUserBoostPercent(stakeAmount);
+  const getNftBonusQuery = useGetUserBoostPercent();
   const stakingFeeQuery = useStakingFee();
+  const calcSharesQuery = useCalcShares(stakeAmount, stakeDays, getNftBonusQuery.data);
 
   const getTotal = () => {
     if (getLengthBonusQuery.isFetching || getNftBonusQuery.isFetching) return '0';
@@ -252,12 +242,33 @@ export default function StakeAmountLength() {
       console.log(error);
     }
     try {
-      if (getNftBonusQuery.data) total += parseFloat(getNftBonusQuery.data);
+      if (getNftBonusQuery.data && stakeAmount)
+        total += stakeAmount * parseFloat(getNftBonusQuery.data / 1e4);
     } catch (error) {
       console.log(error);
     }
     return total;
   };
+
+  const isInvalid = () => {
+    return !account || !stakeAmount || !stakeDays || stakeDays < 2 || stakeDays > 1000;
+  };
+
+  const handleConfirm = useCallback(async () => {
+    if (isInvalid()) {
+      return;
+    }
+    try {
+      const tx = await stakeMutation.mutateAsync({
+        amount: stakeAmount,
+        days: stakeDays,
+        referrer: ethers.utils.isAddress(referrer) ? referrer : ethers.constants.AddressZero
+      });
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [stakeMutation, account, stakeAmount, stakeDays]);
 
   return (
     <>
@@ -295,18 +306,24 @@ export default function StakeAmountLength() {
             {account && (
               <BonusDetailDiv>
                 <BonusTitle>NFT Bonuses:</BonusTitle>
-                <BonusData>{`+${formatNumber(getNftBonusQuery.data)} PINU`}</BonusData>
+                <BonusData>{`+${formatNumber(
+                  (stakeAmount * getNftBonusQuery.data) / 1e4
+                )} PINU`}</BonusData>
               </BonusDetailDiv>
             )}
             <BonusDetailDiv>
               <BonusTitle>Total:</BonusTitle>
-              <BonusData>{`+${formatNumber(getTotal())} PINU`}</BonusData>
+              <BonusData>{`${formatNumber(getTotal())} PINU`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
           <BonusDivs borderdisabled={true}>
             <BonusDetailDiv>
               <BonusTitle>Share price</BonusTitle>
-              <BonusData>{`${formatNumber(stakingShareRateBasis.data)} PINU/Share`}</BonusData>
+              <BonusData>{`${formatNumber(stakingSharePrice.data)} PINU/Share`}</BonusData>
+            </BonusDetailDiv>
+            <BonusDetailDiv>
+              <BonusTitle>Total shares</BonusTitle>
+              <BonusData>{`${formatNumber(calcSharesQuery.data)}`}</BonusData>
             </BonusDetailDiv>
           </BonusDivs>
         </StakeBonusWrapDiv>
@@ -314,7 +331,7 @@ export default function StakeAmountLength() {
           <StakeButtonDivTitle>{`PLS Fee: ${formatNumber(
             stakingFeeQuery.data
           )} PLS`}</StakeButtonDivTitle>
-          <StakeBtn onClick={handleConfirm}>
+          <StakeBtn onClick={handleConfirm} disabled={isInvalid()}>
             <PulseInuBtnBgImg src={PulseInuBtnBgImage} />
             Stake Pulse Inu
           </StakeBtn>

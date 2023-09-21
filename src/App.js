@@ -33,7 +33,8 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/stake" element={<Stake />} />
+              <Route path={'/stake'} element={<Stake />} />
+              <Route path={'/referrals/:referrer'} element={<Stake />} />
               <Route path="/burn" element={<Burn />} />
             </Routes>
           </Router>

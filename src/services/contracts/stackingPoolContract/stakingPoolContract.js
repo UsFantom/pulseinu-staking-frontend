@@ -19,12 +19,28 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.SHARE_RATE_BASIS();
   }
 
+  async currentShareRate() {
+    return this.reader.currentShareRate();
+  }
+
   async totalStaked() {
     return this.reader.totalStaked();
   }
 
   async userStakingInfo(account) {
     return this.reader.userStakingInfo(account);
+  }
+
+  async getPinuPriceOfPls() {
+    return this.reader.getPinuPriceOfPls();
+  }
+
+  async getPlsPriceOfUsd() {
+    return this.reader.getPlsPriceOfUsd();
+  }
+
+  async getCurrentDay() {
+    return this.reader.getCurrentDay();
   }
 
   async getUserStakeHistory(account) {
@@ -57,5 +73,13 @@ export class StakingPoolContract extends BaseContract {
 
   async getUserBoostPercent(account) {
     return this.reader.getUserBoostPercent(account);
+  }
+
+  async getUserRewards(account) {
+    return this.reader.getUserRewards(account);
+  }
+
+  async calcShares(amount, days, boostPercent) {
+    return this.reader.calcShares(amount, days, boostPercent);
   }
 }

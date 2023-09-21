@@ -22,7 +22,10 @@ const LegendaryCollectorSelectDiv = styled.div`
 const SelectItemDiv = styled.div`
   width: 48%;
   display: flex;
-  background-color: ${(props) => props.bgcolor};
+  background-image: ${(props) =>
+    props.bgcolor
+      ? 'radial-gradient(457.11% 185343.5% at 291% -17% , #F00 0%, #F00F8E 39.37%, #4F30FF 62.03%, #00E8FC 97.26%)'
+      : 'none'};
   border-radius: 30px;
   cursor: pointer;
   @media (max-width: 1044px) {
@@ -122,7 +125,7 @@ export default function LegendaryCollectorSelect(props) {
   return (
     <LegendaryCollectorSelectDiv>
       {props.selected === 0 ? (
-        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+        <SelectItemDiv bgcolor onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={LegendaryImage} width="140" height="134" />
@@ -134,7 +137,7 @@ export default function LegendaryCollectorSelect(props) {
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Legendary</NFTDetailTitle>
             <NFTDetailContent color="#D7E0FF">
-              Earn a 10% Yield boost on staking potential future yield opportunities
+              Earn a 30% Yield boost on staking potential future yield opportunities
             </NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
@@ -149,13 +152,13 @@ export default function LegendaryCollectorSelect(props) {
           <NFTDetailDiv>
             <NFTDetailTitle>Legendary</NFTDetailTitle>
             <NFTDetailContent>
-              Earn a 10% Yield boost on staking potential future yield opportunities
+              Earn a 30% Yield boost on staking potential future yield opportunities
             </NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       )}
       {props.selected === 1 ? (
-        <SelectItemDiv bgcolor="#4F30FF" onClick={() => props.setSelected(null)}>
+        <SelectItemDiv bgcolor onClick={() => props.setSelected(null)}>
           <NFTImageDiv bgcolor="transparent">
             <NFTImgWrap>
               <NFTImg src={CollectorImage} width="108" height="98" />
@@ -166,7 +169,7 @@ export default function LegendaryCollectorSelect(props) {
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Collector</NFTDetailTitle>
-            <NFTDetailContent color="#D7E0FF">Earn a 10% Yield boost on staking</NFTDetailContent>
+            <NFTDetailContent color="#D7E0FF">Earn a 5% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       ) : (
@@ -181,7 +184,7 @@ export default function LegendaryCollectorSelect(props) {
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Collector</NFTDetailTitle>
-            <NFTDetailContent color="#696969">Earn a 10% Yield boost on staking</NFTDetailContent>
+            <NFTDetailContent color="#696969">Earn a 5% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       )}

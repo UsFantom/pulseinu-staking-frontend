@@ -1,6 +1,6 @@
 export const formatNumber = (value, count) => {
-  if (value === null || value === undefined) {
-    return '';
+  if (value === null || value === undefined || isNaN(value)) {
+    return '0';
   }
   try {
     return parseFloat(value)

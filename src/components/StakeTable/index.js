@@ -1,10 +1,16 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { useStakingHistory, useStakingInfo } from '../../queries/useStaking';
+import {
+  useGetCurrentDay,
+  useGetUserRewards,
+  useStakingHistory,
+  useStakingInfo
+} from '../../queries/useStaking';
 import { ethers } from 'ethers';
 import { formatNumber } from '../../utils/utils';
 import { useUnStakeMutation } from '../../queries/useUnStakeMutation';
 import { useWeb3React } from '@web3-react/core';
+import { LoadableContent } from '../Custom/LoadableContent';
 
 const StakeTableDiv = styled.div`
   width: Calc(100% - 40px);
@@ -77,7 +83,12 @@ const UnStakeButton = styled.button`
 
 export default function StakeTable() {
   const stakingInfoQuery = useStakingInfo();
+
+  const currentDayQuery = useGetCurrentDay();
+
   const stakingHistoryQuery = useStakingHistory();
+
+  const userRewards = useGetUserRewards();
 
   const unStakeMutation = useUnStakeMutation();
   const { account } = useWeb3React();
@@ -111,7 +122,11 @@ export default function StakeTable() {
               {formatNumber(stakingInfoQuery.data?.stakingInfo[3].toString())}
             </StakeTableData>
             <StakeTableData>
-              {formatNumber(stakingInfoQuery.data?.stakingInfo[4].toString())}
+              {formatNumber(
+                (
+                  stakingInfoQuery.data?.stakingInfo[3] + stakingInfoQuery.data?.stakingInfo[4]
+                ).toString()
+              )}
             </StakeTableData>
             <StakeTableData>
               {formatNumber(
@@ -129,14 +144,25 @@ export default function StakeTable() {
                 )
               )}
             </StakeTableData>
-            <StakeTableData>
-              {formatNumber(
-                ethers.utils.formatEther(stakingInfoQuery.data?.stakingInfo[2].toString())
-              )}
-            </StakeTableData>
-            <StakeTableData>
-              <UnStakeButton onClick={() => handleConfirm()}>Unstake</UnStakeButton>
-            </StakeTableData>
+            <StakeTableData>{formatNumber(userRewards.data)}</StakeTableData>
+            <LoadableContent
+              query={[currentDayQuery, stakingInfoQuery, stakingHistoryQuery]}
+              fallback={
+                <StakeTableData>
+                  <UnStakeButton disabled={true}>Unstake</UnStakeButton>
+                </StakeTableData>
+              }>
+              <StakeTableData>
+                <UnStakeButton
+                  onClick={handleConfirm}
+                  disabled={
+                    currentDayQuery.data >=
+                    stakingInfoQuery.data.stakingInfo[3] + stakingInfoQuery.data.stakingInfo[4]
+                  }>
+                  Unstake
+                </UnStakeButton>
+              </StakeTableData>
+            </LoadableContent>
           </StakeTableRow>
         )}
         {stakingHistoryQuery.data?.stakingInfo &&
@@ -144,7 +170,9 @@ export default function StakeTable() {
             return (
               <StakeTableRow key={index}>
                 <StakeTableData>{formatNumber(staking[3].toString())}</StakeTableData>
-                <StakeTableData>{formatNumber(staking[4].toString())}</StakeTableData>
+                <StakeTableData>
+                  {formatNumber((staking[3] + staking[4]).toString())}
+                </StakeTableData>
                 <StakeTableData>
                   {formatNumber(
                     ethers.utils.formatUnits(staking[0].toString(), stakingInfoQuery.data.decimals)

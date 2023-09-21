@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import UpArrow from '../../assets/images/uparrow.svg';
-import DownArrow from '../../assets/images/downarrow.svg';
+// import UpArrow from '../../assets/images/uparrow.svg';
+// import DownArrow from '../../assets/images/downarrow.svg';
 
 const StatisticDataDiv = styled.div`
   display: block;
@@ -70,67 +70,74 @@ const StatisticAmountEquals = styled.p`
   }
 `;
 
-const StatisticDay = styled.p`
-  font-family: Poppins;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-  letter-spacing: 0.05em;
-  text-align: left;
-  color: #696969;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  display: flex;
-  @media (max-width: 650px) {
-    text-align: center;
-    justify-content: space-evenly;
-  }
-`;
+// const StatisticDay = styled.p`
+//   font-family: Poppins;
+//   font-size: 12px;
+//   font-weight: 400;
+//   line-height: 18px;
+//   letter-spacing: 0.05em;
+//   text-align: left;
+//   color: #696969;
+//   margin-top: 0px;
+//   margin-bottom: 0px;
+//   display: flex;
+//   @media (max-width: 650px) {
+//     text-align: center;
+//     justify-content: space-evenly;
+//   }
+// `;
 
-const StatisticDayUnit = styled.span`
-  display: block;
-  width: 40px;
-  margin: 0px;
-  @media (max-width: 650px) {
-    text-align: center;
-  }
-`;
+// const StatisticDayUnit = styled.span`
+//   display: block;
+//   width: 40px;
+//   margin: 0px;
+//   @media (max-width: 650px) {
+//     text-align: center;
+//   }
+// `;
 
-const StatisticDiffAmount = styled.span`
-  font-family: Poppins;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.05em;
-  text-align: left;
-  @media (max-width: 650px) {
-    text-align: center;
-  }
-`;
+// const StatisticDiffAmount = styled.span`
+//   font-family: Poppins;
+//   font-size: 12px;
+//   font-weight: 500;
+//   line-height: 18px;
+//   letter-spacing: 0.05em;
+//   text-align: left;
+//   @media (max-width: 650px) {
+//     text-align: center;
+//   }
+// `;
 
-const StatisticDiffAmountUp = styled(StatisticDiffAmount)`
-  color: #34da6c;
-`;
+// const StatisticDiffAmountUp = styled(StatisticDiffAmount)`
+//   color: #34da6c;
+// `;
 
-const StatisticDiffAmountDown = styled(StatisticDiffAmount)`
-  color: #fc4646;
-`;
+// const StatisticDiffAmountDown = styled(StatisticDiffAmount)`
+//   color: #fc4646;
+// `;
 
-const ArrowImage = styled.img`
-  width: 8px;
-  height: 9px;
-  margin: 0px 9px 1px 5px;
-`;
+// const ArrowImage = styled.img`
+//   width: 8px;
+//   height: 9px;
+//   margin: 0px 9px 1px 5px;
+// `;
 
 export default function StatisticData(props) {
+  const [symbol, setSymbol] = useState(props.symbol);
+
+  useEffect(() => {
+    setSymbol(props.symbol);
+  }, [props.symbol]);
+
   return (
     <StatisticDataDiv>
       <StatisticTitle>{props.title}</StatisticTitle>
       <StatisticAmount>
-        {props.amount}&nbsp;{props.unit && <StatisticAmountUnit>PINU</StatisticAmountUnit>}
+        {props.amount}&nbsp;
+        {props.unit && <StatisticAmountUnit>{symbol || 'PINU'}</StatisticAmountUnit>}
       </StatisticAmount>
       <StatisticAmountEquals>{props.equals}</StatisticAmountEquals>
-      {props.amountDiff && props.amountDiff['24h'] && (
+      {/* {props.amountDiff && props.amountDiff['24h'] && (
         <StatisticDay>
           <StatisticDayUnit>24h %</StatisticDayUnit>
           {props.amountDiff['24h'] > 0 ? (
@@ -161,7 +168,7 @@ export default function StatisticData(props) {
             </StatisticDiffAmountDown>
           )}
         </StatisticDay>
-      )}
+      )} */}
     </StatisticDataDiv>
   );
 }
