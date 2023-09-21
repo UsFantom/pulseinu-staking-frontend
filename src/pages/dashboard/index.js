@@ -340,7 +340,7 @@ export default function Dashboard() {
       {
         label: 'Stakes',
         percent: stakingTotalStakedQuery.data / stakingTokenTotalSupplyQuery.data,
-        fill: 'url(#paint0_radial_91_231)'
+        fill: 'rgb(20, 48, 62)'
       },
       {
         label: 'Burns',
