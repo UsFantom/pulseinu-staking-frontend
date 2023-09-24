@@ -143,6 +143,21 @@ const YourStakeTitle = styled.p`
   margin-left: 20px;
 `;
 
+const CurrentDayTitle = styled.p`
+  font-family: Poppins;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: 0.26px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #7e97ef 0%, rgba(215, 224, 255, 0) 126.92%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 20px;
+`;
+
 export default function Stake() {
   const navigate = useNavigate();
 
@@ -179,6 +194,7 @@ export default function Stake() {
       </ContentDiv>
       <ContentDiv>
         <YourStakeTitle>Your Stakes</YourStakeTitle>
+        <CurrentDayTitle>Current Day: 2</CurrentDayTitle>
         <StakeTable />
       </ContentDiv>
     </PageLayout>
