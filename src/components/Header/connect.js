@@ -17,19 +17,27 @@ const HeaderConnectBtn = styled.button`
   line-height: 22px;
   letter-spacing: 0.02em;
   text-align: center;
-  color: #d7e0ff;
   text-transform: uppercase;
-  cursor: pointer;
-  border: none;
   box-shadow: 0px 0px 52px 0px #cc13ec75;
-  background: radial-gradient(
-      farthest-corner at -17% 291%,
-      #00e8fc 0%,
-      #4f30ff 60%,
-      #f00f8e 95%,
-      #ff0000 100%
-    ),
-    linear-gradient(0deg, #ffffff, #ffffff);
+  cursor: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? 'not-allowed' : 'pointer'};
+  color: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? '#696969' : '#d7e0ff'};
+  border: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? '1px solid #696969' : 'none'};
+  background: ${(props) =>
+    props.disabled !== undefined && props.disabled === true
+      ? 'transparent'
+      : 'radial-gradient(farthest-corner at -17% 291%,#00e8fc 0%,#4f30ff 60%,#f00f8e 95%,#ff0000 100%),linear-gradient(0deg, #ffffff, #ffffff)'};
+  &:active {
+    border: 0.5px solid var(--line-fill, #413fff);
+    background: linear-gradient(
+      270deg,
+      rgba(252, 0, 33, 0.1) 0%,
+      rgba(79, 48, 255, 0.1) 52.08%,
+      rgba(240, 15, 142, 0.1) 100%
+    );
+  }
 `;
 
 const Injected = new InjectedConnector();
@@ -83,5 +91,9 @@ export default function WalletConnectButton() {
     }
   };
 
-  return <HeaderConnectBtn onClick={onClicked}>{content()}</HeaderConnectBtn>;
+  return (
+    <HeaderConnectBtn onClick={onClicked} disabled={false}>
+      {content()}
+    </HeaderConnectBtn>
+  );
 }
