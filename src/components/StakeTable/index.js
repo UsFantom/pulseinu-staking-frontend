@@ -101,7 +101,7 @@ export default function StakeTable(props) {
     setCurrentDay(props.currentDay);
   }, [props.currentDay]);
 
-  const stakingHistoryQuery = useUserStakings();
+  const stakingHistoryQuery = useUserStakings(props.updateTime);
 
   const userRewardsQuery = useGetUserRewards(stakingHistoryQuery.data?.stakingInfo?.length ?? 0);
   const unStakeMutation = useUnStakeMutation();

@@ -224,7 +224,7 @@ const PulseInuBtnBgImg = styled.img`
   opacity: 0.5;
 `;
 
-export default function StakeAmountLength() {
+export default function StakeAmountLength(props) {
   const { referrer } = useParams();
 
   const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
@@ -284,6 +284,9 @@ export default function StakeAmountLength() {
       });
       handleContractSuccess(`You staked ${stakeAmount} PINU successfully`);
       console.log(tx);
+      if (props.updateStakes) {
+        props.updateStakes();
+      }
     } catch (err) {
       handleContractErrors(err);
     }

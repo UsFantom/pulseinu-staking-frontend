@@ -170,6 +170,8 @@ export default function Stake() {
   const [showReferrals, setShowReferrals] = useState(false);
   const currentDayQuery = useGetCurrentDay();
 
+  const [updateTime, setUpdateTime] = useState(new Date().getMilliseconds());
+
   const toggleReferrals = () => {
     setShowReferrals(!showReferrals);
   };
@@ -193,14 +195,18 @@ export default function Stake() {
           </StakeTitleBurnButton>
         </StakeTitleDiv>
         <Referrals showReferrals={showReferrals} toggleReferrals={() => toggleReferrals()} />
-        <StakeAmountLength />
+        <StakeAmountLength
+          updateStakes={() => {
+            setUpdateTime(new Date().getMilliseconds());
+          }}
+        />
       </ContentDiv>
       <ContentDiv>
         <YourStakeTitle>Your Stakes</YourStakeTitle>
         <LoadableContent query={currentDayQuery} fallback={null}>
           <>
             <CurrentDayTitle>Current Day: {parseInt(currentDayQuery.data?._hex)}</CurrentDayTitle>
-            <StakeTable currentDay={parseInt(currentDayQuery.data?._hex)} />
+            <StakeTable updateTime={updateTime} currentDay={parseInt(currentDayQuery.data?._hex)} />
           </>
         </LoadableContent>
       </ContentDiv>

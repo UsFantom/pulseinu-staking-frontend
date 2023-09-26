@@ -175,7 +175,7 @@ export const useGetUserRewards = (count) => {
   const contract = useStakingPoolContract();
   const { account } = useWeb3React();
   return useQuery(
-    ['useGetUserRewards', account],
+    ['useGetUserRewards', account, count],
     async () =>
       await Promise.all(
         Array.from({ length: count }, (_, i) => contract.getUserRewards(account, i))
@@ -259,13 +259,13 @@ export const useStakingInfo = (index) => {
   );
 };
 
-export const useUserStakings = () => {
+export const useUserStakings = (updateTime) => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
   const erc20Contract = useERC20Contract(stakingTokenQuery.data);
   return useQuery(
-    ['useUserStakings', stakingTokenQuery.data, account],
+    ['useUserStakings', stakingTokenQuery.data, account, updateTime],
     async () => await Promise.all([contract.getUserStakes(account), erc20Contract.decimals()]),
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && account),
