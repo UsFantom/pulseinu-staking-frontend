@@ -28,7 +28,7 @@ export const useBoostNftTokenTypesPrices = () => {
   );
 };
 
-export const useBoostNftTotalSupply = () => {
+export const useBoostNftTotalSupply = (updateTime) => {
   const config = getConfig();
   const contract = useBoostNftContract(config?.contracts?.boostNft?.address);
   const stakingTokenQuery = useStakingToken();
@@ -36,7 +36,7 @@ export const useBoostNftTotalSupply = () => {
   const tokenBoostNftTokenTypesPricesQuery = useBoostNftTokenTypesPrices();
 
   return useQuery(
-    ['useBoostNftTotalSupply'],
+    ['useBoostNftTotalSupply', updateTime],
     async () => {
       let totalSupply = await contract.totalSupply();
       totalSupply = parseInt(totalSupply);

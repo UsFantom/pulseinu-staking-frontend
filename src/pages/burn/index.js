@@ -204,6 +204,8 @@ export default function Burn() {
   const { account } = useWeb3React();
   const mintMutation = useMintMutation();
 
+  const [updateTime, setUpdateTime] = useState(new Date().getMilliseconds());
+
   const valid = () => {
     if (stakingTokenuserBalanceQuery.data && boostNftTokenTypesPricesQuery.data && account) {
       if ((!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
@@ -228,6 +230,7 @@ export default function Burn() {
       handleContractSuccess(
         `You burnt ${boostNftTokenTypesPricesQuery.data[selected]} PINU successfully`
       );
+      setUpdateTime(new Date().getMilliseconds());
     } catch (err) {
       handleContractErrors(err);
     }
@@ -266,7 +269,7 @@ export default function Burn() {
         <BurnImg src={BurnImage} />
       </ContentDiv>
       <LegendaryCollectorSelect selected={selected} setSelected={(value) => handleSelect(value)} />
-      <RecentMint />
+      <RecentMint updateTime={updateTime} />
     </PageLayout>
   );
 }

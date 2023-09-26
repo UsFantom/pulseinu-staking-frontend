@@ -29,13 +29,13 @@ const RecentMintTitle = styled.h1`
   text-transform: uppercase;
 `;
 
-export default function RecentMint() {
+export default function RecentMint(props) {
   return (
     <RecentMintDiv>
       <RecentMintTitleDiv>
         <RecentMintTitle>Recently Minted</RecentMintTitle>
       </RecentMintTitleDiv>
-      <MintedNFTs />
+      <MintedNFTs updateTime={props.updateTime} />
     </RecentMintDiv>
   );
 }
