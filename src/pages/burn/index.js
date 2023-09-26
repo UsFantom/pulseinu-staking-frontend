@@ -260,7 +260,7 @@ export default function Burn() {
             </BurnConfirmTitleDiv>
             <BurnConfirmButtonDiv>
               <BurnCancelBtn onClick={() => handleSelect(null)}>Cancel</BurnCancelBtn>
-              <BurnConfirmBtn onClick={handleConfirm} disabled={false && !valid()}>
+              <BurnConfirmBtn onClick={handleConfirm} disabled={!valid()}>
                 Confirm
               </BurnConfirmBtn>
             </BurnConfirmButtonDiv>
