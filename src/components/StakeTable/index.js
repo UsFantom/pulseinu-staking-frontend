@@ -1,11 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  useGetCurrentDay,
-  useGetUserRewards,
-  useStakingHistory,
-  useStakingInfo
-} from '../../queries/useStaking';
+import { useGetUserRewards, useUserStakings } from '../../queries/useStaking';
 import { ethers } from 'ethers';
 import { formatNumber } from '../../utils/utils';
 import { useUnStakeMutation } from '../../queries/useUnStakeMutation';
@@ -73,6 +68,18 @@ const UnStakeButton = styled.button`
       #ff0000 100%
     ),
     linear-gradient(0deg, #ffffff, #ffffff);
+
+  cursor: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? 'not-allowed' : 'pointer'};
+  color: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? '#696969' : '#d7e0ff'};
+  border: ${(props) =>
+    props.disabled !== undefined && props.disabled === true ? '1px solid #696969' : 'none'};
+  background: ${(props) =>
+    props.disabled !== undefined && props.disabled === true
+      ? 'transparent'
+      : 'radial-gradient(farthest-corner at -17% 291%,#00e8fc 0%,#4f30ff 60%,#f00f8e 95%,#ff0000 100%)'};
+
   @media (max-width: 1044px) {
     margin-right: 0px;
   }
@@ -81,29 +88,85 @@ const UnStakeButton = styled.button`
   }
 `;
 
-export default function StakeTable() {
-  const stakingInfoQuery = useStakingInfo();
+export default function StakeTable(props) {
+  const [currentDay, setCurrentDay] = useState(props.currentDay);
 
-  const currentDayQuery = useGetCurrentDay();
+  useEffect(() => {
+    setCurrentDay(props.currentDay);
+  }, [props.currentDay]);
 
-  const stakingHistoryQuery = useStakingHistory();
+  const stakingHistoryQuery = useUserStakings();
 
-  const userRewards = useGetUserRewards();
-
+  const userRewardsQuery = useGetUserRewards(stakingHistoryQuery.data?.stakingInfo?.length ?? 0);
   const unStakeMutation = useUnStakeMutation();
   const { account } = useWeb3React();
 
-  const handleConfirm = useCallback(async () => {
-    if (!account) {
-      return;
-    }
-    try {
-      const tx = await unStakeMutation.mutateAsync();
-      console.log(tx);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [unStakeMutation, account]);
+  const handleConfirm = useCallback(
+    async (index) => {
+      if (!account) {
+        return;
+      }
+      try {
+        const tx = await unStakeMutation.mutateAsync(index);
+        console.log(tx);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [unStakeMutation, account]
+  );
+
+  const renderStakingRow = (staking, index) => {
+    const balance = staking[0];
+    const shares = staking[1];
+    const stakingDay = staking[4];
+    const stakeDays = staking[5];
+    console.log(currentDay, stakeDays + stakingDay);
+    return (
+      <StakeTableRow key={index}>
+        <StakeTableData>{formatNumber(stakingDay)}</StakeTableData>
+        <StakeTableData>{formatNumber(stakeDays + stakingDay)}</StakeTableData>
+        <StakeTableData>
+          <LoadableContent query={stakingHistoryQuery} fallback={null}>
+            <>
+              {formatNumber(ethers.utils.formatUnits(balance, stakingHistoryQuery.data.decimals))}
+            </>
+          </LoadableContent>
+        </StakeTableData>
+        <StakeTableData>
+          <LoadableContent query={stakingHistoryQuery} fallback={null}>
+            <>{formatNumber(ethers.utils.formatUnits(shares, stakingHistoryQuery.data.decimals))}</>
+          </LoadableContent>
+        </StakeTableData>
+        <StakeTableData>
+          <LoadableContent query={userRewardsQuery} fallback={null}>
+            <>
+              {formatNumber(
+                userRewardsQuery.data?.length > index ? userRewardsQuery.data[index] : 0
+              )}
+            </>
+          </LoadableContent>
+        </StakeTableData>
+        <LoadableContent
+          query={[stakingHistoryQuery]}
+          fallback={
+            <StakeTableData>
+              <UnStakeButton disabled={true}>Unstake</UnStakeButton>
+            </StakeTableData>
+          }>
+          <StakeTableData>
+            <UnStakeButton
+              onClick={() => {
+                handleConfirm(index);
+              }}
+              disabled={currentDay <= stakeDays + stakingDay}>
+              Unstake
+            </UnStakeButton>
+          </StakeTableData>
+        </LoadableContent>
+      </StakeTableRow>
+    );
+  };
 
   return (
     <StakeTableDiv>
@@ -116,80 +179,9 @@ export default function StakeTable() {
           <StakeTableHeader>PLS Earned</StakeTableHeader>
           <StakeTableHeader />
         </StakeTableRow>
-        {stakingInfoQuery.data?.stakingInfo && stakingInfoQuery.data?.stakingInfo[0] > 0 && (
-          <StakeTableRow>
-            <StakeTableData>
-              {formatNumber(stakingInfoQuery.data?.stakingInfo[3].toString())}
-            </StakeTableData>
-            <StakeTableData>
-              {formatNumber(
-                (
-                  stakingInfoQuery.data?.stakingInfo[3] + stakingInfoQuery.data?.stakingInfo[4]
-                ).toString()
-              )}
-            </StakeTableData>
-            <StakeTableData>
-              {formatNumber(
-                ethers.utils.formatUnits(
-                  stakingInfoQuery.data?.stakingInfo[0].toString(),
-                  stakingInfoQuery.data.decimals
-                )
-              )}
-            </StakeTableData>
-            <StakeTableData>
-              {formatNumber(
-                ethers.utils.formatUnits(
-                  stakingInfoQuery.data?.stakingInfo[1].toString(),
-                  stakingInfoQuery.data.decimals
-                )
-              )}
-            </StakeTableData>
-            <StakeTableData>{formatNumber(userRewards.data)}</StakeTableData>
-            <LoadableContent
-              query={[currentDayQuery, stakingInfoQuery, stakingHistoryQuery]}
-              fallback={
-                <StakeTableData>
-                  <UnStakeButton disabled={true}>Unstake</UnStakeButton>
-                </StakeTableData>
-              }>
-              <StakeTableData>
-                <UnStakeButton
-                  onClick={handleConfirm}
-                  disabled={
-                    currentDayQuery.data >=
-                    stakingInfoQuery.data.stakingInfo[3] + stakingInfoQuery.data.stakingInfo[4]
-                  }>
-                  Unstake
-                </UnStakeButton>
-              </StakeTableData>
-            </LoadableContent>
-          </StakeTableRow>
-        )}
         {stakingHistoryQuery.data?.stakingInfo &&
           stakingHistoryQuery.data?.stakingInfo.map((staking, index) => {
-            return (
-              <StakeTableRow key={index}>
-                <StakeTableData>{formatNumber(staking[3].toString())}</StakeTableData>
-                <StakeTableData>
-                  {formatNumber((staking[3] + staking[4]).toString())}
-                </StakeTableData>
-                <StakeTableData>
-                  {formatNumber(
-                    ethers.utils.formatUnits(staking[0].toString(), stakingInfoQuery.data.decimals)
-                  )}
-                </StakeTableData>
-                <StakeTableData>
-                  {formatNumber(
-                    ethers.utils.formatUnits(staking[1].toString(), stakingInfoQuery.data.decimals)
-                  )}
-                </StakeTableData>
-                <StakeTableData>
-                  {formatNumber(ethers.utils.formatEther(staking[2].toString()))}
-                </StakeTableData>
-                {stakingInfoQuery.data?.stakingInfo &&
-                  stakingInfoQuery.data?.stakingInfo[0] > 0 && <StakeTableData />}
-              </StakeTableRow>
-            );
+            return renderStakingRow(staking, index);
           })}
       </StakeTableComp>
     </StakeTableDiv>

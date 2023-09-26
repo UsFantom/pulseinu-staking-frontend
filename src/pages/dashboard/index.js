@@ -13,7 +13,6 @@ import {
   useStakingTokenBurnedAmount,
   useStakingTokenTotalSupply,
   useStakingTotalReward,
-  useStakingTotalRewardPaid,
   useStakingTotalStaked
 } from '../../queries/useStaking';
 import { LoadableContent } from '../../components/Custom/LoadableContent';
@@ -318,7 +317,6 @@ export default function Dashboard() {
   const stakingTokenBurnedAmountQuery = useStakingTokenBurnedAmount();
 
   const stakingTotalRewardQuery = useStakingTotalReward();
-  const stakingTotalRewardPaidQuery = useStakingTotalRewardPaid();
 
   const stakingTotalStakedQuery = useStakingTotalStaked();
 
@@ -435,12 +433,10 @@ export default function Dashboard() {
           <DashboardStatisticPaidAPYDiv>
             <StatisticData
               title="PLS Dividends Paid"
-              amount={`${formatNumber(stakingTotalRewardPaidQuery.data)}`}
+              amount={`${formatNumber(stakingTotalRewardQuery.data)}`}
               unit
               symbol={'PLS'}
-              equals={`≈ $${formatNumber(
-                stakingTotalRewardPaidQuery.data * plsPriceOfUsdQuery.data
-              )}`}
+              equals={`≈ $${formatNumber(stakingTotalRewardQuery.data * plsPriceOfUsdQuery.data)}`}
             />
           </DashboardStatisticPaidAPYDiv>
           <DashboardStatisticPaidAPYDiv>

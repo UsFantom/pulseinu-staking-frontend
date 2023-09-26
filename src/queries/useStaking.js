@@ -171,15 +171,20 @@ export const useGetCurrentDay = () => {
   );
 };
 
-export const useGetUserRewards = () => {
+export const useGetUserRewards = (count) => {
   const contract = useStakingPoolContract();
   const { account } = useWeb3React();
   return useQuery(
     ['useGetUserRewards', account],
-    async () => await contract.getUserRewards(account),
+    async () =>
+      await Promise.all(
+        Array.from({ length: count }, (_, i) => contract.getUserRewards(account, i))
+      ),
     {
-      enabled: Boolean(contract && account),
-      select: (userRewards) => ethers.utils.formatEther(userRewards)
+      enabled: Boolean(contract && account && count),
+      select: (userRewards) => {
+        return userRewards.map((userReward) => ethers.utils.formatEther(userReward));
+      }
     }
   );
 };
@@ -233,14 +238,15 @@ export const useStakingUserReferrals = () => {
   );
 };
 
-export const useStakingInfo = () => {
+export const useStakingInfo = (index) => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
   const erc20Contract = useERC20Contract(stakingTokenQuery.data);
   return useQuery(
     ['useStakingInfo', stakingTokenQuery.data, account],
-    async () => await Promise.all([contract.userStakingInfo(account), erc20Contract.decimals()]),
+    async () =>
+      await Promise.all([contract.userStakingInfo(account, index), erc20Contract.decimals()]),
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && account),
       select: ([stakingInfo, decimals]) => {
@@ -253,15 +259,14 @@ export const useStakingInfo = () => {
   );
 };
 
-export const useStakingHistory = () => {
+export const useUserStakings = () => {
   const { account } = useWeb3React();
   const contract = useStakingPoolContract();
   const stakingTokenQuery = useStakingToken();
   const erc20Contract = useERC20Contract(stakingTokenQuery.data);
   return useQuery(
-    ['useStakingHistory', stakingTokenQuery.data, account],
-    async () =>
-      await Promise.all([contract.getUserStakeHistory(account), erc20Contract.decimals()]),
+    ['useUserStakings', stakingTokenQuery.data, account],
+    async () => await Promise.all([contract.getUserStakes(account), erc20Contract.decimals()]),
     {
       enabled: Boolean(contract && erc20Contract && stakingTokenQuery.data && account),
       select: ([stakingInfo, decimals]) => {

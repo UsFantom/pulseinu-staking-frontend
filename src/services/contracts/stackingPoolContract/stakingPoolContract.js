@@ -27,8 +27,8 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.totalStaked();
   }
 
-  async userStakingInfo(account) {
-    return this.reader.userStakingInfo(account);
+  async userStakingInfo(account, index) {
+    return this.reader.userStakingInfo(account, index);
   }
 
   async getPinuPriceOfPls() {
@@ -43,16 +43,16 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.getCurrentDay();
   }
 
-  async getUserStakeHistory(account) {
-    return this.reader.getUserStakeHistory(account);
+  async getUserStakes(account) {
+    return this.reader.getUserStakes(account);
   }
 
   async stake(amount, days, referrer = ethers.constants.AddressZero, stakingFee) {
     return this.writer.stake(amount, days, referrer, { value: stakingFee });
   }
 
-  async unstake() {
-    return this.writer.unstake();
+  async unstake(index) {
+    return this.writer.unstake(index);
   }
 
   async getUserReferrals(account) {
@@ -75,8 +75,8 @@ export class StakingPoolContract extends BaseContract {
     return this.reader.getUserBoostPercent(account);
   }
 
-  async getUserRewards(account) {
-    return this.reader.getUserRewards(account);
+  async getUserRewards(account, index) {
+    return this.reader.getUserRewards(account, index);
   }
 
   async calcShares(amount, days, boostPercent) {

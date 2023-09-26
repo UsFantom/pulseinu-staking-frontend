@@ -85,6 +85,7 @@
     "name": "Unstaked",
     "inputs": [
       { "type": "address", "name": "user", "internalType": "address", "indexed": true },
+      { "type": "uint256", "name": "stakeNumber", "internalType": "uint256", "indexed": true },
       { "type": "uint256", "name": "amount", "internalType": "uint256", "indexed": false }
     ],
     "anonymous": false
@@ -297,7 +298,10 @@
     "stateMutability": "view",
     "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "getUserRewards",
-    "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
+    "inputs": [
+      { "type": "address", "name": "_user", "internalType": "address" },
+      { "type": "uint256", "name": "_stakeNumber", "internalType": "uint256" }
+    ]
   },
   {
     "type": "function",
@@ -311,12 +315,13 @@
           { "type": "uint256", "name": "balance", "internalType": "uint256" },
           { "type": "uint256", "name": "shares", "internalType": "uint256" },
           { "type": "uint256", "name": "rewards", "internalType": "uint256" },
+          { "type": "uint256", "name": "userRewardPerSharePaid", "internalType": "uint256" },
           { "type": "uint16", "name": "startDay", "internalType": "uint16" },
           { "type": "uint16", "name": "stakeDays", "internalType": "uint16" }
         ]
       }
     ],
-    "name": "getUserStakeHistory",
+    "name": "getUserStakes",
     "inputs": [{ "type": "address", "name": "_user", "internalType": "address" }]
   },
   {
@@ -396,13 +401,6 @@
   },
   {
     "type": "function",
-    "stateMutability": "view",
-    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
-    "name": "rewards",
-    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
-  },
-  {
-    "type": "function",
     "stateMutability": "nonpayable",
     "outputs": [],
     "name": "setPause",
@@ -451,13 +449,6 @@
     "type": "function",
     "stateMutability": "view",
     "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
-    "name": "totalRewardPaid",
-    "inputs": []
-  },
-  {
-    "type": "function",
-    "stateMutability": "view",
-    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
     "name": "totalShares",
     "inputs": []
   },
@@ -473,7 +464,7 @@
     "stateMutability": "nonpayable",
     "outputs": [],
     "name": "unstake",
-    "inputs": []
+    "inputs": [{ "type": "uint256", "name": "_stakeNumber", "internalType": "uint256" }]
   },
   {
     "type": "function",
@@ -489,21 +480,18 @@
   {
     "type": "function",
     "stateMutability": "view",
-    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
-    "name": "userRewardPerSharePaid",
-    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
-  },
-  {
-    "type": "function",
-    "stateMutability": "view",
     "outputs": [
       { "type": "uint256", "name": "balance", "internalType": "uint256" },
       { "type": "uint256", "name": "shares", "internalType": "uint256" },
       { "type": "uint256", "name": "rewards", "internalType": "uint256" },
+      { "type": "uint256", "name": "userRewardPerSharePaid", "internalType": "uint256" },
       { "type": "uint16", "name": "startDay", "internalType": "uint16" },
       { "type": "uint16", "name": "stakeDays", "internalType": "uint16" }
     ],
     "name": "userStakingInfo",
-    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
+    "inputs": [
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "uint256", "name": "", "internalType": "uint256" }
+    ]
   }
 ]
