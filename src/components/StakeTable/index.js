@@ -121,7 +121,6 @@ export default function StakeTable(props) {
     const shares = staking[1];
     const stakingDay = staking[4];
     const stakeDays = staking[5];
-    console.log(currentDay, stakeDays + stakingDay);
     return (
       <StakeTableRow key={index}>
         <StakeTableData>{formatNumber(stakingDay)}</StakeTableData>
@@ -159,7 +158,7 @@ export default function StakeTable(props) {
               onClick={() => {
                 handleConfirm(index);
               }}
-              disabled={currentDay <= stakeDays + stakingDay}>
+              disabled={currentDay <= stakeDays + stakingDay || balance === 0}>
               Unstake
             </UnStakeButton>
           </StakeTableData>
