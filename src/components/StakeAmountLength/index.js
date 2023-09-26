@@ -15,7 +15,13 @@ import {
 import PulseInuBtnBgImage from '../../assets/images/pulseinubtn.svg';
 import { useStakeMutation } from '../../queries/useStakeMutation';
 import { useWeb3React } from '@web3-react/core';
-import { formatNumber } from '../../utils/utils';
+import {
+  DIALOG_TYPES,
+  formatNumber,
+  handleContractErrors,
+  handleContractSuccess,
+  showDialog
+} from '../../utils/utils';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -269,15 +275,17 @@ export default function StakeAmountLength() {
     if (isInvalid()) {
       return;
     }
+    showDialog(DIALOG_TYPES.PROGRESS, 'Staking');
     try {
       const tx = await stakeMutation.mutateAsync({
         amount: stakeAmount,
         days: stakeDays,
         referrer: ethers.utils.isAddress(referrer) ? referrer : ethers.constants.AddressZero
       });
+      handleContractSuccess(`You staked ${stakeAmount} PINU successfully`);
       console.log(tx);
     } catch (err) {
-      console.log(err);
+      handleContractErrors(err);
     }
   }, [stakeMutation, account, stakeAmount, stakeDays]);
 

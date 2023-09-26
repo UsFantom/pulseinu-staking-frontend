@@ -2,7 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useGetUserRewards, useUserStakings } from '../../queries/useStaking';
 import { ethers } from 'ethers';
-import { formatNumber } from '../../utils/utils';
+import {
+  DIALOG_TYPES,
+  formatNumber,
+  handleContractErrors,
+  handleContractSuccess,
+  showDialog
+} from '../../utils/utils';
 import { useUnStakeMutation } from '../../queries/useUnStakeMutation';
 import { useWeb3React } from '@web3-react/core';
 import { LoadableContent } from '../Custom/LoadableContent';
@@ -106,11 +112,13 @@ export default function StakeTable(props) {
       if (!account) {
         return;
       }
+      showDialog(DIALOG_TYPES.PROGRESS, 'Unstaking');
       try {
         const tx = await unStakeMutation.mutateAsync(index);
         console.log(tx);
+        handleContractSuccess(`You unstaked Stake(${index})successfully`);
       } catch (err) {
-        console.log(err);
+        handleContractErrors(err);
       }
     },
     [unStakeMutation, account]
