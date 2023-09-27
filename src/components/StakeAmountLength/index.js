@@ -282,7 +282,7 @@ export default function StakeAmountLength(props) {
         days: stakeDays,
         referrer: ethers.utils.isAddress(referrer) ? referrer : ethers.constants.AddressZero
       });
-      handleContractSuccess(`You staked ${stakeAmount} PINU successfully`);
+      handleContractSuccess(`You staked ${formatNumber(stakeAmount)} PINU successfully`);
       console.log(tx);
       if (props.updateStakes) {
         props.updateStakes();

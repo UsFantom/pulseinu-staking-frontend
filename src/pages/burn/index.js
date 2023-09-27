@@ -232,7 +232,7 @@ export default function Burn() {
       });
       console.log(tx);
       handleContractSuccess(
-        `You burnt ${boostNftTokenTypesPricesQuery.data[selected]} PINU successfully`
+        `You burnt ${formatNumber(boostNftTokenTypesPricesQuery.data[selected])} PINU successfully`
       );
       setUpdateTime(new Date().getMilliseconds());
     } catch (err) {
