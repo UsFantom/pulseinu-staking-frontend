@@ -8,6 +8,8 @@ import StakeAmountLength from '../../components/StakeAmountLength';
 import StakeTable from '../../components/StakeTable';
 import NavigateBack from '../../components/NavigateBack';
 import BurnBgImg from '../../assets/images/burn_bg.svg';
+import { useGetCurrentDay } from '../../queries/useStaking';
+import { LoadableContent } from '../../components/Custom/LoadableContent';
 
 const PageLayout = styled.div`
   position: relative;
@@ -166,6 +168,9 @@ export default function Stake() {
   };
 
   const [showReferrals, setShowReferrals] = useState(false);
+  const currentDayQuery = useGetCurrentDay();
+
+  const [updateTime, setUpdateTime] = useState(new Date().getMilliseconds());
 
   const toggleReferrals = () => {
     setShowReferrals(!showReferrals);
@@ -190,12 +195,20 @@ export default function Stake() {
           </StakeTitleBurnButton>
         </StakeTitleDiv>
         <Referrals showReferrals={showReferrals} toggleReferrals={() => toggleReferrals()} />
-        <StakeAmountLength />
+        <StakeAmountLength
+          updateStakes={() => {
+            setUpdateTime(new Date().getMilliseconds());
+          }}
+        />
       </ContentDiv>
       <ContentDiv>
         <YourStakeTitle>Your Stakes</YourStakeTitle>
-        <CurrentDayTitle>Current Day: 2</CurrentDayTitle>
-        <StakeTable />
+        <LoadableContent query={currentDayQuery} fallback={null}>
+          <>
+            <CurrentDayTitle>Current Day: {parseInt(currentDayQuery.data?._hex)}</CurrentDayTitle>
+            <StakeTable updateTime={updateTime} currentDay={parseInt(currentDayQuery.data?._hex)} />
+          </>
+        </LoadableContent>
       </ContentDiv>
     </PageLayout>
   );

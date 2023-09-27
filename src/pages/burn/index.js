@@ -10,6 +10,13 @@ import BurnImage from '../../assets/images/burn.svg';
 import { useBoostNftTokenTypesPrices } from '../../queries/useBoostNft';
 import { useWeb3React } from '@web3-react/core';
 import { useMintMutation } from '../../queries/useMintMutation';
+import { useStakingTokenUserBalance } from '../../queries/useStaking';
+import {
+  DIALOG_TYPES,
+  handleContractErrors,
+  handleContractSuccess,
+  showDialog
+} from '../../utils/utils';
 
 const PageLayout = styled.div`
   position: relative;
@@ -191,22 +198,41 @@ export default function Burn() {
     setSelected(select);
   };
 
+  const stakingTokenuserBalanceQuery = useStakingTokenUserBalance();
+
   const boostNftTokenTypesPricesQuery = useBoostNftTokenTypesPrices();
   const { account } = useWeb3React();
   const mintMutation = useMintMutation();
+
+  const [updateTime, setUpdateTime] = useState(new Date().getMilliseconds());
+
+  const valid = () => {
+    if (stakingTokenuserBalanceQuery.data && boostNftTokenTypesPricesQuery.data && account) {
+      if ((!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
+        return false;
+      }
+      return stakingTokenuserBalanceQuery.data >= boostNftTokenTypesPricesQuery.data[selected];
+    }
+    return false;
+  };
 
   const handleConfirm = useCallback(async () => {
     if (!account || (!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
       return;
     }
+    showDialog(DIALOG_TYPES.PROGRESS, 'Burning');
     try {
       const tx = await mintMutation.mutateAsync({
         type: selected,
         amount: boostNftTokenTypesPricesQuery.data[selected]
       });
       console.log(tx);
+      handleContractSuccess(
+        `You burnt ${boostNftTokenTypesPricesQuery.data[selected]} PINU successfully`
+      );
+      setUpdateTime(new Date().getMilliseconds());
     } catch (err) {
-      console.log(err);
+      handleContractErrors(err);
     }
   }, [mintMutation, account, selected, boostNftTokenTypesPricesQuery.data]);
 
@@ -234,7 +260,7 @@ export default function Burn() {
             </BurnConfirmTitleDiv>
             <BurnConfirmButtonDiv>
               <BurnCancelBtn onClick={() => handleSelect(null)}>Cancel</BurnCancelBtn>
-              <BurnConfirmBtn onClick={handleConfirm} disabled={false}>
+              <BurnConfirmBtn onClick={handleConfirm} disabled={!valid()}>
                 Confirm
               </BurnConfirmBtn>
             </BurnConfirmButtonDiv>
@@ -243,7 +269,7 @@ export default function Burn() {
         <BurnImg src={BurnImage} />
       </ContentDiv>
       <LegendaryCollectorSelect selected={selected} setSelected={(value) => handleSelect(value)} />
-      <RecentMint />
+      <RecentMint updateTime={updateTime} />
     </PageLayout>
   );
 }

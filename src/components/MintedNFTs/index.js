@@ -76,11 +76,11 @@ const MintedAmount = styled.p`
   color: ${(props) => props.color};
 `;
 
-export default function MintedNFTs() {
+export default function MintedNFTs(props) {
   const ref = useRef();
   const { events } = useDraggable(ref);
 
-  const boostNftTotalSupply = useBoostNftTotalSupply();
+  const boostNftTotalSupply = useBoostNftTotalSupply(props.updateTime);
   return (
     <MintedNFTsDiv {...events} ref={ref}>
       {boostNftTotalSupply.data &&
