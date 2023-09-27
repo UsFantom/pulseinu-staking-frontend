@@ -13,6 +13,7 @@ import { useMintMutation } from '../../queries/useMintMutation';
 import { useStakingTokenUserBalance } from '../../queries/useStaking';
 import {
   DIALOG_TYPES,
+  formatNumber,
   handleContractErrors,
   handleContractSuccess,
   showDialog
@@ -222,7 +223,7 @@ export default function Burn() {
     }
     showDialog(
       DIALOG_TYPES.PROGRESS,
-      `Burning ${boostNftTokenTypesPricesQuery.data[selected]} PINU`
+      `Burning ${formatNumber(boostNftTokenTypesPricesQuery.data[selected])} PINU`
     );
     try {
       const tx = await mintMutation.mutateAsync({

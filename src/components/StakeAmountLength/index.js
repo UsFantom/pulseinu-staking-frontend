@@ -275,7 +275,7 @@ export default function StakeAmountLength(props) {
     if (isInvalid()) {
       return;
     }
-    showDialog(DIALOG_TYPES.PROGRESS, `Staking ${stakeAmount} PINU`);
+    showDialog(DIALOG_TYPES.PROGRESS, `Staking ${formatNumber(stakeAmount)} PINU`);
     try {
       const tx = await stakeMutation.mutateAsync({
         amount: stakeAmount,
