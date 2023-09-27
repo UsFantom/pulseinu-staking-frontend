@@ -64,36 +64,69 @@ function isDialogOpened() {
 function createDialog(type, message) {
   const dialogContainer = document.createElement('div');
   dialogContainer.className = 'dialog-container';
+  dialogContainer.style.position = 'fixed';
+  dialogContainer.style.top = '0';
+  dialogContainer.style.left = '0';
+  dialogContainer.style.width = '100%';
+  dialogContainer.style.height = '100%';
+  dialogContainer.style.display = 'flex';
+  dialogContainer.style.justifyContent = 'center';
+  dialogContainer.style.alignItems = 'center';
+  dialogContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+  dialogContainer.style.zIndex = '9999';
 
   const dialogContent = document.createElement('div');
   dialogContent.className = 'dialog-content';
+  dialogContent.style.position = 'relative';
+  dialogContent.style.textAlign = 'center';
+  dialogContent.style.backgroundColor = '#fff';
+  dialogContent.style.padding = '20px';
+  dialogContent.style.borderRadius = '4px';
+  dialogContent.style.textAlign = 'center';
+  dialogContent.style.width = '80%'; // Adjust the width to 80% on mobile
+  dialogContent.style.maxWidth = '500px'; // Adjust the maximum width to 500 pixels on desktop
   dialogContent.addEventListener('click', (event) => {
     event.stopPropagation(); // Prevent click events from propagating to the dialog container
   });
 
   const closeButton = document.createElement('button');
-  closeButton.className = 'dialog-close-btn';
   closeButton.innerHTML = '&times;';
+  closeButton.style.position = 'absolute';
+  closeButton.style.top = '10px';
+  closeButton.style.right = '10px';
+  closeButton.style.border = 'none';
+  closeButton.style.backgroundColor = 'transparent';
+  closeButton.style.fontSize = '24px';
+  closeButton.style.fontWeight = 'bold';
+  closeButton.style.cursor = 'pointer';
   closeButton.addEventListener('click', hideDialog);
 
   const messageElement = document.createElement('p');
-  messageElement.className = 'dialog-content-label';
+  messageElement.style.margin = '0';
   messageElement.textContent = message;
 
   dialogContent.appendChild(closeButton);
   dialogContent.appendChild(messageElement);
 
-  const spinnerDiv = document.createElement('div');
-  spinnerDiv.className = 'spinner-wrap';
-
   const spinner = document.createElement('div');
   spinner.className = 'spinner';
+  spinner.style.marginTop = '20px';
+  spinner.style.border = '4px solid #f3f3f3';
+  spinner.style.borderTop = '4px solid #3498db';
+  spinner.style.borderRadius = '50%';
+  spinner.style.width = '30px';
+  spinner.style.height = '30px';
+  spinner.style.animation = 'spin 1s linear infinite';
+  spinner.style.transformOrigin = 'center';
+  spinner.style.display = 'none';
+  spinner.style.position = 'relative';
+  spinner.style.transform = 'translateX(-50%)';
+  spinner.style.left = '50%';
   if (type === DIALOG_TYPES.PROGRESS) {
     spinner.style.display = 'block';
   }
-  spinnerDiv.appendChild(spinner);
+  dialogContent.appendChild(spinner);
 
-  dialogContent.appendChild(spinnerDiv);
   dialogContainer.appendChild(dialogContent);
 
   // Close the dialog when clicking outside of it
@@ -103,7 +136,7 @@ function createDialog(type, message) {
 }
 
 function updateDialog(type, message) {
-  const messageElement = document.querySelector('.dialog-content-label');
+  const messageElement = document.querySelector('.dialog-content p');
   const spinnerElement = document.querySelector('.dialog-content .spinner');
 
   messageElement.textContent = message;
