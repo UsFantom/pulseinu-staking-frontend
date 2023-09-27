@@ -1,4 +1,13 @@
 @font-face {
-    font-family: Poppins;
-    src: url(./assets/fonts/Poppins/Poppins-Medium.ttf);
+  font-family: Poppins;
+  src: url(./assets/fonts/Poppins/Poppins-Medium.ttf);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
