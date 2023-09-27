@@ -13,6 +13,7 @@ import { useMintMutation } from '../../queries/useMintMutation';
 import { useStakingTokenUserBalance } from '../../queries/useStaking';
 import {
   DIALOG_TYPES,
+  formatNumber,
   handleContractErrors,
   handleContractSuccess,
   showDialog
@@ -220,7 +221,10 @@ export default function Burn() {
     if (!account || (!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
       return;
     }
-    showDialog(DIALOG_TYPES.PROGRESS, 'Burning');
+    showDialog(
+      DIALOG_TYPES.PROGRESS,
+      `Burning ${formatNumber(boostNftTokenTypesPricesQuery.data[selected])} PINU`
+    );
     try {
       const tx = await mintMutation.mutateAsync({
         type: selected,
@@ -228,7 +232,7 @@ export default function Burn() {
       });
       console.log(tx);
       handleContractSuccess(
-        `You burnt ${boostNftTokenTypesPricesQuery.data[selected]} PINU successfully`
+        `You burnt ${formatNumber(boostNftTokenTypesPricesQuery.data[selected])} PINU successfully`
       );
       setUpdateTime(new Date().getMilliseconds());
     } catch (err) {

@@ -49,8 +49,75 @@ export const handleContractSuccess = (message) => {
 };
 
 export const showDialog = (type, message) => {
-  console.log(type, message);
-  const dialog = '';
-  alert(message);
-  return dialog;
+  if (isDialogOpened()) {
+    updateDialog(type, message);
+  } else {
+    createDialog(type, message);
+  }
 };
+
+function isDialogOpened() {
+  const dialogContainer = document.querySelector('.dialog-container');
+  return Boolean(dialogContainer);
+}
+
+function createDialog(type, message) {
+  const dialogContainer = document.createElement('div');
+  dialogContainer.className = 'dialog-container';
+
+  const dialogContent = document.createElement('div');
+  dialogContent.className = 'dialog-content';
+  dialogContent.addEventListener('click', (event) => {
+    event.stopPropagation(); // Prevent click events from propagating to the dialog container
+  });
+
+  const closeButton = document.createElement('button');
+  closeButton.className = 'dialog-close-btn';
+  closeButton.innerHTML = '&times;';
+  closeButton.addEventListener('click', hideDialog);
+
+  const messageElement = document.createElement('p');
+  messageElement.className = 'dialog-content-label';
+  messageElement.textContent = message;
+
+  dialogContent.appendChild(closeButton);
+  dialogContent.appendChild(messageElement);
+
+  const spinnerDiv = document.createElement('div');
+  spinnerDiv.className = 'spinner-wrap';
+
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  if (type === DIALOG_TYPES.PROGRESS) {
+    spinner.style.display = 'block';
+  }
+  spinnerDiv.appendChild(spinner);
+
+  dialogContent.appendChild(spinnerDiv);
+  dialogContainer.appendChild(dialogContent);
+
+  // Close the dialog when clicking outside of it
+  dialogContainer.addEventListener('click', hideDialog);
+
+  document.body.appendChild(dialogContainer);
+}
+
+function updateDialog(type, message) {
+  const messageElement = document.querySelector('.dialog-content-label');
+  const spinnerElement = document.querySelector('.dialog-content .spinner');
+
+  messageElement.textContent = message;
+
+  if (type === DIALOG_TYPES.PROGRESS) {
+    spinnerElement.style.display = 'block';
+  } else {
+    spinnerElement.style.display = 'none';
+  }
+}
+
+function hideDialog() {
+  const dialogContainer = document.querySelector('.dialog-container');
+  if (dialogContainer) {
+    dialogContainer.parentNode.removeChild(dialogContainer);
+  }
+}

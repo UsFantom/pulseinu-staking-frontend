@@ -112,7 +112,7 @@ export default function StakeTable(props) {
       if (!account) {
         return;
       }
-      showDialog(DIALOG_TYPES.PROGRESS, 'Unstaking');
+      showDialog(DIALOG_TYPES.PROGRESS, `Unstaking(${index})`);
       try {
         const tx = await unStakeMutation.mutateAsync(index);
         console.log(tx);

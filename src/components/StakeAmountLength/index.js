@@ -275,14 +275,14 @@ export default function StakeAmountLength(props) {
     if (isInvalid()) {
       return;
     }
-    showDialog(DIALOG_TYPES.PROGRESS, 'Staking');
+    showDialog(DIALOG_TYPES.PROGRESS, `Staking ${formatNumber(stakeAmount)} PINU`);
     try {
       const tx = await stakeMutation.mutateAsync({
         amount: stakeAmount,
         days: stakeDays,
         referrer: ethers.utils.isAddress(referrer) ? referrer : ethers.constants.AddressZero
       });
-      handleContractSuccess(`You staked ${stakeAmount} PINU successfully`);
+      handleContractSuccess(`You staked ${formatNumber(stakeAmount)} PINU successfully`);
       console.log(tx);
       if (props.updateStakes) {
         props.updateStakes();

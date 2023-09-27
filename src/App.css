@@ -1,4 +1,78 @@
 @font-face {
-    font-family: Poppins;
-    src: url(./assets/fonts/Poppins/Poppins-Medium.ttf);
+  font-family: Poppins;
+  src: url(./assets/fonts/Poppins/Poppins-Medium.ttf);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+}
+
+.dialog-content {
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 700px;
+  background: radial-gradient(457.11% 185343.5% at 291% -17% , #F00 0%, #F00F8E 39.37%, #4F30FF 62.03%, #00E8FC 97.26%);;  
+}
+
+.dialog-content-label {
+  margin: 20px 0 20px 0;
+  color: #d9d9d9;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.dialog-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background-color: transparent;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+}
+
+.spinner-wrap {
+  margin: auto;
+  margin-bottom: 10px;
+  text-align: center;
+  width: fit-content;
+}
+
+.spinner {
+  margin-top: 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  transform-origin: center;
+  display: none;
 }
