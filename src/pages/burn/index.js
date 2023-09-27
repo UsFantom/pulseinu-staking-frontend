@@ -220,7 +220,10 @@ export default function Burn() {
     if (!account || (!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
       return;
     }
-    showDialog(DIALOG_TYPES.PROGRESS, 'Burning');
+    showDialog(
+      DIALOG_TYPES.PROGRESS,
+      `Burning ${boostNftTokenTypesPricesQuery.data[selected]} PINU`
+    );
     try {
       const tx = await mintMutation.mutateAsync({
         type: selected,
