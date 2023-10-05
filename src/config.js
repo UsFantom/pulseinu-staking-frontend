@@ -29,7 +29,7 @@ export const CONFIG = {
       stakingToken: '0xbFb94A0736681D35EA3AE16838F50378788d5182',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
-    chainSlug: 'pulse',
+    chainSlug: 'sepolia',
     stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',
     stakingTokenToUSDC: '0x3e520cc96a444256d6d8bd220233554daec51e42',
     rpcUrl: `https://sepolia.infura.io/v3/${INFURA_KEY}`,
@@ -44,7 +44,8 @@ export const CONFIG = {
   },
   369: {
     contracts: {
-      stakingToken: '0xa12e2661ec6603cbbb891072b2ad5b3d5edb48bd'
+      stakingToken: '0xa12e2661ec6603cbbb891072b2ad5b3d5edb48bd',
+      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png'
     },
     chainSlug: 'pulse',
     stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',
@@ -69,6 +70,7 @@ export const CONFIG = {
         tokenTypes: [0, 1]
       },
       stakingToken: '0x6eB0864C8568dC4361CC8A56703F154cC44dF353',
+      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
     chainSlug: 'pulse',

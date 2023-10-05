@@ -60,7 +60,8 @@ const HeaderMenuDiv = styled.div`
   }
 `;
 
-const HeaderMenuItem = styled.p`
+const HeaderMenuItem = styled.a`
+  text-decoration: none;
   color: #d7e0ff;
   text-align: center;
   font-family: Poppins;
@@ -106,6 +107,10 @@ export default function AmountBurned() {
     }
   };
 
+  const openUrl = (url) => {
+    window.open(url, '_blank');
+  };
+
   const handleAddToken = useCallback(async () => {
     if (!correctChain) return;
     try {
@@ -118,14 +123,28 @@ export default function AmountBurned() {
   return (
     <HeaderDiv>
       <HeaderLogoDiv>
-        <HeaderLogoImg src={PulseInuLogo} />
+        <a href="/">
+          <HeaderLogoImg src={PulseInuLogo} />
+        </a>
         <HeaderLogoTitle>PULSE INU</HeaderLogoTitle>
       </HeaderLogoDiv>
       <HeaderMenuDiv>
         <HeaderMenuItem>{account ? `${account.substring(0, 6)}...` : ''}</HeaderMenuItem>
-        <HeaderMenuItem>WHITEPAPER</HeaderMenuItem>
-        <HeaderMenuIcon src={TwitterLogo} width={19} height={17} />
-        <HeaderMenuIcon src={TelegramLogo} width={21} height={21} />
+        <HeaderMenuItem href="https://pulseinu.org/whitepaper.pdf" target="_blank">
+          WHITEPAPER
+        </HeaderMenuItem>
+        <HeaderMenuIcon
+          src={TwitterLogo}
+          width={19}
+          height={17}
+          onClick={() => openUrl('https://twitter.com/PulseInu')}
+        />
+        <HeaderMenuIcon
+          src={TelegramLogo}
+          width={21}
+          height={21}
+          onClick={() => openUrl('https://t.me/+Z5uINrmzvE9lNjNh')}
+        />
         <HeaderMenuIcon src={MetaMaskLogo} width={25} height={25} onClick={handleAddToken} />
         <WalletConnectButton />
       </HeaderMenuDiv>
