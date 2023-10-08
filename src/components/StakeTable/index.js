@@ -116,7 +116,7 @@ export default function StakeTable(props) {
       try {
         const tx = await unStakeMutation.mutateAsync(index);
         console.log(tx);
-        handleContractSuccess(`You unstaked Stake(${index})successfully`);
+        handleContractSuccess(`You unstaked successfully`);
       } catch (err) {
         handleContractErrors(err);
       }
