@@ -8,6 +8,7 @@ import Stake from './pages/stake';
 import Burn from './pages/burn';
 
 import './App.css';
+import ReferClaim from './pages/referclaim';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,7 @@ function App() {
               <Route path={'/stake'} element={<Stake />} />
               <Route path={'/referrals/:referrer'} element={<Stake />} />
               <Route path="/burn" element={<Burn />} />
+              <Route path="/referclaim" element={<ReferClaim />} />
             </Routes>
           </Router>
         </React.Fragment>
