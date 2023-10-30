@@ -3,8 +3,10 @@ export const CONTRACT_ERROR_MAP = {
   'transfer amount exceeds balance': `Insufficient balance`,
   'StakingPool::stake: amount = 0': 'Invalid staking amount',
   'StakingPool::stake: stakeDays <= 1': 'Invalid stake days',
-  'StakingPool::stake: stakeDays > 1000': 'Invalid stake days',
+  'StakingPool::stake: stakeDays > MAX_STAKING_DAYS': 'Invalid stake days',
   'StakingPool::stake: incorrect fee amount': 'Invalid stake fee amount',
+  'StakingPool::stake: caller is referrer': 'Invalid Referrer Address',
+  'StakingPool::stake: max stakes reached': 'Reached maximum stakes',
   'StakingPool::unstake: invalid stake number': 'Invalid stake number',
   'StakingPool::unstake: stake not matured': 'Unable to unstake',
   'Failed to transfer PLS to address': 'Failed to transfer PLS to address'
