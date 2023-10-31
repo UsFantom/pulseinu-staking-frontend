@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import Header from '../../components/Header';
+import { useWeb3React } from '@web3-react/core';
+import { useCorrectChain } from '../../hooks/useProvider';
+import {
+  DIALOG_TYPES,
+  getParameterCaseInsensitive,
+  handleContractErrors,
+  handleContractSuccess,
+  makeTimeString,
+  showDialog
+} from '../../utils/utils';
+import { ADOPTERS, REFERRER_DICT } from '../../const';
+import { useStakingTokenContractInfo } from '../../queries/stakingToken';
+import { MerkleTree } from 'merkletreejs';
+import { keccak256 } from 'js-sha3';
+import { useReferrerClaimMutation } from '../../queries/useReferrerClaimMutation';
+import { useEarlyAdapterClaimMutation } from '../../queries/useEarlyAdapterClaimMutation';
 
 const PageLayout = styled.div`
   position: relative;
@@ -128,6 +144,94 @@ const ClaimTitle = styled.p`
 `;
 
 export default function ReferClaim() {
+  const { account } = useWeb3React();
+  const correctChain = useCorrectChain();
+  const stakingTokenContractInfoQuery = useStakingTokenContractInfo();
+
+  const [currentTime, setCurrentTime] = useState(new Date().getTime());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().getTime());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  const eligibleForReferral = useMemo(() => {
+    if (!account || !correctChain || !stakingTokenContractInfoQuery.data) return false;
+    return Boolean(getParameterCaseInsensitive(REFERRER_DICT, account));
+  }, [correctChain, account, stakingTokenContractInfoQuery]);
+
+  const eligibleForEarlyAdapter = useMemo(() => {
+    if (!account || !correctChain || !stakingTokenContractInfoQuery.data) return false;
+    return (
+      ADOPTERS.findIndex((item) => account.toString().toLowerCase() === item.toLowerCase()) > -1
+    );
+  }, [correctChain, account, stakingTokenContractInfoQuery]);
+
+  const mintEndTime = useMemo(() => {
+    if (!stakingTokenContractInfoQuery.data) return null;
+    return Number(stakingTokenContractInfoQuery.data.mintEndTime._hex) * 1000;
+  }, [stakingTokenContractInfoQuery]);
+
+  const referrerClaimMutation = useReferrerClaimMutation();
+  const earlyAdapterClaimMutation = useEarlyAdapterClaimMutation();
+
+  const referrerClaim = useCallback(async () => {
+    showDialog(DIALOG_TYPES.PROGRESS, `Referrer Claiming`);
+    try {
+      let percent = getParameterCaseInsensitive(REFERRER_DICT, account);
+      if (percent == undefined) {
+        percent = 0;
+      }
+      const addresses = Object.keys(REFERRER_DICT);
+
+      let leafNodes = [];
+
+      for (let i = 0; i < addresses.length; i++) {
+        leafNodes.push(keccak256(addresses[i] + REFERRER_DICT[addresses[i]]));
+      }
+
+      let merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+
+      let hashedAddress = keccak256(account + percent);
+
+      let proof = merkleTree.getHexProof(hashedAddress);
+      percent = parseInt('0x' + percent, 16);
+      const tx = await referrerClaimMutation.mutateAsync({
+        proof: proof,
+        percent: percent
+      });
+      handleContractSuccess(`You claimed successfully`);
+      console.log(tx);
+    } catch (err) {
+      handleContractErrors(err);
+    }
+  }, [referrerClaimMutation]);
+
+  const earlyAdapterClaim = useCallback(async () => {
+    showDialog(DIALOG_TYPES.PROGRESS, `Early Adapter Claiming`);
+    try {
+      let leaves = ADOPTERS.map((addr) => keccak256(addr));
+
+      // Create tree
+      let merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+      // 'Serverside' code
+      let hashedAddress = keccak256(account);
+      let proof = merkleTree.getHexProof(hashedAddress);
+      const tx = await earlyAdapterClaimMutation.mutateAsync({
+        proof: proof
+      });
+      console.log(tx);
+      handleContractSuccess(`You claimed successfully`);
+    } catch (err) {
+      handleContractErrors(err);
+    }
+  }, [referrerClaimMutation]);
+
   return (
     <PageLayout>
       <HeaderDiv>
@@ -137,14 +241,26 @@ export default function ReferClaim() {
         <ReferClaimH2>Referrer & Early Adopter Claims</ReferClaimH2>
         <ClaimsDiv>
           <ClaimsItemDiv>
-            <ClaimBtn disabled>Referrer Claim</ClaimBtn>
-            <ClaimP>Not Eligible For Referrer</ClaimP>
-            <ClaimTitle>9 Days 20:24:50</ClaimTitle>
+            <ClaimBtn disabled={!eligibleForReferral || !mintEndTime} onClick={referrerClaim}>
+              Referrer Claim
+            </ClaimBtn>
+            {!eligibleForReferral || !mintEndTime ? (
+              <ClaimP>Not Eligible For Referrer</ClaimP>
+            ) : (
+              <ClaimTitle>{makeTimeString(mintEndTime - currentTime)}</ClaimTitle>
+            )}
           </ClaimsItemDiv>
           <ClaimsItemDiv>
-            <ClaimBtn disabled>Early Adopter Claim</ClaimBtn>
-            <ClaimP>Not Eligible For Early Adopter</ClaimP>
-            <ClaimTitle>9 Days 20:24:50</ClaimTitle>
+            <ClaimBtn
+              disabled={!eligibleForEarlyAdapter || !mintEndTime}
+              onClick={earlyAdapterClaim}>
+              Early Adopter Claim
+            </ClaimBtn>
+            {!eligibleForEarlyAdapter || !mintEndTime ? (
+              <ClaimP>Not Eligible For Early Adopter</ClaimP>
+            ) : (
+              <ClaimTitle>{makeTimeString(mintEndTime - currentTime)}</ClaimTitle>
+            )}
           </ClaimsItemDiv>
         </ClaimsDiv>
       </ContentDiv>

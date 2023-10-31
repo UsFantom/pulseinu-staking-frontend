@@ -9,7 +9,8 @@ export const CONTRACT_ERROR_MAP = {
   'StakingPool::stake: max stakes reached': 'Reached maximum stakes',
   'StakingPool::unstake: invalid stake number': 'Invalid stake number',
   'StakingPool::unstake: stake not matured': 'Unable to unstake',
-  'Failed to transfer PLS to address': 'Failed to transfer PLS to address'
+  'Failed to transfer PLS to address': 'Failed to transfer PLS to address',
+  'unknown account': 'You are not eligible for claiming'
 };
 
 export const DIALOG_TYPES = {
@@ -48,6 +49,30 @@ export const handleContractErrors = (error) => {
 
 export const handleContractSuccess = (message) => {
   return showDialog(DIALOG_TYPES.SUCCESS, message);
+};
+
+export const getParameterCaseInsensitive = (object, key) => {
+  const asLowercase = key.toLowerCase();
+  return object[Object.keys(object).find((k) => k.toLowerCase() === asLowercase)];
+};
+
+export const makeTimeString = (time) => {
+  if (time < 0) {
+    return '00:00:00';
+  }
+  let seconds = Math.floor(time / 1000);
+  let days = Math.floor(seconds / 3600 / 24);
+  let hours = Math.floor((seconds - days * 3600 * 24) / 3600);
+  let mins = Math.floor((seconds - days * 3600 * 24 - hours * 3600) / 60);
+  seconds = seconds - days * 3600 * 24 - hours * 3600 - mins * 60;
+  return (
+    (days > 1 ? days + ' days ' : days == 1 ? days + ' day ' : '') +
+    (hours < 10 ? '0' + hours : hours) +
+    ':' +
+    (mins < 10 ? '0' + mins : mins) +
+    ':' +
+    (seconds < 10 ? '0' + seconds : seconds)
+  );
 };
 
 export const showDialog = (type, message) => {
