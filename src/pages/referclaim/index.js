@@ -15,10 +15,11 @@ import {
 import { ADOPTERS, REFERRER_DICT } from '../../const';
 import { useStakingTokenContractInfo } from '../../queries/stakingToken';
 import { MerkleTree } from 'merkletreejs';
-import { keccak256 } from 'keccak256';
+import { ethers } from 'ethers';
 import { useReferrerClaimMutation } from '../../queries/useReferrerClaimMutation';
 import { useEarlyAdapterClaimMutation } from '../../queries/useEarlyAdapterClaimMutation';
 
+const { keccak256 } = ethers.utils;
 const PageLayout = styled.div`
   position: relative;
   width: 100%;
@@ -236,6 +237,7 @@ export default function ReferClaim() {
       console.log(tx);
       handleContractSuccess(`You claimed successfully`);
     } catch (err) {
+      console.log(err);
       handleContractErrors(err);
     }
   }, [referrerClaimMutation]);
