@@ -199,10 +199,13 @@ export default function ReferClaim() {
       let merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
       console.log('referrer merkle tree: ', merkleTree.getRoot().toString('hex'));
 
+      console.log('account percent: ', account + percent);
       let hashedAddress = keccak256(account + percent);
 
       let proof = merkleTree.getHexProof(hashedAddress);
       percent = parseInt('0x' + percent, 16);
+
+      console.log('proof: ', proof);
 
       const tx = await referrerClaimMutation.mutateAsync({
         proof: proof,
@@ -230,6 +233,7 @@ export default function ReferClaim() {
       // 'Serverside' code
       let hashedAddress = keccak256(account);
       let proof = merkleTree.getHexProof(hashedAddress);
+      console.log('proof: ', proof);
 
       const tx = await earlyAdapterClaimMutation.mutateAsync({
         proof: proof

@@ -11,7 +11,9 @@ export const CONTRACT_ERROR_MAP = {
   'StakingPool::unstake: stake not matured': 'Unable to unstake',
   'Failed to transfer PLS to address': 'Failed to transfer PLS to address',
   'unknown account': 'You are not eligible for claiming',
-  MINT_TIMEIN: 'Mint time has not ended yet'
+  MINT_TIMEIN: 'Mint time has not ended yet',
+  NOT_REFERRER_CLAIMABLE_ADDR_PERCENT: 'You are not eligible for claiming as a referrer',
+  NOT_FIRST_ADOPTER_CLAIMABLE_ADDR: 'You are not eligible for claiming as an early adopter'
 };
 
 export const DIALOG_TYPES = {
