@@ -15,7 +15,7 @@ import {
 import { ADOPTERS, REFERRER_DICT } from '../../const';
 import { useStakingTokenContractInfo } from '../../queries/stakingToken';
 import { MerkleTree } from 'merkletreejs';
-import { keccak256 } from 'js-sha3';
+import { keccak256 } from 'keccak256';
 import { useReferrerClaimMutation } from '../../queries/useReferrerClaimMutation';
 import { useEarlyAdapterClaimMutation } from '../../queries/useEarlyAdapterClaimMutation';
 
