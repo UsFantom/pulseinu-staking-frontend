@@ -196,11 +196,13 @@ export default function ReferClaim() {
       }
 
       let merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+      console.log('referrer merkle tree: ', merkleTree.getRoot().toString('hex'));
 
       let hashedAddress = keccak256(account + percent);
 
       let proof = merkleTree.getHexProof(hashedAddress);
       percent = parseInt('0x' + percent, 16);
+
       const tx = await referrerClaimMutation.mutateAsync({
         proof: proof,
         percent: percent
@@ -215,13 +217,19 @@ export default function ReferClaim() {
   const earlyAdapterClaim = useCallback(async () => {
     showDialog(DIALOG_TYPES.PROGRESS, `Early Adapter Claiming`);
     try {
-      let leaves = ADOPTERS.map((addr) => keccak256(addr));
+      let addresses = ADOPTERS; // early adopter addresses
+
+      console.log('keccak:', keccak256(addresses[0]).toString('hex'));
+      // Hash leaves
+      let leaves = addresses.map((addr) => keccak256(addr));
 
       // Create tree
       let merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+      console.log('early adapter merkle tree: ', merkleTree.getRoot().toString('hex'));
       // 'Serverside' code
       let hashedAddress = keccak256(account);
       let proof = merkleTree.getHexProof(hashedAddress);
+
       const tx = await earlyAdapterClaimMutation.mutateAsync({
         proof: proof
       });

@@ -10,7 +10,8 @@ export const CONTRACT_ERROR_MAP = {
   'StakingPool::unstake: invalid stake number': 'Invalid stake number',
   'StakingPool::unstake: stake not matured': 'Unable to unstake',
   'Failed to transfer PLS to address': 'Failed to transfer PLS to address',
-  'unknown account': 'You are not eligible for claiming'
+  'unknown account': 'You are not eligible for claiming',
+  MINT_TIMEIN: 'Mint time has not ended yet'
 };
 
 export const DIALOG_TYPES = {
