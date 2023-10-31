@@ -249,25 +249,27 @@ export default function ReferClaim() {
         <ReferClaimH2>Referrer & Early Adopter Claims</ReferClaimH2>
         <ClaimsDiv>
           <ClaimsItemDiv>
-            <ClaimBtn disabled={!eligibleForReferral || !mintEndTime} onClick={referrerClaim}>
+            <ClaimBtn
+              disabled={!eligibleForReferral || !mintEndTime || mintEndTime >= currentTime}
+              onClick={referrerClaim}>
               Referrer Claim
             </ClaimBtn>
             {!eligibleForReferral || !mintEndTime ? (
               <ClaimP>Not Eligible For Referrer</ClaimP>
             ) : (
-              <ClaimTitle>{makeTimeString(mintEndTime - currentTime)}</ClaimTitle>
+              <ClaimTitle>{`Ends in ${makeTimeString(mintEndTime - currentTime)}`}</ClaimTitle>
             )}
           </ClaimsItemDiv>
           <ClaimsItemDiv>
             <ClaimBtn
-              disabled={!eligibleForEarlyAdapter || !mintEndTime}
+              disabled={!eligibleForEarlyAdapter || !mintEndTime || mintEndTime >= currentTime}
               onClick={earlyAdapterClaim}>
               Early Adopter Claim
             </ClaimBtn>
             {!eligibleForEarlyAdapter || !mintEndTime ? (
               <ClaimP>Not Eligible For Early Adopter</ClaimP>
             ) : (
-              <ClaimTitle>{makeTimeString(mintEndTime - currentTime)}</ClaimTitle>
+              <ClaimTitle>{`Ends in ${makeTimeString(mintEndTime - currentTime)}`}</ClaimTitle>
             )}
           </ClaimsItemDiv>
         </ClaimsDiv>
