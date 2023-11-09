@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 
 import Header from '../../components/Header';
@@ -9,7 +9,6 @@ import {
   getParameterCaseInsensitive,
   handleContractErrors,
   handleContractSuccess,
-  makeTimeString,
   showDialog
 } from '../../utils/utils';
 import { ADOPTERS, REFERRER_DICT } from '../../const';
@@ -17,7 +16,7 @@ import { useStakingTokenContractInfo } from '../../queries/stakingToken';
 import { MerkleTree } from 'merkletreejs';
 import { ethers } from 'ethers';
 import { useReferrerClaimMutation } from '../../queries/useReferrerClaimMutation';
-import { useEarlyAdapterClaimMutation } from '../../queries/useEarlyAdapterClaimMutation';
+import { useEarlyAdopterClaimMutation } from '../../queries/useEarlyAdopterClaimMutation';
 
 const { keccak256 } = ethers.utils;
 const PageLayout = styled.div`
@@ -135,51 +134,25 @@ const ClaimP = styled.p`
   color: #fff;
 `;
 
-const ClaimTitle = styled.p`
-  font-family: Poppins;
-  font-size: 24px;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  color: #fff;
-`;
-
 export default function ReferClaim() {
   const { account } = useWeb3React();
   const correctChain = useCorrectChain();
   const stakingTokenContractInfoQuery = useStakingTokenContractInfo();
-
-  const [currentTime, setCurrentTime] = useState(new Date().getTime());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date().getTime());
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
 
   const eligibleForReferral = useMemo(() => {
     if (!account || !correctChain || !stakingTokenContractInfoQuery.data) return false;
     return Boolean(getParameterCaseInsensitive(REFERRER_DICT, account));
   }, [correctChain, account, stakingTokenContractInfoQuery]);
 
-  const eligibleForEarlyAdapter = useMemo(() => {
+  const eligibleForEarlyAdopter = useMemo(() => {
     if (!account || !correctChain || !stakingTokenContractInfoQuery.data) return false;
     return (
       ADOPTERS.findIndex((item) => account.toString().toLowerCase() === item.toLowerCase()) > -1
     );
   }, [correctChain, account, stakingTokenContractInfoQuery]);
 
-  const mintEndTime = useMemo(() => {
-    if (!stakingTokenContractInfoQuery.data) return null;
-    return Number(stakingTokenContractInfoQuery.data.mintEndTime._hex) * 1000;
-  }, [stakingTokenContractInfoQuery]);
-
   const referrerClaimMutation = useReferrerClaimMutation();
-  const earlyAdapterClaimMutation = useEarlyAdapterClaimMutation();
+  const earlyAdopterClaimMutation = useEarlyAdopterClaimMutation();
 
   const referrerClaim = useCallback(async () => {
     showDialog(DIALOG_TYPES.PROGRESS, `Referrer Claiming`);
@@ -218,8 +191,8 @@ export default function ReferClaim() {
     }
   }, [referrerClaimMutation]);
 
-  const earlyAdapterClaim = useCallback(async () => {
-    showDialog(DIALOG_TYPES.PROGRESS, `Early Adapter Claiming`);
+  const earlyAdopterClaim = useCallback(async () => {
+    showDialog(DIALOG_TYPES.PROGRESS, `Early Adopter Claiming`);
     try {
       let addresses = ADOPTERS; // early adopter addresses
 
@@ -229,13 +202,13 @@ export default function ReferClaim() {
 
       // Create tree
       let merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
-      console.log('early adapter merkle tree: ', merkleTree.getRoot().toString('hex'));
+      console.log('early adopter merkle tree: ', merkleTree.getRoot().toString('hex'));
       // 'Serverside' code
       let hashedAddress = keccak256(account);
       let proof = merkleTree.getHexProof(hashedAddress);
       console.log('proof: ', proof);
 
-      const tx = await earlyAdapterClaimMutation.mutateAsync({
+      const tx = await earlyAdopterClaimMutation.mutateAsync({
         proof: proof
       });
       console.log(tx);
@@ -255,28 +228,16 @@ export default function ReferClaim() {
         <ReferClaimH2>Referrer & Early Adopter Claims</ReferClaimH2>
         <ClaimsDiv>
           <ClaimsItemDiv>
-            <ClaimBtn
-              disabled={!eligibleForReferral || !mintEndTime || mintEndTime >= currentTime}
-              onClick={referrerClaim}>
+            <ClaimBtn disabled={!eligibleForReferral} onClick={referrerClaim}>
               Referrer Claim
             </ClaimBtn>
-            {!eligibleForReferral || !mintEndTime ? (
-              <ClaimP>Not Eligible For Referrer</ClaimP>
-            ) : (
-              <ClaimTitle>{`Ends in ${makeTimeString(mintEndTime - currentTime)}`}</ClaimTitle>
-            )}
+            {!eligibleForReferral && <ClaimP>Not Eligible For Referrer</ClaimP>}
           </ClaimsItemDiv>
           <ClaimsItemDiv>
-            <ClaimBtn
-              disabled={!eligibleForEarlyAdapter || !mintEndTime || mintEndTime >= currentTime}
-              onClick={earlyAdapterClaim}>
+            <ClaimBtn disabled={!eligibleForEarlyAdopter} onClick={earlyAdopterClaim}>
               Early Adopter Claim
             </ClaimBtn>
-            {!eligibleForEarlyAdapter || !mintEndTime ? (
-              <ClaimP>Not Eligible For Early Adopter</ClaimP>
-            ) : (
-              <ClaimTitle>{`Ends in ${makeTimeString(mintEndTime - currentTime)}`}</ClaimTitle>
-            )}
+            {!eligibleForEarlyAdopter && <ClaimP>Not Eligible For Early Adopter</ClaimP>}
           </ClaimsItemDiv>
         </ClaimsDiv>
       </ContentDiv>

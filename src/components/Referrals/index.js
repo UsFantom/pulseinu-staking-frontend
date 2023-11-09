@@ -155,7 +155,7 @@ export default function Referrals(props) {
       return;
     }
     setCopied(true);
-    navigator.clipboard.writeText(`${process.env.REACT_APP_WEB_LINK}/referrals/${account}`);
+    navigator.clipboard.writeText(`${window.location.origin}/referrals/${account}`);
     setTimeout(() => {
       setCopied(false);
     }, 2000);
@@ -180,9 +180,7 @@ export default function Referrals(props) {
             ) : (
               <ReferralLinkCopyBtn onClick={() => copyToClipboard()}>Copy</ReferralLinkCopyBtn>
             )}
-            <ReferralLink>{`${process.env.REACT_APP_WEB_LINK}/referrals/${
-              account ?? ''
-            }`}</ReferralLink>
+            <ReferralLink>{`${window.location.origin}/referrals/${account ?? ''}`}</ReferralLink>
           </ReferralLinkDiv>
           <ReferralDetailTitle>Your referrals</ReferralDetailTitle>
           <ReferralsTable />

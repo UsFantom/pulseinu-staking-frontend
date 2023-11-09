@@ -44,8 +44,16 @@ export const CONFIG = {
   },
   369: {
     contracts: {
+      stakingPool: {
+        address: '0x41550ba6b244C1e67F8C385a2738D60d9C927167'
+      },
+      boostNft: {
+        address: '0x2B307dB5C0b745B0D77d424479f1F4D37980383F',
+        tokenTypes: [0, 1]
+      },
       stakingToken: '0xa12e2661ec6603cbbb891072b2ad5b3d5edb48bd',
-      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png'
+      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png',
+      burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
     chainSlug: 'pulse',
     stakingTokenToWrapper: '0x3c617dfe0685b5269395be095c307b02c7ec418a',

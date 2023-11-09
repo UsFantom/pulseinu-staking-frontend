@@ -44,7 +44,7 @@ export const useBoostNftTotalSupply = (updateTime) => {
       const ids = [];
       for (let i = totalSupply - 1; i >= Math.max(0, totalSupply - 10); i--) {
         promises.push(contract.tokenIdToType(i));
-        ids.push(i);
+        ids.push(i + 1);
       }
       const types = await Promise.all(promises);
       const nfts = types.map((type, index) => {

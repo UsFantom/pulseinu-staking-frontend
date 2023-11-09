@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import BackImg from '../../assets/images/back.svg';
@@ -35,16 +35,12 @@ const NavigateBackTitle = styled.h2`
 `;
 
 export default function NavigateBack(props) {
-  const navigate = useNavigate();
-
-  const navigateTo = (to) => {
-    navigate(to);
-  };
-
   return (
-    <NavigateBackButtonDiv onClick={() => navigateTo(props.navigateTo)}>
-      <BackImage src={BackImg} />
-      <NavigateBackTitle>{props.title}</NavigateBackTitle>
+    <NavigateBackButtonDiv>
+      <Link to={props.navigateTo}>
+        <BackImage src={BackImg} />
+        <NavigateBackTitle>{props.title}</NavigateBackTitle>
+      </Link>
     </NavigateBackButtonDiv>
   );
 }

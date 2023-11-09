@@ -9,6 +9,7 @@ import WalletConnectButton from './connect';
 import { useWeb3React } from '@web3-react/core';
 import { useCorrectChain } from '../../hooks/useProvider';
 import { useStakingTokenMutation } from '../../queries/useTokenMutation';
+import { Link } from 'react-router-dom';
 
 const HeaderDiv = styled.div`
   display: flex;
@@ -123,9 +124,9 @@ export default function AmountBurned() {
   return (
     <HeaderDiv>
       <HeaderLogoDiv>
-        <a href="/">
+        <Link to="/">
           <HeaderLogoImg src={PulseInuLogo} />
-        </a>
+        </Link>
         <HeaderLogoTitle>PULSE INU</HeaderLogoTitle>
       </HeaderLogoDiv>
       <HeaderMenuDiv>

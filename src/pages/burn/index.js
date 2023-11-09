@@ -212,7 +212,10 @@ export default function Burn() {
       if ((!selected && selected !== 0) || !boostNftTokenTypesPricesQuery.data) {
         return false;
       }
-      return stakingTokenuserBalanceQuery.data >= boostNftTokenTypesPricesQuery.data[selected];
+      return (
+        stakingTokenuserBalanceQuery.data >=
+        parseFloat(boostNftTokenTypesPricesQuery.data[selected])
+      );
     }
     return false;
   };

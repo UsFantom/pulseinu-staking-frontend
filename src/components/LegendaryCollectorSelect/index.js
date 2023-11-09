@@ -136,9 +136,7 @@ export default function LegendaryCollectorSelect(props) {
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle color="#D7E0FF">Legendary</NFTDetailTitle>
-            <NFTDetailContent color="#D7E0FF">
-              Earn a 30% Yield boost on staking potential future yield opportunities
-            </NFTDetailContent>
+            <NFTDetailContent color="#D7E0FF">Earn a 30% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       ) : (
@@ -151,9 +149,7 @@ export default function LegendaryCollectorSelect(props) {
           </NFTImageDiv>
           <NFTDetailDiv>
             <NFTDetailTitle>Legendary</NFTDetailTitle>
-            <NFTDetailContent>
-              Earn a 30% Yield boost on staking potential future yield opportunities
-            </NFTDetailContent>
+            <NFTDetailContent>Earn a 30% Yield boost on staking</NFTDetailContent>
           </NFTDetailDiv>
         </SelectItemDiv>
       )}

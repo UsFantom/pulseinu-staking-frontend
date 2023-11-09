@@ -89,8 +89,8 @@ export default function MintedNFTs(props) {
             <MintedNFTsImgDiv>
               <NFTImgWrap>
                 <NFTImg
-                  src={`https://ipfs.io/ipfs/bafybeig2yg4vllwj7leuhdxn237b7xkjbdqksvg7y6zq3lmt52c4pd6pyq/${
-                    item.id % 1500
+                  src={`https://ipfs.io/ipfs/bafybeihvawd7ex253yfe4dwtae7gjajaxjkhk6lh3qgxlzihkkay3q5y3q/${
+                    ((item.id - 1) % 10000) + 1
                   }.gif`}
                   width="140"
                   height="134"
