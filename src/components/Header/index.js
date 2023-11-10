@@ -131,7 +131,7 @@ export default function AmountBurned() {
       </HeaderLogoDiv>
       <HeaderMenuDiv>
         <HeaderMenuItem>{account ? `${account.substring(0, 6)}...` : ''}</HeaderMenuItem>
-        <HeaderMenuItem href="https://pulseinu.org/whitepaper.pdf" target="_blank">
+        <HeaderMenuItem href={`${window.location.origin}/whitepaper.pdf`} target="_blank">
           WHITEPAPER
         </HeaderMenuItem>
         <HeaderMenuIcon
