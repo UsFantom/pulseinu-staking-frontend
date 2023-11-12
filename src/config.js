@@ -52,7 +52,7 @@ export const CONFIG = {
         tokenTypes: [0, 1]
       },
       stakingToken: '0xa12e2661ec6603cbbb891072b2ad5b3d5edb48bd',
-      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png',
+      stakingTokenImage: 'https://pulseinu.org/logo192.png',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
     chainSlug: 'pulse',
@@ -78,7 +78,7 @@ export const CONFIG = {
         tokenTypes: [0, 1]
       },
       stakingToken: '0x6eB0864C8568dC4361CC8A56703F154cC44dF353',
-      stakingTokenImage: 'https://pulseinu.org/assets/images/pinu_small.png',
+      stakingTokenImage: 'https://pulseinu.org/logo192.png',
       burnAddress: '0x000000000000000000000000000000000000dEaD'
     },
     chainSlug: 'pulse',
