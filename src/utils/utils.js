@@ -22,6 +22,18 @@ export const DIALOG_TYPES = {
   PROGRESS: 2
 };
 
+export const formatBigNumber = (value, count) => {
+  if (value < 1e6) {
+    return formatNumber(value, count);
+  } else if (value < 1e9) {
+    return `${formatNumber(value / 1e6, count)}M`;
+  } else if (value < 1e12) {
+    return `${formatNumber(value / 1e9, count)}B`;
+  } else {
+    return `${formatNumber(value / 1e12, count)}T`;
+  }
+};
+
 export const formatNumber = (value, count) => {
   if (value === null || value === undefined || isNaN(value)) {
     return '0';

@@ -17,7 +17,7 @@ import {
 } from '../../queries/useStaking';
 import { LoadableContent } from '../../components/Custom/LoadableContent';
 import { isValidValue } from '../../utils';
-import { formatNumber } from '../../utils/utils';
+import { formatBigNumber, formatNumber } from '../../utils/utils';
 import InuBgImage from '../../assets/images/Inu.png';
 
 const PageLayout = styled.div`
@@ -331,7 +331,7 @@ export default function Dashboard() {
   const generateChartData = () => {
     const chart = [
       {
-        label: 'Liquidity',
+        label: 'Liquid',
         percent:
           (stakingTokenTotalSupplyQuery.data -
             stakingTotalStakedQuery.data -
@@ -403,7 +403,7 @@ export default function Dashboard() {
               {() => (
                 <StatisticData
                   title="TOTAL SUPPLY"
-                  amount={`${formatNumber(stakingTokenTotalSupplyQuery.data / 1e12)}T`}
+                  amount={`${formatBigNumber(stakingTokenTotalSupplyQuery.data)}`}
                   unit
                   equals={`≈ $${formatNumber(
                     stakingTokenTotalSupplyQuery.data *
@@ -458,7 +458,7 @@ export default function Dashboard() {
               <DashboardPulseInuDistStatsDiv>
                 <PulseInuDistribution
                   title="BURNS"
-                  amount={`${formatNumber(stakingTokenBurnedAmountQuery.data)}`}
+                  amount={`${formatBigNumber(stakingTokenBurnedAmountQuery.data)}`}
                   equals={`≈ $${formatNumber(
                     stakingTokenBurnedAmountQuery.data *
                       pinuPriceOfPls.data *
@@ -468,7 +468,7 @@ export default function Dashboard() {
                 />
                 <PulseInuDistribution
                   title="STAKES"
-                  amount={`${formatNumber(stakingTotalStakedQuery.data)}`}
+                  amount={`${formatBigNumber(stakingTotalStakedQuery.data)}`}
                   equals={`≈ $${formatNumber(
                     stakingTotalStakedQuery.data * pinuPriceOfPls.data * plsPriceOfUsdQuery.data
                   )}`}
@@ -476,7 +476,7 @@ export default function Dashboard() {
                 />
                 <PulseInuDistribution
                   title="LIQUIDITY"
-                  amount={formatNumber(
+                  amount={formatBigNumber(
                     stakingTokenTotalSupplyQuery.data -
                       stakingTotalStakedQuery.data -
                       stakingTokenBurnedAmountQuery.data

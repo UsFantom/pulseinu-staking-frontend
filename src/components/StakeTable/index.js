@@ -4,6 +4,7 @@ import { useGetUserRewards, useUserStakings } from '../../queries/useStaking';
 import { ethers } from 'ethers';
 import {
   DIALOG_TYPES,
+  formatBigNumber,
   formatNumber,
   handleContractErrors,
   handleContractSuccess,
@@ -136,19 +137,23 @@ export default function StakeTable(props) {
         <StakeTableData>
           <LoadableContent query={stakingHistoryQuery} fallback={null}>
             <>
-              {formatNumber(ethers.utils.formatUnits(balance, stakingHistoryQuery.data.decimals))}
+              {formatBigNumber(
+                ethers.utils.formatUnits(balance, stakingHistoryQuery.data.decimals)
+              )}
             </>
           </LoadableContent>
         </StakeTableData>
         <StakeTableData>
           <LoadableContent query={stakingHistoryQuery} fallback={null}>
-            <>{formatNumber(ethers.utils.formatUnits(shares, stakingHistoryQuery.data.decimals))}</>
+            <>
+              {formatBigNumber(ethers.utils.formatUnits(shares, stakingHistoryQuery.data.decimals))}
+            </>
           </LoadableContent>
         </StakeTableData>
         <StakeTableData>
           <LoadableContent query={userRewardsQuery} fallback={null}>
             <>
-              {formatNumber(
+              {formatBigNumber(
                 userRewardsQuery.data?.length > index ? userRewardsQuery.data[index] : 0
               )}
             </>
