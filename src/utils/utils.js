@@ -39,7 +39,7 @@ export const eToNumber = (num) => {
   (num += '').charAt(0) == '-' && ((num = num.substring(1)), (sign = '-'));
   let arr = num.split(/[e]/gi);
   if (arr.length < 2) return sign + num;
-  let dot = (0.1).toLocaleString().substr(1, 1),
+  let dot = (0.1).toLocaleString('en-US').substring(1, 2),
     n = arr[0],
     exp = +arr[1],
     w = (n = n.replace(/^0+/, '')).replace(dot, ''),
@@ -214,3 +214,13 @@ function hideDialog() {
     dialogContainer.parentNode.removeChild(dialogContainer);
   }
 }
+
+export const isValidValue = (data) => {
+  return (
+    data !== null &&
+    data !== undefined &&
+    data !== 'null' &&
+    data !== 'undefined' &&
+    data.toString().trim() !== ''
+  );
+};

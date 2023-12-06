@@ -3,7 +3,7 @@ import { useStakingPoolContract, useERC20Contract } from '../hooks/useContract';
 import { useQuery } from 'react-query';
 import { getConfig } from '../config';
 import { ethers } from 'ethers';
-import { isValidValue } from '../utils';
+import { isValidValue } from '../utils/utils';
 
 export const useStakingToken = () => {
   const config = getConfig();

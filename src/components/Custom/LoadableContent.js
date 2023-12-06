@@ -1,5 +1,5 @@
 import { cloneElement } from 'react';
-import { isValidValue } from '../../utils';
+import { isValidValue } from '../../utils/utils';
 
 export const LoadableContent = ({ query, fallback, children }) => {
   const queries = Array.isArray(query) ? query : [query];

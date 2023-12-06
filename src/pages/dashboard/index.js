@@ -16,8 +16,7 @@ import {
   useStakingTotalStaked
 } from '../../queries/useStaking';
 import { LoadableContent } from '../../components/Custom/LoadableContent';
-import { isValidValue } from '../../utils';
-import { formatBigNumber, formatNumber, formatSmallNumber } from '../../utils/utils';
+import { formatBigNumber, formatNumber, formatSmallNumber, isValidValue } from '../../utils/utils';
 import InuBgImage from '../../assets/images/Inu.png';
 
 const PageLayout = styled.div`

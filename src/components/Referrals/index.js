@@ -5,7 +5,7 @@ import ReferralsTable from '../ReferralsTable';
 import ToggleUpImage from '../../assets/images/toggleup.svg';
 import ToggleDownImage from '../../assets/images/toggledown.svg';
 import { useWeb3React } from '@web3-react/core';
-import { isValidValue } from '../../utils';
+import { isValidValue } from '../../utils/utils';
 
 const ReferralsDiv = styled.div``;
 
